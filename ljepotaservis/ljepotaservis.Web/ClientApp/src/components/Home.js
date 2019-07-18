@@ -75,7 +75,7 @@ export default class Home extends Component {
     } = this.state;
 
     return (
-      <div style={{ margin: "5px", padding: "15px", width: "50%" }}>
+      <div style={{ margin: "5px", padding: "15px" }}>
         <input
           type="text"
           name="searchBar"
@@ -85,12 +85,16 @@ export default class Home extends Component {
           style={{ width: "100%", height: "50px" }}
         />
         <br />
-        <Button
-          onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
-          bsStyle="success"
-        >
-          Filters
-        </Button>
+        <div style={{ margin: "5px 0px", width: "100%" }}>
+          <Button
+            onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
+            bsStyle="success"
+            bsSize="large"
+            block
+          >
+            Filters
+          </Button>
+        </div>
         <br />
         <Collapse in={filtersAreOpen}>
           <div>
