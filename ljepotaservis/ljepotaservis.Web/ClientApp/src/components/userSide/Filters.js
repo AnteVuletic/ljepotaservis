@@ -1,6 +1,6 @@
 import React from "react";
 import { DropdownButton, MenuItem, Button } from "react-bootstrap";
-import DateTimePicker from "react-datetime-picker";
+import DatePicker from "react-datepicker";
 
 export default function Filters(props) {
   const {
@@ -10,7 +10,7 @@ export default function Filters(props) {
     onDateChange,
     serviceOptions
   } = props;
-  //Date selector lose radi
+
   return (
     <div style={{ margin: "5px", padding: "20px" }}>
       <h5>Service:</h5>
@@ -27,12 +27,15 @@ export default function Filters(props) {
       </DropdownButton>
       <br />
       <h5>Date and time: </h5>
-      <DateTimePicker
-        value={dateTime}
-        clearIcon={null}
-        format="dd/MM/yyyy HH:mm"
-        minDate={new Date()}
+      <DatePicker
+        selected={dateTime}
         onChange={onDateChange}
+        showTimeSelect
+        timeFormat="HH:mm"
+        timeIntervals={15}
+        dateFormat="MMMM d, yyyy HH:mm"
+        timeCaption="time"
+        minDate={new Date()}
       />
       <br />
       <br />

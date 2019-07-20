@@ -7,6 +7,7 @@ import { createBrowserHistory } from "history";
 import store from "./store";
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");

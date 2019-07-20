@@ -29,10 +29,10 @@ export default class Login extends Component {
     return (
       <div
         style={{
-          width: "400px",
           border: "1px solid",
           margin: "5px",
-          padding: "15px"
+          padding: "15px",
+          maxWidth: "400px"
         }}
       >
         <form onSubmit={this.handleSubmit} noValidate>

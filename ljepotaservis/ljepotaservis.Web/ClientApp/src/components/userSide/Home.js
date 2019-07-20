@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Well, Collapse, Button } from "react-bootstrap";
 import Filters from "./Filters";
 import StoreList from "./StoreList";
+import { getAllStores } from "../../services/userServices";
 
 const serviceOptions = [
   "All",
@@ -16,41 +17,17 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
-      stores: [
-        {
-          id: 1,
-          name: "Linea",
-          score: 4,
-          address: "Tavelićeva 7",
-          workingHours: "08-20"
-        },
-        {
-          id: 2,
-          name: "Linea2",
-          score: 4.5,
-          address: "Tavelićeva 22",
-          workingHours: "08-21"
-        },
-        {
-          id: 3,
-          name: "Linea3",
-          score: 4,
-          address: "Tavelićeva 7",
-          workingHours: "08-24"
-        },
-        {
-          id: 4,
-          name: "Linea4",
-          score: 4,
-          address: "Tavelićeva 7",
-          workingHours: "08-24"
-        }
-      ],
+      stores: [],
+      loading: true,
       searchBar: "",
       selectedService: "All",
       dateTime: null,
       filtersAreOpen: false
     };
+  }
+
+  componentDidMount() {
+    getAllStores().then(stores => this.setState({ stores, loading: false }));
   }
 
   handleChange = e => {
@@ -62,32 +39,18 @@ export default class Home extends Component {
   };
 
   handleDateChange = dateTime => {
-    const minutes = dateTime.getMinutes();
-    switch (true) {
-      case minutes >= 0 && minutes <= 14:
-        dateTime.setMinutes(0);
-        break;
-      case minutes > 14 && minutes <= 44:
-        dateTime.setMinutes(30);
-        break;
-      case minutes > 44 && minutes <= 59:
-        dateTime.setHours(dateTime.getHours() + 1);
-        dateTime.setMinutes(0);
-        break;
-      default:
-        return;
-    }
-
     this.setState({ dateTime });
   };
 
   render() {
+    console.log(this.state);
     const {
       searchBar,
       selectedService,
       dateTime,
       stores,
-      filtersAreOpen
+      filtersAreOpen,
+      loading
     } = this.state;
 
     return (
@@ -125,8 +88,11 @@ export default class Home extends Component {
             </Well>
           </div>
         </Collapse>
-
-        <StoreList stores={stores} />
+        {loading ? (
+          <h3>Loading...</h3>
+        ) : (
+          <StoreList stores={stores} filter={`${searchBar}`} />
+        )}
       </div>
     );
   }
