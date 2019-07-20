@@ -48,7 +48,7 @@ export default class Home extends Component {
       ],
       searchBar: "",
       selectedService: "All",
-      dateTime: new Date(),
+      dateTime: null,
       filtersAreOpen: false
     };
   }
@@ -62,6 +62,22 @@ export default class Home extends Component {
   };
 
   handleDateChange = dateTime => {
+    const minutes = dateTime.getMinutes();
+    switch (true) {
+      case minutes >= 0 && minutes <= 14:
+        dateTime.setMinutes(0);
+        break;
+      case minutes > 14 && minutes <= 44:
+        dateTime.setMinutes(30);
+        break;
+      case minutes > 44 && minutes <= 59:
+        dateTime.setHours(dateTime.getHours() + 1);
+        dateTime.setMinutes(0);
+        break;
+      default:
+        return;
+    }
+
     this.setState({ dateTime });
   };
 

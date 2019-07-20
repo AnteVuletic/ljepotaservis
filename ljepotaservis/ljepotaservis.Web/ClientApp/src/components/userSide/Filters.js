@@ -10,7 +10,7 @@ export default function Filters(props) {
     onDateChange,
     serviceOptions
   } = props;
-
+  //Date selector lose radi
   return (
     <div style={{ margin: "5px", padding: "20px" }}>
       <h5>Service:</h5>
@@ -27,7 +27,13 @@ export default function Filters(props) {
       </DropdownButton>
       <br />
       <h5>Date and time: </h5>
-      <DateTimePicker value={dateTime} onChange={onDateChange} />
+      <DateTimePicker
+        value={dateTime}
+        clearIcon={null}
+        format="dd/MM/yyyy HH:mm"
+        minDate={new Date()}
+        onChange={onDateChange}
+      />
       <br />
       <br />
       <Button bsStyle="success">Apply filters</Button>
