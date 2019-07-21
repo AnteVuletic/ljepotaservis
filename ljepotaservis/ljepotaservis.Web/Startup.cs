@@ -23,7 +23,11 @@ namespace ljepotaservis.Web
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            ConfigureSqlServer.Configure(services,Configuration);
+            services.ConfigureSqlServer(Configuration);
+            services.ConfigureDependencyInjection(Configuration);
+            services.ConfigureSendGrid(Configuration);
+            services.ConfigureIdentity(Configuration);
+            services.ConfigureJwt(Configuration);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -46,6 +50,7 @@ namespace ljepotaservis.Web
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

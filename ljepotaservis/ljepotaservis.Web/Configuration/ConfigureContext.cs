@@ -5,12 +5,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace ljepotaservis.Web.Configuration
 {
-    public static class ConfigureSqlServer
+    public static class ConfigureContext
     {
-        public static void Configure(IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<LjepotaServisContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("CashierRegister")));
+            return services;
         }
     }
 }

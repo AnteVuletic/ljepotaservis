@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using ljepotaservis.Data.Entities.Models;
+using ljepotaservis.Data.Enums;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using UserStore = ljepotaservis.Data.Entities.Models.UserStore;
 
 namespace ljepotaservis.Entities.Data
 {
-    public class LjepotaServisContext : DbContext
+    public class LjepotaServisContext : IdentityDbContext<User>
     {
         public LjepotaServisContext(DbContextOptions options) : base(options)
         {}
@@ -17,11 +21,12 @@ namespace ljepotaservis.Entities.Data
         public DbSet<Resource> Resources { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Store> Stores { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<UserStore> UserStores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Business>().HasKey(business => business.Oib);
 
             ConfigureUserStore(modelBuilder);
@@ -39,6 +44,11 @@ namespace ljepotaservis.Entities.Data
                 .HasOne(userStore => userStore.User)
                 .WithMany(user => user.UserStores)
                 .HasForeignKey(userStore => userStore.UserId);
+
+            modelBuilder.Entity<UserStore>()
+                .HasMany(userStore => userStore.Reservations)
+                .WithOne(reservation => reservation.UserStoreEmployee)
+                .HasForeignKey(reservation => reservation.UserStoreEmployeeId);
         }
 
         private static void ConfigureReservationService(ModelBuilder modelBuilder)

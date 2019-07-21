@@ -7,11 +7,11 @@ namespace ljepotaservis.Domain.Abstractions
 {
     public abstract class ARepository
     {
-        private readonly LjepotaServisContext _ljepotaServisContext;
+        public readonly LjepotaServisContext _dbLjepotaServisContext;
 
-        protected ARepository(LjepotaServisContext ljepotaServisContext)
+        protected ARepository(LjepotaServisContext dbLjepotaServisContext)
         {
-            _ljepotaServisContext = ljepotaServisContext;
+            _dbLjepotaServisContext = dbLjepotaServisContext;
         }
     }
 }
