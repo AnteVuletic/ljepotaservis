@@ -15,5 +15,7 @@ namespace ljepotaservis.Data.Entities.Models
         public override string Email { get; set; }
         public override bool EmailConfirmed { get; set; }
         public ICollection<UserStore> UserStores { get; set; }
+        public virtual ICollection<UserClaims> Claims { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

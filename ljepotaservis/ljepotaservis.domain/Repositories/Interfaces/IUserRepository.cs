@@ -10,7 +10,6 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        ICollection<UserEmployeeDto> GetEmployeesByStore(Store store);
-        ICollection<UserOwnerDto> GetOwnersByBusiness(Business business);
+        ICollection<UserDto> GetEmployeesByStore(Store store);
     }
 }

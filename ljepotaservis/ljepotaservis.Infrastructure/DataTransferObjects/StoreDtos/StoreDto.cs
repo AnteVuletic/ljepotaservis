@@ -10,6 +10,7 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
     {
         public Store Store { get; set; }
         public Resource Profile { get; set; }
-        public ICollection<UserEmployeeDto> Employees { get; set; }
+        public ICollection<Service> Services { get; set; }
+        public ICollection<UserDto> Employees { get; set; }
     }
 }

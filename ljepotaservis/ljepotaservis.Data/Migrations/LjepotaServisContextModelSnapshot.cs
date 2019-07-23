@@ -27,6 +27,9 @@ namespace ljepotaservis.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("Name")
                         .HasMaxLength(256);
 
@@ -41,6 +44,34 @@ namespace ljepotaservis.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "57fb0c68-acd3-479b-8949-0c723d374dfe",
+                            ConcurrencyStamp = "98169c40-6e25-42fd-9f22-aaba1f3aaa5f",
+                            Name = "SuperAdmin"
+                        },
+                        new
+                        {
+                            Id = "8191d8fb-92a4-4a48-992d-a1eb56ca4cab",
+                            ConcurrencyStamp = "02251c0b-f0c8-4522-b0ce-2cb3d07eed12",
+                            Name = "Owner"
+                        },
+                        new
+                        {
+                            Id = "f0a5e6b5-492e-40b5-a32a-dbe578973967",
+                            ConcurrencyStamp = "39f2cfb0-f651-43eb-be23-38169ecffb29",
+                            Name = "Employee"
+                        },
+                        new
+                        {
+                            Id = "07aa9e06-19b3-4d0c-95aa-ab9f560ecefa",
+                            ConcurrencyStamp = "51b4deac-1bb6-4101-a084-7b6563f919bf",
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -53,6 +84,9 @@ namespace ljepotaservis.Data.Migrations
 
                     b.Property<string>("ClaimValue");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("RoleId")
                         .IsRequired();
 
@@ -61,6 +95,8 @@ namespace ljepotaservis.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRoleClaim<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -73,14 +109,17 @@ namespace ljepotaservis.Data.Migrations
 
                     b.Property<string>("ClaimValue");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.Property<string>("UserId")
                         .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("AspNetUserClaims");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserClaim<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -107,11 +146,16 @@ namespace ljepotaservis.Data.Migrations
 
                     b.Property<string>("RoleId");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<string>");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -127,20 +171,6 @@ namespace ljepotaservis.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Business", b =>
-                {
-                    b.Property<string>("Oib")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Address");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Oib");
-
-                    b.ToTable("Businesses");
                 });
 
             modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Reservation", b =>
@@ -234,8 +264,6 @@ namespace ljepotaservis.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessOib");
-
                     b.ToTable("Stores");
                 });
 
@@ -317,19 +345,45 @@ namespace ljepotaservis.Data.Migrations
                     b.ToTable("UserStores");
                 });
 
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.ApplicationRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.HasDiscriminator().HasValue("ApplicationRole");
+                });
+
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.ApplicationRoleClaim", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>");
+
+                    b.Property<string>("RoleId1");
+
+                    b.HasIndex("RoleId1");
+
+                    b.HasDiscriminator().HasValue("ApplicationRoleClaim");
+                });
+
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.UserClaims", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>");
+
+                    b.HasIndex("UserId");
+
+                    b.HasDiscriminator().HasValue("UserClaims");
+                });
+
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.UserRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<string>");
+
+                    b.HasDiscriminator().HasValue("UserRole");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("ljepotaservis.Data.Entities.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -346,11 +400,6 @@ namespace ljepotaservis.Data.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
                         .WithMany()
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("ljepotaservis.Data.Entities.Models.User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -395,13 +444,6 @@ namespace ljepotaservis.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Store", b =>
-                {
-                    b.HasOne("ljepotaservis.Data.Entities.Models.Business", "Business")
-                        .WithMany("Stores")
-                        .HasForeignKey("BusinessOib");
-                });
-
             modelBuilder.Entity("ljepotaservis.Data.Entities.Models.UserStore", b =>
                 {
                     b.HasOne("ljepotaservis.Data.Entities.Models.Store", "Store")
@@ -412,6 +454,35 @@ namespace ljepotaservis.Data.Migrations
                     b.HasOne("ljepotaservis.Data.Entities.Models.User", "User")
                         .WithMany("UserStores")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.ApplicationRoleClaim", b =>
+                {
+                    b.HasOne("ljepotaservis.Data.Entities.Models.ApplicationRole", "Role")
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("RoleId1");
+                });
+
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.UserClaims", b =>
+                {
+                    b.HasOne("ljepotaservis.Data.Entities.Models.User", "User")
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.UserRole", b =>
+                {
+                    b.HasOne("ljepotaservis.Data.Entities.Models.ApplicationRole", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId1")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("ljepotaservis.Data.Entities.Models.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

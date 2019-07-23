@@ -15,7 +15,6 @@ namespace ljepotaservis.Entities.Data
         public LjepotaServisContext(DbContextOptions options) : base(options)
         {}
 
-        public DbSet<Business> Businesses { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationService> ReservationServices { get; set; }
         public DbSet<Resource> Resources { get; set; }
@@ -27,10 +26,40 @@ namespace ljepotaservis.Entities.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Business>().HasKey(business => business.Oib);
-
+            ConfigureUserRoles(modelBuilder);
             ConfigureUserStore(modelBuilder);
             ConfigureReservationService(modelBuilder);
+        }
+
+        private static void ConfigureUserRoles(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<IdentityRole>()
+                .HasData(new List<IdentityRole>
+                    {
+                        new IdentityRole("SuperAdmin"),
+                        new IdentityRole("Owner"),
+                        new IdentityRole("Employee"),
+                        new IdentityRole("User")
+                    }
+                );
+
+            modelBuilder.Entity<User>()
+                .HasMany(user => user.Claims)
+                .WithOne(user => user.User)
+                .HasForeignKey(userClaim => userClaim.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<User>()
+                .HasMany(user => user.UserRoles)
+                .WithOne(userRoles => userRoles.User)
+                .HasForeignKey(userRole => userRole.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<ApplicationRole>()
+                .HasMany(applicationRole => applicationRole.UserRoles)
+                .WithOne(userRole => userRole.Role)
+                .HasForeignKey(userRole => userRole.RoleId)
+                .IsRequired();
         }
 
         private static void ConfigureUserStore(ModelBuilder modelBuilder)

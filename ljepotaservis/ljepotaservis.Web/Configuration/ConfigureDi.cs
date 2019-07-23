@@ -14,6 +14,7 @@ namespace ljepotaservis.Web.Configuration
         public static IServiceCollection ConfigureDependencyInjection(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IStoreRepository, StoreRepository>();
             return services;
         }
     }

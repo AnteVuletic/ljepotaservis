@@ -20,10 +20,5 @@ namespace ljepotaservis.Domain.Repositories.Implementations
         {
             throw new NotImplementedException();
         }
-
-        public ICollection<UserOwnerDto> GetOwnersByBusiness(Business business)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
