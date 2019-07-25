@@ -1,22 +1,51 @@
-import React from "react";
-import { Route, Switch } from "react-router";
-import Registration from "./components/authentication/Registration";
-import Login from "./components/authentication/Login";
-import Home from "./components/userSide/Home";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Route, Switch, Redirect, withRouter } from "react-router";
 import NavbarComponent from "./components/NavbarComponent";
-import { PrivateRoute } from "./utils/PrivateRoute";
-import Store from "./components/userSide/Store";
+import PrivateRoute from "./components/PrivateRoute";
+import Role from "./utils/role";
+import SuperAdminSide from "./components/superAdminSide";
+import OwnerSide from "./components/ownerSide";
+import EmployeeSide from "./components/employeeSide";
+import UserSide from "./components/userSide";
 
-export default () => (
-  <div>
-    <NavbarComponent />
-    <div style={{ marginTop: "60px" }}>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/register" component={Registration} />
-        <Route path="/login" component={Login} />
-        <Route path="/stores/:id" component={Store} />
-      </Switch>
-    </div>
-  </div>
-);
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <NavbarComponent />
+        <div style={{ marginTop: "60px" }}>
+          <Switch>
+            <Route path="/" component={UserSide} />
+            <PrivateRoute
+              path="/super-admin"
+              user={this.props.authentication.user}
+              roles={[Role.SuperAdmin]}
+              component={SuperAdminSide}
+            />
+            <PrivateRoute
+              path="/owner"
+              user={this.props.authentication.user}
+              roles={[Role.Owner]}
+              component={OwnerSide}
+            />
+            <PrivateRoute
+              path="/employee"
+              user={this.props.authentication.user}
+              roles={[Role.Employee]}
+              component={EmployeeSide}
+            />
+            <Redirect to="/" />
+          </Switch>
+        </div>
+      </div>
+    );
+  }
+}
+//Private route component je na Home samo za testiranje trenutno
+
+const mapStateToProps = state => ({
+  authentication: { ...state.authentication }
+});
+
+export default withRouter(connect(mapStateToProps)(App));

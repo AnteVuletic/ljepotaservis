@@ -3,6 +3,7 @@ import { Well, Collapse, Button } from "react-bootstrap";
 import Filters from "./Filters";
 import StoreList from "./StoreList";
 import { getAllStores } from "../../services/userServices";
+import ReactLoading from "react-loading";
 
 const serviceOptions = [
   "All",
@@ -43,7 +44,6 @@ export default class Home extends Component {
   };
 
   render() {
-    console.log(this.state);
     const {
       searchBar,
       selectedService,
@@ -89,7 +89,12 @@ export default class Home extends Component {
           </div>
         </Collapse>
         {loading ? (
-          <h3>Loading...</h3>
+          <ReactLoading
+            type="bars"
+            color="#4cae4c"
+            height={"50px"}
+            width={"50px"}
+          />
         ) : (
           <StoreList stores={stores} filter={`${searchBar}`} />
         )}
