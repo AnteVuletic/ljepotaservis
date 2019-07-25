@@ -1,8 +1,6 @@
-﻿using ljepotaservis.Infrastructure.Services.Models;
-using ljepotaservis.Infrastructure.Services.SendGrid;
+﻿using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using WebPWrecover.Services;
 
 namespace ljepotaservis.Web.Configuration
 {
@@ -10,8 +8,8 @@ namespace ljepotaservis.Web.Configuration
     {
         public static IServiceCollection ConfigureSendGrid(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IEmailTemplateSender, SendGridService>();
-            services.Configure<AuthorizationSendGirdOptions>(configuration.GetSection("SendGrid"));
+            services.AddTransient<EmailHelper>();
+            services.Configure<EmailHelper>(configuration);
             return services;
         }
     }

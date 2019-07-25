@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace ljepotaservis.Web.Controllers
 {
@@ -51,8 +49,11 @@ namespace ljepotaservis.Web.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
-        public async Task<IActionResult> CreateStoreAndOwner([FromBody] Store store, UserDto owner)
+        public async Task<IActionResult> CreateStoreAndOwner([FromBody] JObject StoreAndOwner )
         {
+            var store = StoreAndOwner["store"].ToObject<Store>();
+            var owner = StoreAndOwner["owner"].ToObject<UserDto>();
+
             await _storeRepository.CreateStoreAndOwner(store, owner);
             return Ok();
         }

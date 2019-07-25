@@ -1,17 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ljepotaservis.Data.Entities.Models;
+﻿using System.Threading.Tasks;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
-using ljepotaservis.Infrastructure.Helpers;
-using ljepotaservis.Infrastructure.Services.SendGrid;
-using ljepotaservis.Infrastructure.Services.SendGrid.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace ljepotaservis.Web.Controllers
 {

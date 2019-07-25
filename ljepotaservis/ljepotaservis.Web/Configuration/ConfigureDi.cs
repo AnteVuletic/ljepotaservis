@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ljepotaservis.Domain.Repositories.Implementations;
+﻿using ljepotaservis.Domain.Repositories.Implementations;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

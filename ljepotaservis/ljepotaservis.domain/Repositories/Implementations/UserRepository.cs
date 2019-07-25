@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,8 @@ using ljepotaservis.Domain.Abstractions;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
+using ljepotaservis.Infrastructure.EmailTemplates;
 using ljepotaservis.Infrastructure.Helpers;
-using ljepotaservis.Infrastructure.Services.SendGrid;
-using ljepotaservis.Infrastructure.Services.SendGrid.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
@@ -20,22 +20,22 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 {
     public class UserRepository : ARepository, IUserRepository
     {
-        private readonly IEmailTemplateSender _emailSender;
+        private readonly EmailHelper _emailHelper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly JwtHelper _jwtHelper;
 
         public UserRepository(
             LjepotaServisContext ljepotaServisContext,
-            IEmailTemplateSender emailSender,
+            EmailHelper emailHelper,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<ApplicationRole> roleManager,
+            RoleManager<IdentityRole> roleManager,
             JwtHelper jwtHelper) 
             : base(ljepotaServisContext)
         {
-            _emailSender = emailSender;
+            _emailHelper = emailHelper;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
@@ -52,14 +52,14 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 
             if (!result.Succeeded) throw new Exception("Unable to create user");
 
-            SendGridEmailResponse emailResponse;
-            do
+            var registrationTemplate = await EmailTemplateResolver.Register(dbUser, await _userManager.GenerateEmailConfirmationTokenAsync(dbUser));
+            var emailMessage = new MailMessage
             {
-                emailResponse = await EmailVerificationHelper.SendVerificationEmail(dbUser, _emailSender, _userManager);
-                if (!emailResponse.IsSuccessful)
-                    await Task.Delay(5000);
-
-            } while (!emailResponse.IsSuccessful);
+                To = { user.Email },
+                Body = registrationTemplate,
+                Subject = "Confirm registration on Ljepota Servis"
+            };
+            _emailHelper.SendEmail(emailMessage);
         }
 
         public async Task<string> LoginUser(UserDto user)

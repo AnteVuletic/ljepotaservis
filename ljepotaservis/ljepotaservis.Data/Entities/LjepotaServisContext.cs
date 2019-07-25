@@ -36,10 +36,26 @@ namespace ljepotaservis.Entities.Data
             modelBuilder.Entity<IdentityRole>()
                 .HasData(new List<IdentityRole>
                     {
-                        new IdentityRole("SuperAdmin"),
-                        new IdentityRole("Owner"),
-                        new IdentityRole("Employee"),
-                        new IdentityRole("User")
+                        new IdentityRole
+                        {
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
+                        },
+                        new IdentityRole
+                        {
+                            Name = "Owner",
+                            NormalizedName = "OWNER"
+                        },
+                        new IdentityRole
+                        {
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        },
+                        new IdentityRole
+                        {
+                            Name = "User",
+                            NormalizedName = "USER"
+                        }
                     }
                 );
 
