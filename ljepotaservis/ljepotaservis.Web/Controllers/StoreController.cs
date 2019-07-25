@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
-using ljepotaservis.Domain.Repositories.Implementations;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ljepotaservis.Web.Controllers
 {
@@ -20,34 +18,14 @@ namespace ljepotaservis.Web.Controllers
     public class StoreController : ControllerBase
     {
         private readonly IStoreRepository _storeRepository;
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IUserRepository _userRepository;
 
         public StoreController(
             IStoreRepository storeRepository,
-            UserManager<User> userManager,
-            RoleManager<ApplicationRole> roleManager)
+            IUserRepository userRepository)
         {
             _storeRepository = storeRepository;
-            _userManager = userManager;
-            _roleManager = roleManager;
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Owner")]
-        public async Task<IActionResult> AddEmployeesToStore([FromBody] ICollection<UserDto> employees)
-        {
-            var store = await ResolveStore();
-
-            var employeeRole = _roleManager.Roles.Single(role => role.Name == "Employee");
-            foreach (var employee in employees)
-            {
-                var userDb = UserDto.ProjectUserDtoToUser(employee, true);
-                await _userManager.CreateAsync(userDb, employee.Password);
-                await _userManager.AddToRoleAsync(userDb, employeeRole.Name);
-                await _userManager.AddClaimAsync(userDb , new Claim("Store", store.Id.ToString()));
-            }
-            return Ok();
+            _userRepository = userRepository;
         }
 
         [HttpPost]
@@ -63,11 +41,19 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Owner")]
-        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] StoreDto storeDto)
+        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] ICollection<UserDto> employees)
         {
             var store = await ResolveStore();
-            if (storeDto.Store.Id != store.Id) return Unauthorized();
-            await _storeRepository.AddEditEmployeesToStore(storeDto);
+            await _userRepository.AddEditEmployeesToStore(store, employees);
+            return Ok();
+        }
+
+
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        public async Task<IActionResult> CreateStoreAndOwner([FromBody] Store store, UserDto owner)
+        {
+            await _storeRepository.CreateStoreAndOwner(store, owner);
             return Ok();
         }
 

@@ -14,8 +14,8 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
     {
         Task<StoreDto> Create(Store store, Resource resourceProfilePicture = null);
         Task<Store> GetStoreById(int id);
-        Task AddServicesToStore(StoreDto storeDto);
-        Task AddEmployeesToStore(StoreDto storeDto);
+        Task AddEditServicesToStore(StoreDto storeDto);
+        Task CreateStoreAndOwner(Store store, UserDto owner);
         ICollection<StoreDto> GetStoreByReservationDate(ReservationServiceDto reservations);
         ICollection<StoreDto> GetStoreByService(Service service);
         StoreDto GetStoreByEmployee(UserDto employee);

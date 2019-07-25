@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Abstractions;
@@ -88,31 +86,20 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
         }
 
-        public async Task AddEditEmployeesToStore(StoreDto storeDto)
+        public async Task CreateStoreAndOwner(Store store, UserDto owner)
         {
-            foreach (var userDto in storeDto.Employees)
-            {
-                var employeeRole = await _roleManager.Roles.SingleAsync(role => role.Name == "Employee");
-                if (userDto.Id != "")
-                {
-                    var employeeOrNull = await _userManager.FindByIdAsync(userDto.Id);
-                    if(employeeOrNull == null) throw new Exception("User has ID which cannot be found in database");
-                    employeeOrNull.Email = userDto.Email;
-                    employeeOrNull.Firstname = userDto.FirstName;
-                    employeeOrNull.Lastname = userDto.LastName;
-                    employeeOrNull.Email = userDto.Email;
-                    employeeOrNull.UserName = userDto.Username;
+            var ownerRole = await _roleManager.Roles.SingleAsync(role => role.Name == "Owner");
 
-                    await _userManager.UpdateAsync(employeeOrNull);
-                }
-                else
-                {
-                    var employee = UserDto.ProjectUserDtoToUser(userDto, true);
-                    await _userManager.CreateAsync(employee, userDto.Password);
-                    await _userManager.AddToRoleAsync(employee, employeeRole.Name);
-                    await _userManager.AddClaimAsync(employee, new Claim("Store", storeDto.Store.Id.ToString()));
-                }
-            }
+            var userOwner = UserDto.ProjectUserDtoToUser(owner, true);
+
+            await _userManager.CreateAsync(userOwner, owner.Password);
+            var result = _userManager.AddToRoleAsync(userOwner, ownerRole.Name);
+            if (!result.Result.Succeeded)
+                throw new Exception("Unable to create user");
+
+            var storeCreated = await Create(store);
+
+            await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Store.Id.ToString()));
         }
 
         public ICollection<StoreDto> GetStoreByReservationDate(ReservationServiceDto reservations)

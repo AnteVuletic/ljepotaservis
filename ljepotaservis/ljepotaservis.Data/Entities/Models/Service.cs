@@ -10,8 +10,8 @@ namespace ljepotaservis.Data.Entities.Models
         public string Name { get; set; }
         public int Price { get; set; }
         public TimeSpan Duration { get; set; }
-        public ICollection<ReservationService> ReservationServices { get; set; }
         public int StoreId { get; set; }
         public Store Store { get; set; }
+        public ICollection<ReservationService> ReservationServices { get; set; }
     }
 }
