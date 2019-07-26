@@ -1,19 +1,19 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Route, Switch, Redirect } from "react-router";
-import Dashboard from "./Dashboard";
-import Reservations from "./Reservations";
+import { connect } from "react-redux";
+import Login from "./Login";
+import Registration from "./Registration";
 import RoleNavbar from "../navbar";
 
-const EmployeeSide = props => {
+const Authentication = props => {
   const { path } = props.match;
   return (
     <div>
       <RoleNavbar role={props.role} />
       <Switch>
-        <Route exact path={path} component={Dashboard} />
-        <Route path={path + "/reservations"} component={Reservations} />
-        <Redirect to={path} />
+        <Route path={path + "/login"} component={Login} />
+        <Route path={path + "/registration"} component={Registration} />
+        <Redirect to={path + "/registration"} />
       </Switch>
     </div>
   );
@@ -25,4 +25,4 @@ const mapStateToProps = state => ({
     : "Guest"
 });
 
-export default connect(mapStateToProps)(EmployeeSide);
+export default connect(mapStateToProps)(Authentication);

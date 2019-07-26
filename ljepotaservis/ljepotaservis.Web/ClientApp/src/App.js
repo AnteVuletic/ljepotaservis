@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Route, Switch, Redirect, withRouter } from "react-router";
-import NavbarComponent from "./components/NavbarComponent";
 import PrivateRoute from "./components/PrivateRoute";
 import Role from "./utils/role";
 import SuperAdminSide from "./components/superAdminSide";
 import OwnerSide from "./components/ownerSide";
 import EmployeeSide from "./components/employeeSide";
-import UserSide from "./components/userSide";
+import Home from "./components/Home";
+import Authentication from "./components/authentication";
+import Store from "./components/userSide/Store";
 
 class App extends Component {
   render() {
     return (
       <div>
-        <NavbarComponent />
         <div style={{ marginTop: "60px" }}>
           <Switch>
-            <Route path="/" component={UserSide} />
+            <Route exact path="/" component={Home} />
+            <Route path={"/stores/:id"} component={Store} />
+            <Route path={"/authentication"} component={Authentication} />
             <PrivateRoute
               path="/super-admin"
               user={this.props.authentication.user}
