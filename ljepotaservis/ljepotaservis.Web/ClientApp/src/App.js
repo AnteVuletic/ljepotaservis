@@ -44,7 +44,6 @@ class App extends Component {
     );
   }
 }
-//Private route component je na Home samo za testiranje trenutno
 
 const mapStateToProps = state => ({
   authentication: { ...state.authentication }

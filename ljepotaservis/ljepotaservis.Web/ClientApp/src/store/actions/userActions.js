@@ -17,7 +17,6 @@ function login(username, password) {
       },
       error => {
         dispatch(failure(error));
-        dispatch(alertActions.error(error));
       }
     );
   };
@@ -46,7 +45,6 @@ function getAll() {
       users => dispatch(success(users)),
       error => {
         dispatch(failure(error));
-        dispatch(alertActions.error(error));
       }
     );
   };

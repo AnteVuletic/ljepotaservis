@@ -1,4 +1,5 @@
-import { authHeader } from "../utils//authHeader";
+import { authHeader } from "../utils/authHeader";
+import { handleResponse } from "../utils/handleResponse";
 
 export const userService = {
   login,
@@ -36,22 +37,6 @@ function getAll() {
   return fetch(`/api/getRestrictedDate`, requestOptions).then(handleResponse);
 }
 
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        // auto logout if 401 (Unauthorized) response returned from api
-        logout();
-      }
-
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
-    }
-
-    return data;
-  });
-}
 // samo mock za testirat react maknit kasnije
 export const getAllStores = () =>
   new Promise(function(resolve, reject) {

@@ -25,7 +25,7 @@ export default function NavbarTemplet(props) {
 
         {role === "Guest" && (
           <Nav pullRight>
-            <LinkContainer to="/authentication/register">
+            <LinkContainer to="/authentication/registration">
               <NavItem eventKey={1}>Registration</NavItem>
             </LinkContainer>
             <LinkContainer to="/authentication/login">
