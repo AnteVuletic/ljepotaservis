@@ -20,9 +20,7 @@ const OwnerSide = props => {
 };
 
 const mapStateToProps = state => ({
-  role: state.authentication.hasOwnProperty("user")
-    ? state.authentication.user.role
-    : "Guest"
+  role: state.authentication.user.role
 });
 
 export default connect(mapStateToProps)(OwnerSide);

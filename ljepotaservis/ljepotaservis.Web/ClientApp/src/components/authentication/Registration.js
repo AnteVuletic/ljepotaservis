@@ -76,7 +76,7 @@ export default class Registration extends Component {
       passwordValidationState,
       passwordConfirmationValidationState
     } = this.state;
-    // validationState ne radi idk zasto...
+
     return (
       <div
         style={{

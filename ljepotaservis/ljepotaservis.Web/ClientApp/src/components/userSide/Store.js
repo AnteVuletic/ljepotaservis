@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import RoleNavbar from "../navbar";
 
@@ -12,9 +12,7 @@ const Store = props => {
 };
 
 const mapStateToProps = state => ({
-  role: state.authentication.hasOwnProperty("user")
-    ? state.authentication.user.role
-    : "Guest"
+  role: state.authentication.user.role
 });
 
 export default connect(mapStateToProps)(Store);

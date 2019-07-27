@@ -1,7 +1,18 @@
 import { userConstants } from "../constants/userConstants";
+import Role from "../../utils/role";
 
 let user = JSON.parse(localStorage.getItem("user"));
-const initialState = user ? { loggedIn: true, user } : {};
+
+// Initial role is "Guest" if there is nothing in local storage or the role in local storage is not valid.
+let initialState = { loggedIn: false, user: { role: Role.Guest } };
+if (user) {
+  if (Role.hasOwnProperty(user.role)) {
+    initialState = {
+      loggedIn: true,
+      user
+    };
+  }
+}
 
 export function authentication(state = initialState, action) {
   switch (action.type) {
@@ -16,9 +27,15 @@ export function authentication(state = initialState, action) {
         user: action.user
       };
     case userConstants.LOGIN_FAILURE:
-      return {};
+      return {
+        loggedIn: false,
+        user: { role: "Guest" }
+      };
     case userConstants.LOGOUT:
-      return {};
+      return {
+        loggedIn: false,
+        user: { role: "Guest" }
+      };
     default:
       return state;
   }

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Well, Collapse, Button } from "react-bootstrap";
-import Filters from "./userSide/Filters";
-import StoreList from "./userSide/StoreList";
-import { getAllStores } from "../services/userServices";
-import ReactLoading from "react-loading";
-import RoleNavbar from "./navbar";
 import { connect } from "react-redux";
+import { Well, Collapse, Button } from "react-bootstrap";
+import ReactLoading from "react-loading";
+import Filters from "../userSide/Filters";
+import StoreList from "../userSide/StoreList";
+import { getAllStores } from "../../services/userServices";
+import RoleNavbar from "../navbar";
 
 const serviceOptions = [
   "All",
@@ -108,9 +108,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  role: state.authentication.hasOwnProperty("user")
-    ? state.authentication.user.role
-    : "Guest"
+  role: state.authentication.user.role
 });
 
 export default connect(mapStateToProps)(Home);
