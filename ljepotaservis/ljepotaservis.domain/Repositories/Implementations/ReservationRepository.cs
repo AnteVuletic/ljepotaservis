@@ -20,7 +20,10 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 
         public async Task Create(UserDto client, UserDto employee, ReservationServiceDto reservationServiceDto)
         {
-            var employeeDb = await _dbLjepotaServisContext.UserStores.Include(userStore => userStore.Store).SingleAsync(userStore => userStore.UserId == employee.Id);
+            var employeeDb = await _dbLjepotaServisContext
+                .UserStores
+                .Include(userStore => userStore.Store)
+                .SingleAsync(userStore => userStore.UserId == employee.Id);
             var store = employeeDb.Store;
             var clientStoreOrDefault = await _dbLjepotaServisContext.UserStores.SingleOrDefaultAsync(userStore => userStore.UserId == client.Id && userStore.StoreId == store.Id);
 

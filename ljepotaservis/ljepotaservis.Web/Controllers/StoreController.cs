@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ljepotaservis.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class StoreController : ControllerBase
     {

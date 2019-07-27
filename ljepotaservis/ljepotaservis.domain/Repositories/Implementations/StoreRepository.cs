@@ -102,23 +102,6 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Store.Id.ToString()));
         }
 
-        public Task<ICollection<StoreDto>> GetStoreByReservationDate(ReservationServiceDto reservations)
-        {
-            var reservationTimeTotal = new TimeSpan();
-            reservationTimeTotal = reservations.Services.Aggregate(reservationTimeTotal, (current, reservationsService) => current + reservationsService.Duration);
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<StoreDto>> GetStoreByService(Service service)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<StoreDto> GetStoreByEmployee(UserDto employee)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task UpdateStoreDetails(int storeId, Store store, Resource resource = null)
         {
             var storeDb = await _dbLjepotaServisContext.Stores.FindAsync(storeId);

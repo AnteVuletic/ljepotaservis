@@ -22,16 +22,10 @@ namespace ljepotaservis.Web.Configuration
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = true;
-                options.Password.RequiredLength = 5;
+                options.Password.RequiredLength = 7;
                 options.Password.RequireNonAlphanumeric = false;
                 options.SignIn.RequireConfirmedEmail = true;
                 options.User.RequireUniqueEmail = true;
-            });
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/user/login";
-                options.ExpireTimeSpan = TimeSpan.FromDays(1);
             });
 
             return services;

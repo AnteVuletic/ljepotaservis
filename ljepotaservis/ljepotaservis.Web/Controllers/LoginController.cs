@@ -36,7 +36,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ConfirmEmail(string userId, string emailToken)
+        public async Task<IActionResult> ConfirmEmail([FromRoute] string userId, [FromRoute] string emailToken)
         {
             var hasSucceeded = await _userRepository.ConfirmEmail(userId, emailToken);
             if(hasSucceeded)
