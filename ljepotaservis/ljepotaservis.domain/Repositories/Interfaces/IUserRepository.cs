@@ -11,6 +11,6 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
         Task<string> LoginUser(UserDto user);
         Task<bool> ConfirmEmail(string userId, string emailToken);
         Task AddEditEmployeesToStore(Store store, ICollection<UserDto> employees);
-        ICollection<UserDto> GetEmployeesByStore(Store store);
+        Task<ICollection<User>> GetEmployeesByStore(Store store);
     }
 }

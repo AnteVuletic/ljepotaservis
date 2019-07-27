@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
@@ -102,27 +104,29 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Store.Id.ToString()));
         }
 
-        public ICollection<StoreDto> GetStoreByReservationDate(ReservationServiceDto reservations)
+        public Task<ICollection<StoreDto>> GetStoreByReservationDate(ReservationServiceDto reservations)
+        {
+            var reservationTimeTotal = new TimeSpan();
+            reservationTimeTotal = reservations.Services.Aggregate(reservationTimeTotal, (current, reservationsService) => current + reservationsService.Duration);
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<StoreDto>> GetStoreByService(Service service)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<StoreDto> GetStoreByService(Service service)
+        public Task<StoreDto> GetStoreByEmployee(UserDto employee)
         {
             throw new NotImplementedException();
         }
 
-        public StoreDto GetStoreByEmployee(UserDto employee)
+        public Task<StoreDto> UpdateStoreDetails(Store storeToUpdate, Store store, Resource resource = null)
         {
             throw new NotImplementedException();
         }
 
-        public StoreDto UpdateStoreDetails(Store storeToUpdate, Store store, Resource resource = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public StoreDto UpdateStoreEmployees(Store store, ICollection<UserDto> employees)
+        public Task<StoreDto> UpdateStoreEmployees(Store store, ICollection<UserDto> employees)
         {
             throw new NotImplementedException();
         }

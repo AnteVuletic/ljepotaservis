@@ -109,13 +109,29 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                     await _userManager.CreateAsync(employee, userDto.Password);
                     await _userManager.AddToRoleAsync(employee, employeeRole.Name);
                     await _userManager.AddClaimAsync(employee, new Claim("Store", store.Id.ToString()));
+
+                    var userStore = new UserStore
+                    {
+                        Store = store,
+                        StoreId = store.Id,
+                        User = employee,
+                        UserId = employee.Id
+                    };
+                    await _dbLjepotaServisContext.AddAsync(userStore);
+                    await _dbLjepotaServisContext.SaveChangesAsync();
                 }
             }
         }
 
-        public ICollection<UserDto> GetEmployeesByStore(Store store)
+        public async Task<ICollection<User>> GetEmployeesByStore(Store store)
         {
-            throw new NotImplementedException();
+            var usersWithStoreClaims = _dbLjepotaServisContext.Users.Where(user => user.Claims.Any(claim => claim.ClaimType == "Store"));
+            var userEmployeesWithClaims =
+                usersWithStoreClaims.Where(user => user.UserRoles.Any(userRole => userRole.Role.Name == "Employee"));
+            var usersWithStoreId = userEmployeesWithClaims.Where(user =>
+                user.Claims.Any(claim => int.Parse(claim.ClaimValue) == store.Id));
+
+            return await usersWithStoreId.ToListAsync();
         }
     }
 }

@@ -16,10 +16,10 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
         Task<Store> GetStoreById(int id);
         Task AddEditServicesToStore(StoreDto storeDto);
         Task CreateStoreAndOwner(Store store, UserDto owner);
-        ICollection<StoreDto> GetStoreByReservationDate(ReservationServiceDto reservations);
-        ICollection<StoreDto> GetStoreByService(Service service);
-        StoreDto GetStoreByEmployee(UserDto employee);
-        StoreDto UpdateStoreDetails(Store storeToUpdate, Store store, Resource resource = null);
-        StoreDto UpdateStoreEmployees(Store store, ICollection<UserDto> employees);
+        Task<ICollection<StoreDto>> GetStoreByReservationDate(ReservationServiceDto reservations);
+        Task<ICollection<StoreDto>> GetStoreByService(Service service);
+        Task<StoreDto> GetStoreByEmployee(UserDto employee);
+        Task<StoreDto> UpdateStoreDetails(Store storeToUpdate, Store store, Resource resource = null);
+        Task<StoreDto> UpdateStoreEmployees(Store store, ICollection<UserDto> employees);
     }
 }

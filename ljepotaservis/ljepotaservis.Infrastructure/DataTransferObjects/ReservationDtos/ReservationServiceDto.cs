@@ -9,6 +9,6 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos
     {
         public Reservation Reservation { get; set; }
         public ICollection<Service> Services { get; set; }
-        public DateTime EndOfReservation { get; set; }
+        public TimeSpan DurationOfReservation { get; set; }
     }
 }
