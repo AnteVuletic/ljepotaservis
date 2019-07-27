@@ -4,7 +4,11 @@ import Role from "../../utils/role";
 let user = JSON.parse(localStorage.getItem("user"));
 
 // Initial role is "Guest" if there is nothing in local storage or the role in local storage is not valid.
-let initialState = { loggedIn: false, user: { role: Role.Guest } };
+let initialState = {
+  loggedIn: false,
+  user: { role: Role.Guest }
+};
+
 if (user) {
   if (Role.hasOwnProperty(user.role)) {
     initialState = {

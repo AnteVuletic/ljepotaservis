@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Well, Collapse, Button } from "react-bootstrap";
 import ReactLoading from "react-loading";
 import Filters from "../userSide/Filters";
 import StoreList from "../userSide/StoreList";
 import { getAllStores } from "../../services/userServices";
-import RoleNavbar from "../navbar";
 
+// Temporary
 const serviceOptions = [
   "All",
   "Female haircut",
@@ -56,7 +55,6 @@ class Home extends Component {
     } = this.state;
     return (
       <div>
-        <RoleNavbar role={this.props.role} />
         <div style={{ margin: "5px", padding: "15px" }}>
           <input
             type="text"
@@ -107,8 +105,4 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  role: state.authentication.user.role
-});
-
-export default connect(mapStateToProps)(Home);
+export default Home;
