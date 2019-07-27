@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ljepotaservis.Data.Entities.Models
+﻿namespace ljepotaservis.Data.Entities.Models
 {
     public class ReservationService
     {

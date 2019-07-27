@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
@@ -121,9 +119,15 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<StoreDto> UpdateStoreDetails(Store storeToUpdate, Store store, Resource resource = null)
+        public async Task UpdateStoreDetails(int storeId, Store store, Resource resource = null)
         {
-            throw new NotImplementedException();
+            var storeDb = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
+
+            storeDb.Address = store.Address;
+            storeDb.ClosingDateTime = store.ClosingDateTime;
+            storeDb.OpenDateTime = store.OpenDateTime;
+            storeDb.Name = store.Name;
+            await _dbLjepotaServisContext.SaveChangesAsync();
         }
 
         public Task<StoreDto> UpdateStoreEmployees(Store store, ICollection<UserDto> employees)

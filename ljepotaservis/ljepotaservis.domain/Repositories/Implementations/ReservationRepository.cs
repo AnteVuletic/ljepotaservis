@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Abstractions;
@@ -21,21 +20,32 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 
         public async Task Create(UserDto client, UserDto employee, ReservationServiceDto reservationServiceDto)
         {
-            var clientDb = await _dbLjepotaServisContext.Users.FindAsync(client.Id);
-            var employeeDb = await _dbLjepotaServisContext.UserStores.SingleAsync(userStore => userStore.UserId == employee.Id);
+            var employeeDb = await _dbLjepotaServisContext.UserStores.Include(userStore => userStore.Store).SingleAsync(userStore => userStore.UserId == employee.Id);
+            var store = employeeDb.Store;
+            var clientStoreOrDefault = await _dbLjepotaServisContext.UserStores.SingleOrDefaultAsync(userStore => userStore.UserId == client.Id && userStore.StoreId == store.Id);
 
-            var userStoreClient = new UserStore
+            if (clientStoreOrDefault == null)
             {
-                UserId = clientDb.Id,
-                User = clientDb
-            };
+                var clientDb = await _dbLjepotaServisContext.Users.FindAsync(client.Id);
+
+                clientStoreOrDefault = new UserStore
+                {
+                    UserId = clientDb.Id,
+                    User = clientDb,
+                    Store = store,
+                    StoreId = store.Id
+                };
+
+                await _dbLjepotaServisContext.AddAsync(clientStoreOrDefault);
+                await _dbLjepotaServisContext.SaveChangesAsync();
+            }
 
             var reservation = new Reservation
             {
                 UserStoreEmployee = employeeDb,
                 UserStoreEmployeeId = employeeDb.Id,
-                UserStore = userStoreClient,
-                UserStoreId = userStoreClient.Id
+                UserStore = clientStoreOrDefault,
+                UserStoreId = clientStoreOrDefault.Id
             };
             await _dbLjepotaServisContext.Reservations.AddAsync(reservation);
             await _dbLjepotaServisContext.SaveChangesAsync();
@@ -64,30 +74,52 @@ namespace ljepotaservis.Domain.Repositories.Implementations
         public async Task<ICollection<ReservationServiceDto>> GetCurrentReservationsByEmployee(UserDto userEmployee)
         {
             var userEmployeeStore = await _dbLjepotaServisContext.UserStores.SingleAsync(userStore => userStore.UserId == userEmployee.Id);
-            var reservationReservationServices = _dbLjepotaServisContext
+            var reservationReservationServices = await _dbLjepotaServisContext
                 .Reservations
-                .GroupJoin(_dbLjepotaServisContext.ReservationServices, reservation => reservation.Id, reservationService => reservationService.ReservationId,
-                    (reservation, reservationService) => new ReservationServiceDto{ Reservation = reservation, Services = reservationService.Select(rs => rs.Service).ToList()})
-                .Where(reservationsReservationService => reservationsReservationService.Reservation.UserStoreEmployeeId == userEmployeeStore.Id);
-            foreach (var reservationReservationService in reservationReservationServices)
+                .Where(reservation => reservation.UserStoreEmployeeId == userEmployeeStore.Id)
+                .ResolveReservationToDto(_dbLjepotaServisContext.ReservationServices)
+                .ToListAsync();
+
+            reservationReservationServices = ReservationDurations(reservationReservationServices);
+            return reservationReservationServices;
+        }
+
+        public async Task<ICollection<ReservationServiceDto>> GetReservationsByStore(Store store)
+        {
+            var reservationsByStore = await _dbLjepotaServisContext
+                .Reservations
+                .Where(reservation => reservation.UserStoreEmployee.StoreId == store.Id)
+                .ResolveReservationToDto(_dbLjepotaServisContext.ReservationServices)
+                .ToListAsync();
+            reservationsByStore = ReservationDurations(reservationsByStore);
+            return reservationsByStore;
+        }
+
+        public async Task<ICollection<ReservationServiceDto>> GetReservationsByUser(UserDto user)
+        {
+            var userStoreClient = _dbLjepotaServisContext.UserStores.Where(userStore => userStore.UserId == user.Id);
+            var reservationsByClient = await _dbLjepotaServisContext
+                .Reservations
+                .Where(reservation =>
+                    userStoreClient.Any(clientStore =>
+                        clientStore.Id == reservation.UserStoreId))
+                .ResolveReservationToDto(_dbLjepotaServisContext.ReservationServices)
+                .ToListAsync();
+            reservationsByClient = ReservationDurations(reservationsByClient);
+            return reservationsByClient;
+        }
+
+        private List<ReservationServiceDto> ReservationDurations(List<ReservationServiceDto> reservationServices)
+        {
+            foreach (var reservationService in reservationServices)
             {
                 var durationOfReservation = new TimeSpan();
-                durationOfReservation = reservationReservationService.Services.Aggregate(durationOfReservation,
+                durationOfReservation = reservationService.Services.Aggregate(durationOfReservation,
                     (accumulator, service) => accumulator + service.Duration);
-                reservationReservationService.DurationOfReservation = durationOfReservation;
+                reservationService.DurationOfReservation = durationOfReservation;
             }
 
-            return await reservationReservationServices.ToListAsync();
-        }
-
-        public Task<ICollection<ReservationServiceDto>> GetReservationsByStore(Store store)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ICollection<ReservationServiceDto>> GetReservationsByUser(UserDto user)
-        {
-            throw new NotImplementedException();
+            return reservationServices;
         }
     }
 }

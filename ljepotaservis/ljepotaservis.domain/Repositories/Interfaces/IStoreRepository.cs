@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
@@ -19,7 +16,7 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
         Task<ICollection<StoreDto>> GetStoreByReservationDate(ReservationServiceDto reservations);
         Task<ICollection<StoreDto>> GetStoreByService(Service service);
         Task<StoreDto> GetStoreByEmployee(UserDto employee);
-        Task<StoreDto> UpdateStoreDetails(Store storeToUpdate, Store store, Resource resource = null);
+        Task UpdateStoreDetails(int storeId, Store store, Resource resource = null);
         Task<StoreDto> UpdateStoreEmployees(Store store, ICollection<UserDto> employees);
     }
 }

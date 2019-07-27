@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using ljepotaservis.Data.Enums;
 
 namespace ljepotaservis.Data.Entities.Models

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using ljepotaservis.Data.Enums;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
 namespace ljepotaservis.Data.Entities.Models

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ljepotaservis.Entities.Data;
+﻿using ljepotaservis.Entities.Data;
 
 namespace ljepotaservis.Domain.Abstractions
 {
