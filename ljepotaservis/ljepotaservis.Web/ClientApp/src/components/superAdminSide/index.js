@@ -14,7 +14,7 @@ const SuperAdminSide = props => {
         <Route exact path={path} component={Dashboard} />
         <Route path={path + "/stores"} component={Stores} />
         <Redirect to={path} />
-      </Switch>{" "}
+      </Switch>
     </div>
   );
 };

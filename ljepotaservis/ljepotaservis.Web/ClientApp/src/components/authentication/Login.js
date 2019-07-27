@@ -13,12 +13,12 @@ export default class Login extends Component {
     };
   }
 
-  handleChange = e => {
-    this.setState({ [e.target.id]: e.target.value });
+  handleChange = event => {
+    this.setState({ [event.target.id]: event.target.value });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = event => {
+    event.preventDefault();
 
     //const { email, password } = this.state;
     // HTTP post request here
@@ -41,7 +41,7 @@ export default class Login extends Component {
             <FormControl
               type="email"
               value={email}
-              placeholder="address@mail.com"
+              placeholder="adresa@mail.com"
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
@@ -52,18 +52,18 @@ export default class Login extends Component {
             <FormControl
               type="password"
               value={password}
-              placeholder="Password"
+              placeholder="Lozinka"
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
           </FormGroup>
 
           <Button bsStyle="success" type="submit">
-            Login
+            Prijavi se
           </Button>
         </form>
         <LinkContainer to="/authentication/registration">
-          <Button>Don't have an account? Register here!</Button>
+          <Button>Nemaš račun? Registriraj se!</Button>
         </LinkContainer>
       </div>
     );

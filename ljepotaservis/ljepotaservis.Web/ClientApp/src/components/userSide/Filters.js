@@ -13,7 +13,7 @@ export default function Filters(props) {
 
   return (
     <div style={{ margin: "5px", padding: "20px" }}>
-      <h5>Service:</h5>
+      <h5>Usluge:</h5>
       <DropdownButton
         title={selectedService}
         onSelect={onSelect}
@@ -25,8 +25,7 @@ export default function Filters(props) {
           </MenuItem>
         ))}
       </DropdownButton>
-      <br />
-      <h5>Date and time: </h5>
+      <h5>Datum i vrijeme: </h5>
       <DatePicker
         selected={dateTime}
         onChange={onDateChange}
@@ -37,9 +36,7 @@ export default function Filters(props) {
         timeCaption="time"
         minDate={new Date()}
       />
-      <br />
-      <br />
-      <Button bsStyle="success">Apply filters</Button>
+      <Button bsStyle="success">Filtriraj</Button>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { validateEmail, validatePassword } from "../../utils/validationHelper";
+import { regexEmail, validatePassword } from "../../utils/validationHelper";
 import {
   FormGroup,
   FormControl,
@@ -23,17 +23,17 @@ export default class Registration extends Component {
     };
   }
 
-  handleChange = e => {
-    this.setState({ [e.target.id]: e.target.value });
+  handleChange = event => {
+    this.setState({ [event.target.id]: event.target.value });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = event => {
+    event.preventDefault();
 
     const { email, password, passwordConfirmation } = this.state;
 
     if (
-      validateEmail(email) &&
+      regexEmail(email) &&
       validatePassword(password) &&
       password === passwordConfirmation
     ) {
@@ -44,7 +44,7 @@ export default class Registration extends Component {
   };
 
   handleEmailBlur = () => {
-    if (validateEmail(this.state.email)) {
+    if (regexEmail(this.state.email)) {
       this.setState({ emailValidationState: "success" });
     } else {
       this.setState({ emailValidationState: "error" });
@@ -96,7 +96,7 @@ export default class Registration extends Component {
             <FormControl
               type="email"
               value={email}
-              placeholder="address@mail.com"
+              placeholder="adresa@mail.com"
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
@@ -112,13 +112,13 @@ export default class Registration extends Component {
             <FormControl
               type="password"
               value={password}
-              placeholder="Password"
+              placeholder="Lozinka"
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
             <HelpBlock>
-              The password has to containt 7 characters, one uppercase, one
-              lowercase and a number!
+              Lozinka treba sadržavati 7 ili više zankova, veliko i malo slovo i
+              broj!
             </HelpBlock>
           </FormGroup>
 
@@ -131,20 +131,20 @@ export default class Registration extends Component {
             <FormControl
               type="password"
               value={passwordConfirmation}
-              placeholder="Password confirmation"
+              placeholder="Potvrdi lozinku"
               onChange={this.handleChange}
             />
             <FormControl.Feedback />
-            <HelpBlock>The passwords have to match!</HelpBlock>
+            <HelpBlock>Lozinke se trebaju podudarati!</HelpBlock>
           </FormGroup>
 
           <Button type="submit" bsStyle="success">
-            Register
+            Registriraj se
           </Button>
         </form>
 
         <LinkContainer to="/authentication/login">
-          <Button>Already have an account? Login here!</Button>
+          <Button>Već imaš račun? Prijavi se!</Button>
         </LinkContainer>
       </div>
     );

@@ -16,28 +16,24 @@ class App extends Component {
       <div>
         <div style={{ marginTop: "60px" }}>
           <Switch>
-            {/* Employee homepage */}
             <PrivateRoute
               path="/employee"
               user={currentUser}
               roles={[Role.Employee]}
               component={EmployeeSide}
             />
-            {/* Owner homepage */}
             <PrivateRoute
               path="/owner"
               user={currentUser}
               roles={[Role.Owner]}
               component={OwnerSide}
             />
-            {/* Super admin homepage */}
             <PrivateRoute
               path="/super-admin"
               user={currentUser}
               roles={[Role.SuperAdmin]}
               component={SuperAdminSide}
             />
-            {/* Guest and user homepage */}
             <PrivateRoute
               path="/"
               user={currentUser}

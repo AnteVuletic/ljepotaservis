@@ -7,11 +7,11 @@ import { getAllStores } from "../../services/userServices";
 
 // Temporary
 const serviceOptions = [
-  "All",
-  "Female haircut",
-  "Nails",
-  "Make up",
-  "Male haircut"
+  "Sve",
+  "Žensko šišanje",
+  "Nokti",
+  "Šminkanje",
+  "Muško šišanje"
 ];
 
 class Home extends Component {
@@ -22,7 +22,7 @@ class Home extends Component {
       stores: [],
       loading: true,
       searchBar: "",
-      selectedService: "All",
+      selectedService: "Sve",
       dateTime: null,
       filtersAreOpen: false
     };
@@ -61,10 +61,9 @@ class Home extends Component {
             name="searchBar"
             value={searchBar}
             onChange={this.handleChange}
-            placeholder="Search"
+            placeholder="Pretraži"
             style={{ width: "100%", height: "50px" }}
           />
-          <br />
           <div style={{ margin: "5px 0px", width: "100%" }}>
             <Button
               onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
@@ -72,10 +71,9 @@ class Home extends Component {
               bsSize="large"
               block
             >
-              Filters
+              Filteri
             </Button>
           </div>
-          <br />
           <Collapse in={filtersAreOpen}>
             <div>
               <Well>

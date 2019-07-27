@@ -8,10 +8,12 @@ export function users(state = {}, action) {
       };
     case userConstants.GETALL_SUCCESS:
       return {
+        loading: false,
         items: action.users
       };
     case userConstants.GETALL_FAILURE:
       return {
+        loading: false,
         error: action.error
       };
     default:

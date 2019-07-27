@@ -26,10 +26,10 @@ export default function NavbarTemplet(props) {
         {role === "Guest" && (
           <Nav pullRight>
             <LinkContainer to="/authentication/registration">
-              <NavItem eventKey={1}>Registration</NavItem>
+              <NavItem eventKey={1}>Registracija</NavItem>
             </LinkContainer>
             <LinkContainer to="/authentication/login">
-              <NavItem eventKey={2}>Log in</NavItem>
+              <NavItem eventKey={2}>Prijava</NavItem>
             </LinkContainer>
           </Nav>
         )}
