@@ -1,5 +1,7 @@
 import React from "react";
 
-export default function Dashboard() {
+const Dashboard = () => {
   return <div>Superadmin</div>;
-}
+};
+
+export default Dashboard;

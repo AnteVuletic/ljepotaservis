@@ -2,7 +2,7 @@ import React from "react";
 import { Jumbotron, Button } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
-export default function StoreList(props) {
+const StoreList = props => {
   return (
     <div>
       {props.stores
@@ -23,4 +23,6 @@ export default function StoreList(props) {
         ))}
     </div>
   );
-}
+};
+
+export default StoreList;

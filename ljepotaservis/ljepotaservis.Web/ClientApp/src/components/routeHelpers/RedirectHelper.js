@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import Role from "../../utils/role";
 
-export default function RedirectHelper(props) {
+const RedirectHelper = props => {
   switch (props.role) {
     case Role.Guest:
       return <Redirect to="/" />;
@@ -17,4 +17,6 @@ export default function RedirectHelper(props) {
     default:
       return <Redirect to="/" />;
   }
-}
+};
+
+export default RedirectHelper;
