@@ -3,8 +3,7 @@ import { handleResponse } from "../utils/handleResponse";
 
 export const userService = {
   login,
-  logout,
-  getAll
+  logout
 };
 
 function login(username, password) {
@@ -25,15 +24,6 @@ function login(username, password) {
 
 function logout() {
   localStorage.removeItem("user");
-}
-
-function getAll() {
-  const requestOptions = {
-    method: "GET",
-    headers: authHeader()
-  };
-  // testirat na backend apiju
-  return fetch(`/api/getRestrictedDate`, requestOptions).then(handleResponse);
 }
 
 // samo mock za testirat react maknit kasnije

@@ -1,4 +1,4 @@
-import { userActions } from "../store//actions/userActions";
+import { userActions } from "../store/actions/userActions";
 
 export const handleResponse = response => {
   return response.text().then(text => {

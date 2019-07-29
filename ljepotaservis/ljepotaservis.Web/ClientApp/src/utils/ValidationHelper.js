@@ -5,7 +5,6 @@ export const regexEmail = email => {
 };
 
 export const validatePassword = password => {
-  //1xuppercase, 1xlowercase, 1xnumber and longer then 7 characters
   return (
     /[A-Z]/.test(password) &&
     /[a-z]/.test(password) &&

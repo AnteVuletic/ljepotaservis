@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { LinkContainer } from "react-router-bootstrap";
-import { regexEmail, validatePassword } from "../../utils/ValidationHelper";
+import { regexEmail, validatePassword } from "../../utils/validationHelper";
 import {
   FormGroup,
   FormControl,

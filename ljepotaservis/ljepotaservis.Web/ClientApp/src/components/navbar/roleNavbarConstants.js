@@ -3,7 +3,7 @@ const roleNavbarConstants = {
     homePath: "/super-admin",
     items: [
       { text: "Naslovnica", path: "/super-admin" },
-      { text: "Saloni", path: "/super-admin/stores" }
+      { text: "Dodaj salon", path: "/super-admin/add-store" }
     ]
   },
   Owner: {
