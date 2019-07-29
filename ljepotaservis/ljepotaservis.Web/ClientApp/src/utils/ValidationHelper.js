@@ -12,3 +12,20 @@ export const validatePassword = password => {
     password.length > 7
   );
 };
+
+export const validateName = name => {
+  const trimmedName = name.trim();
+
+  if (
+    /\d/.test(trimmedName) ||
+    /\s/.test(trimmedName.trim()) ||
+    trimmedName.length < 3 ||
+    trimmedName.length > 10
+  ) {
+    return false;
+  }
+
+  return (
+    trimmedName.charAt(0).toUpperCase() + trimmedName.slice(1).toLowerCase()
+  );
+};

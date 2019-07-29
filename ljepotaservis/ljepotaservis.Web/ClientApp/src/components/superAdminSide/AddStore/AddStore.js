@@ -6,7 +6,7 @@ class AddStore extends Component {
     super(props);
 
     this.state = {
-      storeName: "",
+      name: "",
       address: "",
       openingTime: new Date(),
       closingTime: new Date()
@@ -29,15 +29,15 @@ class AddStore extends Component {
   };
 
   render() {
-    const { storeName, address, openingTime, closingTime } = this.state;
+    const { name, address, openingTime, closingTime } = this.state;
 
     return (
       <div>
         <h3>Dodaj salon</h3>
         <input
-          name="storeName"
+          name="name"
           type="text"
-          value={storeName}
+          value={name}
           onChange={this.handleChange}
           placeholder="Ime salona"
         />
