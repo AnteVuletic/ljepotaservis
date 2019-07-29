@@ -28,11 +28,8 @@ namespace ljepotaservis.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] UserDto user)
         {
-            var token = await _userRepository.LoginUser(user);
-            return Ok(new
-            {
-                token
-            });
+            var userDto = await _userRepository.LoginUser(user);
+            return Ok(userDto);
         }
 
         [HttpGet]

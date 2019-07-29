@@ -46,7 +46,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
         {
             var userRole = _roleManager.Roles.Single(role => role.Name == "User");
 
-            var dbUser = UserDto.ProjectUserDtoToUser(user);
+            var dbUser = user.ProjectUserDtoToUser();
             var result = await _userManager.CreateAsync(dbUser, user.Password);
             await _userManager.AddToRoleAsync(dbUser, userRole.Name);
 
@@ -62,20 +62,21 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             _emailHelper.SendEmail(emailMessage);
         }
 
-        public async Task<string> LoginUser(UserDto user)
+        public async Task<UserDto> LoginUser(UserDto user)
         {
-            var dboUser = _userManager.Users.FirstOrDefault(usr =>
+            var dbUser = _userManager.Users.FirstOrDefault(usr =>
                 string.Equals(user.Email, usr.Email, StringComparison.CurrentCultureIgnoreCase));
 
-            if (dboUser == null) throw new Exception("Non existent user");
-            if (!dboUser.EmailConfirmed) throw new Exception("User non verified email");
+            if (dbUser == null) throw new Exception("Non existent user");
+            if (!dbUser.EmailConfirmed) throw new Exception("User non verified email");
 
-            var userSigninResult = await _signInManager.PasswordSignInAsync(dboUser, user.Password, true, false);
+            var userSigninResult = await _signInManager.PasswordSignInAsync(dbUser, user.Password, true, false);
 
             if (!userSigninResult.Succeeded) throw new Exception("Invalid password");
 
-            await _signInManager.SignInAsync(dboUser, true);
-            return _jwtHelper.GenerateJwtToken(dboUser);
+            await _signInManager.SignInAsync(dbUser, true);
+            var token = _jwtHelper.GenerateJwtToken(dbUser);
+            return dbUser.ProjectUserToDtoUser(token);
         }
 
         public async Task<bool> ConfirmEmail(string userId, string emailToken)
@@ -105,7 +106,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 }
                 else
                 {
-                    var employee = UserDto.ProjectUserDtoToUser(userDto, true);
+                    var employee = userDto.ProjectUserDtoToUser(true);
                     await _userManager.CreateAsync(employee, userDto.Password);
                     await _userManager.AddToRoleAsync(employee, employeeRole.Name);
                     await _userManager.AddClaimAsync(employee, new Claim("Store", store.Id.ToString()));

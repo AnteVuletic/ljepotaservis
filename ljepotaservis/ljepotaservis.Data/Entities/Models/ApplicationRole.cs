@@ -7,5 +7,6 @@ namespace ljepotaservis.Data.Entities.Models
     {
         public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual ICollection<ApplicationRoleClaim> RoleClaims { get; set; }
+        public override string Name { get; set; }
     }
 }
