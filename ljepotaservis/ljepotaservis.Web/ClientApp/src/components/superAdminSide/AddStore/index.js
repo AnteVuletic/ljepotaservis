@@ -3,6 +3,8 @@ import AddStore from "./AddStore";
 import AddOwner from "./AddOwner";
 import Role from "../../../utils/role";
 import { createStoreAndOwner } from "../../../services/superAdmin";
+import UserDto from "../../../services/backendModels/dto/userDto";
+import StoreModel from "../../../services/backendModels/models/storeModel";
 import {
   regexEmail,
   validatePassword,
@@ -73,8 +75,24 @@ class AddStoreAndOwner extends Component {
       alert("store name and address longer than 3");
       return;
     }
-    // Ovo je HTTP post request rjesit promise kad se spojis na api
-    createStoreAndOwner(store, owner);
+
+    const ownerDto = new UserDto(
+      owner.firstName,
+      owner.lastName,
+      owner.email,
+      owner.username,
+      owner.password,
+      Role.SuperAdmin
+    );
+
+    const storeModel = new StoreModel(
+      store.name,
+      store.address,
+      store.openingTime,
+      store.closingTime
+    );
+
+    createStoreAndOwner(storeModel, ownerDto);
   };
 
   handleChange = formInformation => {
