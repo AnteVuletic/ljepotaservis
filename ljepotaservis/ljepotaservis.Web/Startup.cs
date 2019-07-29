@@ -1,6 +1,6 @@
+using ljepotaservis.Web.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +21,12 @@ namespace ljepotaservis.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.ConfigureSqlServer(Configuration);
+            services.ConfigureDependencyInjection(Configuration);
+            services.ConfigureSendGrid(Configuration);
+            services.ConfigureIdentity(Configuration);
+            services.ConfigureJwt(Configuration);
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -43,6 +49,7 @@ namespace ljepotaservis.Web
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
