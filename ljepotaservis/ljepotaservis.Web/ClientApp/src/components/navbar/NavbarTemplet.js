@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer, IndexLinkContainer } from "react-router-bootstrap";
 
-export default function NavbarTemplet(props) {
+const NavbarTemplet = props => {
   const { role, navigation } = props;
   return (
     <Navbar collapseOnSelect fixedTop={true} fluid={true}>
@@ -36,4 +36,6 @@ export default function NavbarTemplet(props) {
       </Navbar.Collapse>
     </Navbar>
   );
-}
+};
+
+export default NavbarTemplet;

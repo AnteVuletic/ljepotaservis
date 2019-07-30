@@ -2,7 +2,7 @@ import React from "react";
 import { DropdownButton, MenuItem, Button } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 
-export default function Filters(props) {
+const Filters = props => {
   const {
     selectedService,
     onSelect,
@@ -39,4 +39,6 @@ export default function Filters(props) {
       <Button bsStyle="success">Filtriraj</Button>
     </div>
   );
-}
+};
+
+export default Filters;

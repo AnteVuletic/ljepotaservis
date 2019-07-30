@@ -5,11 +5,27 @@ export const regexEmail = email => {
 };
 
 export const validatePassword = password => {
-  //1xuppercase, 1xlowercase, 1xnumber and longer then 7 characters
   return (
     /[A-Z]/.test(password) &&
     /[a-z]/.test(password) &&
     /[0-9]/.test(password) &&
     password.length > 7
+  );
+};
+
+export const validateName = name => {
+  const trimmedName = name.trim();
+
+  if (
+    /\d/.test(trimmedName) ||
+    /\s/.test(trimmedName.trim()) ||
+    trimmedName.length < 3 ||
+    trimmedName.length > 10
+  ) {
+    return false;
+  }
+
+  return (
+    trimmedName.charAt(0).toUpperCase() + trimmedName.slice(1).toLowerCase()
   );
 };
