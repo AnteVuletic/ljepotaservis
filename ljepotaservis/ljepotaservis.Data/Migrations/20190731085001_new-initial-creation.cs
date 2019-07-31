@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ljepotaservis.Data.Migrations
 {
-    public partial class initialcreation : Migration
+    public partial class newinitialcreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -72,7 +72,6 @@ namespace ljepotaservis.Data.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    BusinessOib = table.Column<string>(nullable: true),
                     OpenDateTime = table.Column<DateTime>(nullable: false),
                     ClosingDateTime = table.Column<DateTime>(nullable: false)
                 },
@@ -262,6 +261,7 @@ namespace ljepotaservis.Data.Migrations
                     UserStoreId = table.Column<int>(nullable: false),
                     UserStoreEmployeeId = table.Column<int>(nullable: true),
                     TimeOfReservation = table.Column<DateTime>(nullable: false),
+                    EndOfReservation = table.Column<DateTime>(nullable: false),
                     Rating = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -310,10 +310,10 @@ namespace ljepotaservis.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Discriminator", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "57fb0c68-acd3-479b-8949-0c723d374dfe", "98169c40-6e25-42fd-9f22-aaba1f3aaa5f", "IdentityRole", "SuperAdmin", null },
-                    { "8191d8fb-92a4-4a48-992d-a1eb56ca4cab", "02251c0b-f0c8-4522-b0ce-2cb3d07eed12", "IdentityRole", "Owner", null },
-                    { "f0a5e6b5-492e-40b5-a32a-dbe578973967", "39f2cfb0-f651-43eb-be23-38169ecffb29", "IdentityRole", "Employee", null },
-                    { "07aa9e06-19b3-4d0c-95aa-ab9f560ecefa", "51b4deac-1bb6-4101-a084-7b6563f919bf", "IdentityRole", "User", null }
+                    { "901fbf40-636d-4339-bd9b-64b895772ea4", "9288a5cf-7bfb-4a9f-a016-cea3e5b4b4e2", "IdentityRole", "SuperAdmin", "SUPERADMIN" },
+                    { "9cdede97-f681-4bd4-8f31-57433f35d09a", "320380c3-d376-4553-9738-c1ba61060d72", "IdentityRole", "Owner", "OWNER" },
+                    { "f7e2683d-c68d-41b7-a95e-062066642b7f", "cf300468-5f1d-4c20-99ff-206d6a65fd50", "IdentityRole", "Employee", "EMPLOYEE" },
+                    { "ca77e91a-d79c-41fa-973c-1dc4c37c16f5", "8c7e26fb-648f-4eea-8194-b975f3ba36e2", "IdentityRole", "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

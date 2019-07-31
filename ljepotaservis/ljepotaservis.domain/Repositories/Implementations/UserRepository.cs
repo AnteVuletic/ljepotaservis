@@ -73,15 +73,15 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             var userSigninResult = await _signInManager.PasswordSignInAsync(dbUser, user.Password, true, false);
 
             if (!userSigninResult.Succeeded) throw new Exception("Invalid password");
-
-            await _signInManager.SignInAsync(dbUser, true);
+            var userRoles = await _userManager.GetRolesAsync(dbUser);
             var token = _jwtHelper.GenerateJwtToken(dbUser);
-            return dbUser.ProjectUserToDtoUser(token);
+            return dbUser.ProjectUserToDtoUser(token, userRoles.First());
         }
 
         public async Task<bool> ConfirmEmail(string userId, string emailToken)
         {
-            var dboUser = _userManager.Users.Single(user => user.Id == userId);
+            var userIdDecoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(userId));
+            var dboUser = _userManager.Users.Single(user => user.Id == userIdDecoded);
             var tokenUrlDecoded = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(emailToken));
             var result = await _userManager.ConfirmEmailAsync(dboUser, tokenUrlDecoded);
             return result.Succeeded;

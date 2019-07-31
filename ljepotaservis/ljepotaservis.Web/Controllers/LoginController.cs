@@ -29,11 +29,12 @@ namespace ljepotaservis.Web.Controllers
         public async Task<IActionResult> Login([FromBody] UserDto user)
         {
             var userDto = await _userRepository.LoginUser(user);
+            if (userDto == null) return Unauthorized();
             return Ok(userDto);
         }
 
         [HttpGet]
-        public async Task<IActionResult> ConfirmEmail([FromRoute] string userId, [FromRoute] string emailToken)
+        public async Task<IActionResult> ConfirmEmail(string userId, string emailToken)
         {
             var hasSucceeded = await _userRepository.ConfirmEmail(userId, emailToken);
             if(hasSucceeded)

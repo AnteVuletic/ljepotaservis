@@ -15,9 +15,6 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.UserDtos
         public string Password { get; set; }
         public string Token { get; set; }
         public string Role { get; set; }
-        public ICollection<string> Claims { get; set; }
-
-
     }
 
     public static partial class QueryableExtensions
@@ -36,7 +33,7 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.UserDtos
             return userDb;
         }
 
-        public static UserDto ProjectUserToDtoUser(this User user, string token = "")
+        public static UserDto ProjectUserToDtoUser(this User user, string token = "", string role = "")
         {
             return new UserDto
             {
@@ -45,7 +42,7 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.UserDtos
                 FirstName = user.Firstname,
                 Email = user.Email,
                 Token = token,
-                Role = user.UserRoles.First().Role.Name
+                Role = role
             };
         }
     }

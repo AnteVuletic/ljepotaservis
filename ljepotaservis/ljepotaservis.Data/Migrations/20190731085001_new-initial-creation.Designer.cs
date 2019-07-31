@@ -10,8 +10,8 @@ using ljepotaservis.Entities.Data;
 namespace ljepotaservis.Data.Migrations
 {
     [DbContext(typeof(LjepotaServisContext))]
-    [Migration("20190725194031_adjusting-roles")]
-    partial class adjustingroles
+    [Migration("20190731085001_new-initial-creation")]
+    partial class newinitialcreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,29 +52,29 @@ namespace ljepotaservis.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a383f14f-fdf3-479b-90be-7874128f36bc",
-                            ConcurrencyStamp = "e592eeda-2c7b-45e0-847c-2b92c1065cd6",
+                            Id = "901fbf40-636d-4339-bd9b-64b895772ea4",
+                            ConcurrencyStamp = "9288a5cf-7bfb-4a9f-a016-cea3e5b4b4e2",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "6032c70a-703a-4a72-bbbb-420dbcad4006",
-                            ConcurrencyStamp = "5220d211-5c42-429d-8edd-722c7a88ce88",
+                            Id = "9cdede97-f681-4bd4-8f31-57433f35d09a",
+                            ConcurrencyStamp = "320380c3-d376-4553-9738-c1ba61060d72",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = "c6734644-1172-44f7-839d-751b10182058",
-                            ConcurrencyStamp = "54e9931f-26c5-46be-8771-889ee2f87f1d",
+                            Id = "f7e2683d-c68d-41b7-a95e-062066642b7f",
+                            ConcurrencyStamp = "cf300468-5f1d-4c20-99ff-206d6a65fd50",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "c799e78c-6a7e-4f91-aad7-ed946434ab66",
-                            ConcurrencyStamp = "80778c04-d79b-42d8-abd7-558aeb3ae337",
+                            Id = "ca77e91a-d79c-41fa-973c-1dc4c37c16f5",
+                            ConcurrencyStamp = "8c7e26fb-648f-4eea-8194-b975f3ba36e2",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -184,6 +184,8 @@ namespace ljepotaservis.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("EndOfReservation");
 
                     b.Property<int?>("Rating");
 

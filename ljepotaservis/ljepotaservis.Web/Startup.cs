@@ -1,3 +1,4 @@
+using ljepotaservis.Data.DataSeeds;
 using ljepotaservis.Web.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,8 +23,8 @@ namespace ljepotaservis.Web
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.ConfigureDependencyInjection();
             services.ConfigureSqlServer(Configuration);
-            services.ConfigureDependencyInjection(Configuration);
             services.ConfigureSendGrid(Configuration);
             services.ConfigureIdentity(Configuration);
             services.ConfigureJwt(Configuration);
@@ -70,6 +71,8 @@ namespace ljepotaservis.Web
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            SuperAdminSeed.Initialize(app.ApplicationServices.GetService<IServiceScopeFactory>());
         }
     }
 }

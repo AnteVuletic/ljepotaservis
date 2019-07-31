@@ -17,11 +17,11 @@ namespace ljepotaservis.Domain.Repositories.Implementations
         {
         }
 
-        public async Task<Store> GetFilteredStores(SearchFilterDto searchFilters)
+        public async Task<ICollection<Store>> GetFilteredStores(SearchFilterDto searchFilters)
         {
             var stores = _dbLjepotaServisContext.Stores.AsQueryable();
             stores = StoresFilteredByName(stores, searchFilters);
-            return stores;
+            return stores.ToList();
         }
 
         private IQueryable<Store> StoresFilteredByName(IQueryable<Store> stores, SearchFilterDto searchFilter)
