@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import AddStore from "./AddStore";
 import AddOwner from "./AddOwner";
-import Role from "../../../utils/role";
 import { createStoreAndOwner } from "../../../services/superAdmin";
 import UserDto from "../../../services/backendModels/dto/userDto";
 import StoreModel from "../../../services/backendModels/models/storeModel";
@@ -81,8 +80,7 @@ class AddStoreAndOwner extends Component {
       owner.lastName,
       owner.email,
       owner.username,
-      owner.password,
-      Role.SuperAdmin
+      owner.password
     );
 
     const storeModel = new StoreModel(
