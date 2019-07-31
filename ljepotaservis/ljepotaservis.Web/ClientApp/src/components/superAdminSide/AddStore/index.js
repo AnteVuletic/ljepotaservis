@@ -35,7 +35,6 @@ class AddStoreAndOwner extends Component {
     event.preventDefault();
 
     const owner = this.state.owner;
-    owner.role = Role.SuperAdmin;
     const store = this.state.store;
 
     if (!validateName(owner.firstName)) {
