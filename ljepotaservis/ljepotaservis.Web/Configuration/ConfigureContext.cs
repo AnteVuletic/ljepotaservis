@@ -1,7 +1,7 @@
 ﻿using ljepotaservis.Entities.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ljepotaservis.Web.Configuration
 {
@@ -10,7 +10,9 @@ namespace ljepotaservis.Web.Configuration
         public static IServiceCollection ConfigureSqlServer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<LjepotaServisContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("CashierRegister")));
+                {
+                    options.UseSqlServer(configuration.GetConnectionString("LjepotaServis"));
+                });
             return services;
         }
     }

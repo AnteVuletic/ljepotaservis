@@ -9,7 +9,7 @@ import {
   regexEmail,
   validatePassword,
   validateName
-} from "../../../utils/validationHelper";
+} from "../../../utils/ValidationHelper";
 
 class AddStoreAndOwner extends Component {
   constructor(props) {

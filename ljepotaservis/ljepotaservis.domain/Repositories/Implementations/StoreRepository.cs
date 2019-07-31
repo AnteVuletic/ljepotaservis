@@ -90,7 +90,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
         {
             var ownerRole = await _roleManager.Roles.SingleAsync(role => role.Name == "Owner");
 
-            var userOwner = UserDto.ProjectUserDtoToUser(owner, true);
+            var userOwner = owner.ProjectUserDtoToUser(true);
 
             await _userManager.CreateAsync(userOwner, owner.Password);
             var result = _userManager.AddToRoleAsync(userOwner, ownerRole.Name);

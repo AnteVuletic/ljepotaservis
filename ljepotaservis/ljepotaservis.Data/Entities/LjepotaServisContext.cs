@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ljepotaservis.Data.Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -37,7 +39,7 @@ namespace ljepotaservis.Entities.Data
                         {
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
-                        },
+                        }, 
                         new IdentityRole
                         {
                             Name = "Owner",
