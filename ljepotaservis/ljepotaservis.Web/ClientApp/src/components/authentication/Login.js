@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
+import UserDto from "../../services/backendModels/dto/userDto";
+import { authActions } from "../../store/actions/authActions";
 
 export default class Login extends Component {
   constructor(props) {
@@ -20,8 +22,15 @@ export default class Login extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    //const { email, password } = this.state;
-    // HTTP post request here
+    const userToAdd = new UserDto(
+      "",
+      "",
+      this.state.email,
+      "",
+      this.state.email
+    );
+
+    authActions(userToAdd);
   };
 
   render() {

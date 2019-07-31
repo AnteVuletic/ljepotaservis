@@ -5,7 +5,7 @@ class UserDto {
     email,
     username,
     password,
-    role,
+    role = null,
     token = null
   ) {
     this.firstName = firstName;

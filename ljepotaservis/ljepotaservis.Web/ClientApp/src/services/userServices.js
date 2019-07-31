@@ -1,34 +1,10 @@
-import { authHeader } from "../utils/authHeader";
-import { handleResponse } from "../utils/handleResponse";
-
-export const userService = {
-  login,
-  logout
+// samo mock za testirat react maknit kasnije
+export const userServices = {
+  getAllStores
 };
 
-function login(username, password) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-  };
-
-  return fetch("api/login", requestOptions)
-    .then(handleResponse)
-    .then(user => {
-      localStorage.setItem("user", JSON.stringify(user));
-
-      return user;
-    });
-}
-
-function logout() {
-  localStorage.removeItem("user");
-}
-
-// samo mock za testirat react maknit kasnije
-export const getAllStores = () =>
-  new Promise(function(resolve, reject) {
+function getAllStores() {
+  return new Promise(function(resolve) {
     setTimeout(() => {
       resolve([
         {
@@ -62,3 +38,4 @@ export const getAllStores = () =>
       ]);
     }, 2000);
   });
+}
