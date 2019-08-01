@@ -59,9 +59,15 @@ class Registration extends Component {
   }
 
   handleEmailBlur = () => {
+    let isValidEmail = regexEmail(this.state.email);
+    if(!isValidEmail) {
+      this.setState({ emailValidationState: "error" });
+      return;
+    }
+    
     userService.checkEmailTaken(this.state.email)
     .then(isTaken => {
-      isTaken && regexEmail(this.state.email) ?
+      isTaken ?
       this.setState({ emailValidationState: "success" }):
       this.setState({ emailValidationState: "error" })
     });

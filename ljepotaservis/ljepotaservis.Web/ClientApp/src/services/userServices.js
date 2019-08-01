@@ -1,5 +1,5 @@
 import { authHeader } from "../utils/authHeader";
-import { LOGIN } from "./constants/endpoints"
+import { AUTHENTICATION } from "./constants/endpoints"
 import { handleResponse } from "../utils/handleResponse";
 
 export const userService = {
@@ -17,7 +17,7 @@ function login(email, password) {
     body: JSON.stringify({ email, password })
   };
 
-  return fetch(LOGIN.LOGIN, requestOptions)
+  return fetch(AUTHENTICATION.LOGIN, requestOptions)
     .then(handleResponse)
     .then(user => {
       localStorage.setItem("user", JSON.stringify(user));
@@ -33,7 +33,7 @@ function register(username, email, password) {
     body: JSON.stringify({ username, email, password })
   };
 
-  return fetch(LOGIN.REGISTER, requestOptions)
+  return fetch(AUTHENTICATION.REGISTER, requestOptions)
     .then(handleResponse);
 }
 
@@ -48,7 +48,7 @@ function checkEmailTaken(email) {
     body: JSON.stringify({ email })
   };
 
-  return fetch(LOGIN.EMAIL_CHECK, requestOptions)
+  return fetch(AUTHENTICATION.EMAIL_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
 }
