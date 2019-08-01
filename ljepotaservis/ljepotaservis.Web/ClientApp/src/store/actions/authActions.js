@@ -4,14 +4,14 @@ import { authentication } from "../../services/authentication";
 export const login = (email, password) => {
   return dispatch => {
     dispatch(request());
-    authentication.login(userDto).then(
-    userService.login(email, password)
-    .then(user => {
+    authentication.login(email, password).then(
+      user => {
         dispatch(success(user));
       },
       error => {
         dispatch(failure(error));
-      });
+      }
+    );
   };
 
   function request() {
@@ -23,36 +23,12 @@ export const login = (email, password) => {
   function failure(error) {
     return { type: userConstants.LOGIN_FAILURE, error };
   }
-}
-
-export const register = (username, email, password) => {
-  return dispatch => {
-    dispatch(request());
-    
-    userService.register(username, email, password)
-      .then(() => {
-        dispatch(success());
-      },
-      error => {
-        dispatch(failure(error));
-      });
-  }
-
-  
-  function request() {
-    return { type: userConstants.REGISTER_REQUEST };
-  }
-  function success() {
-    return { type: userConstants.REGISTER_SUCCESS };
-  }
-  function failure(error) {
-    return { type: userConstants.REGISTER_FAILURE, error };
-  }
-}
+};
 
 export const logout = () => {
+  authentication.logout();
   return { type: userConstants.LOGOUT };
-}
+};
 
 export const getAll = () => {
   return dispatch => {
@@ -75,4 +51,4 @@ export const getAll = () => {
   function failure(error) {
     return { type: userConstants.GETALL_FAILURE, error };
   }
-}
+};
