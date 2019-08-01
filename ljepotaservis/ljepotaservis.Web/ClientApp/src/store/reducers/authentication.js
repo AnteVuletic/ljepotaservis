@@ -12,6 +12,7 @@ if (user) {
   if (Role.hasOwnProperty(user.role)) {
     initialState = {
       loggedIn: true,
+      loading: false,
       user
     };
   }
@@ -21,18 +22,37 @@ export function authentication(state = initialState, action) {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
-        loggingIn: true
+        loggedIn: false,
+        loading: true,
+        ...state
       };
     case userConstants.LOGIN_SUCCESS:
       return {
         loggedIn: true,
+        loading: false,
         user: action.user
       };
     case userConstants.LOGIN_FAILURE:
       return {
         loggedIn: false,
+        loading: false,
         user: { role: "Guest" }
       };
+    case userConstants.REGISTER_REQUEST:
+      return {
+        loading: true,
+        ...state
+      };
+    case userConstants.REGISTER_SUCCESS:
+      return {
+        loading: false,
+        ...state
+      };
+    case userConstants.REGISTER_FAILURE:
+      return {
+        loading: false,
+        ...state
+      }
     case userConstants.LOGOUT:
       return {
         loggedIn: false,

@@ -33,6 +33,20 @@ namespace ljepotaservis.Web.Controllers
             return Ok(userDto);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CheckEmailTaken([FromBody] string email)
+        {
+            var isEmailTaken = await _userRepository.CheckEmailTaken(email);
+            return Ok(isEmailTaken);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CheckUsernameTaken([FromBody] string username)
+        {
+            var isUserNameTaken = await _userRepository.CheckUsernameTaken(username);
+            return Ok(isUserNameTaken);
+        }
+
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string emailToken)
         {

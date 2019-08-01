@@ -1,23 +1,17 @@
 import { userConstants } from "../constants/userConstants";
 import { authentication } from "../../services/authentication";
 
-export const authActions = {
-  login,
-  logout,
-  getAll
-};
-
-function login(userDto) {
+export const login = (email, password) => {
   return dispatch => {
     dispatch(request());
     authentication.login(userDto).then(
-      user => {
+    userService.login(email, password)
+    .then(user => {
         dispatch(success(user));
       },
       error => {
         dispatch(failure(error));
-      }
-    );
+      });
   };
 
   function request() {
@@ -31,12 +25,36 @@ function login(userDto) {
   }
 }
 
-function logout() {
-  authentication.logout();
+export const register = (username, email, password) => {
+  return dispatch => {
+    dispatch(request());
+    
+    userService.register(username, email, password)
+      .then(() => {
+        dispatch(success());
+      },
+      error => {
+        dispatch(failure(error));
+      });
+  }
+
+  
+  function request() {
+    return { type: userConstants.REGISTER_REQUEST };
+  }
+  function success() {
+    return { type: userConstants.REGISTER_SUCCESS };
+  }
+  function failure(error) {
+    return { type: userConstants.REGISTER_FAILURE, error };
+  }
+}
+
+export const logout = () => {
   return { type: userConstants.LOGOUT };
 }
 
-function getAll() {
+export const getAll = () => {
   return dispatch => {
     dispatch(request());
 

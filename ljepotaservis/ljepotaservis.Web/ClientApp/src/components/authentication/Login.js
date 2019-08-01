@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
+import { connect } from "react-redux";
+import { login } from '../../store/actions/userActions'
 import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
 import UserDto from "../../services/backendModels/dto/userDto";
 import { authActions } from "../../store/actions/authActions";
@@ -23,10 +25,10 @@ class Login extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const userToLogin = new UserDto(
-      "",
-      "",
-      this.state.email,
+    const { login } = this.props;
+    const { email, password } = this.state;
+
+    login(email, password);
       "",
       this.state.password
     );
@@ -80,4 +82,15 @@ class Login extends Component {
   }
 }
 
-export default connect()(Login);
+const mapStateToProps = state => ({
+  authentication: state.authentication
+});
+
+const mapDispatchToProps = {
+  login
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

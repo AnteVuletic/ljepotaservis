@@ -1,10 +1,50 @@
 // samo mock za testirat react maknit kasnije
-export const userServices = {
+import { AUTHENTICATION } from "./constants/endpoints"
   getAllStores
+  register,
+  checkEmailTaken,
+  checkUsernameTaken,
+function login(email, password) {
+    body: JSON.stringify({ email, password })
 };
 
-function getAllStores() {
+  return fetch(AUTHENTICATION.LOGIN, requestOptions)
   return new Promise(function(resolve) {
+function register(username, email, password) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, email, password })
+  };
+
+  return fetch(AUTHENTICATION.REGISTER, requestOptions)
+    .then(handleResponse);
+}
+
+}
+
+function checkEmailTaken(email) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  };
+
+  return fetch(AUTHENTICATION.EMAIL_CHECK, requestOptions)
+    .then(handleResponse)
+    .then(isTaken => isTaken);
+}
+
+function checkUsernameTaken(username){
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username })
+  };
+
+  return fetch(LOGIN.USERNAME_CHECK, requestOptions)
+    .then(handleResponse)
+    .then(isTaken => isTaken);
     setTimeout(() => {
       resolve([
         {
