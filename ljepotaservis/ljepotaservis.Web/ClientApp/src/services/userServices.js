@@ -1,31 +1,15 @@
-import { authHeader } from "../utils/authHeader";
+// samo mock za testirat react maknit kasnije
 import { AUTHENTICATION } from "./constants/endpoints"
-import { handleResponse } from "../utils/handleResponse";
-
-export const userService = {
-  login,
+  getAllStores
   register,
   checkEmailTaken,
   checkUsernameTaken,
-  logout
+function login(email, password) {
+    body: JSON.stringify({ email, password })
 };
 
-function login(email, password) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  };
-
   return fetch(AUTHENTICATION.LOGIN, requestOptions)
-    .then(handleResponse)
-    .then(user => {
-      localStorage.setItem("user", JSON.stringify(user));
-
-      return user;
-    });
-}
-
+  return new Promise(function(resolve) {
 function register(username, email, password) {
   const requestOptions = {
     method: "POST",
@@ -37,8 +21,6 @@ function register(username, email, password) {
     .then(handleResponse);
 }
 
-function logout() {
-  localStorage.removeItem("user");
 }
 
 function checkEmailTaken(email) {
@@ -63,11 +45,6 @@ function checkUsernameTaken(username){
   return fetch(LOGIN.USERNAME_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
-}
-
-// samo mock za testirat react maknit kasnije
-export const getAllStores = () =>
-  new Promise(function(resolve, reject) {
     setTimeout(() => {
       resolve([
         {
@@ -101,3 +78,4 @@ export const getAllStores = () =>
       ]);
     }, 2000);
   });
+}

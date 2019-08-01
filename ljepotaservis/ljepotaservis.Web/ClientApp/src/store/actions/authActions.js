@@ -1,10 +1,10 @@
 import { userConstants } from "../constants/userConstants";
-import { userService } from "../../services/userServices";
+import { authentication } from "../../services/authentication";
 
 export const login = (email, password) => {
   return dispatch => {
     dispatch(request());
-
+    authentication.login(userDto).then(
     userService.login(email, password)
     .then(user => {
         dispatch(success(user));
@@ -51,7 +51,6 @@ export const register = (username, email, password) => {
 }
 
 export const logout = () => {
-  userService.logout();
   return { type: userConstants.LOGOUT };
 }
 
@@ -59,7 +58,7 @@ export const getAll = () => {
   return dispatch => {
     dispatch(request());
 
-    userService.getAll().then(
+    authentication.getAll().then(
       users => dispatch(success(users)),
       error => {
         dispatch(failure(error));

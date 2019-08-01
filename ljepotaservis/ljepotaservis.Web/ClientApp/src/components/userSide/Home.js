@@ -3,7 +3,7 @@ import { Well, Collapse, Button } from "react-bootstrap";
 import ReactLoading from "react-loading";
 import Filters from "../userSide/Filters";
 import StoreList from "../userSide/StoreList";
-import { getAllStores } from "../../services/userServices";
+import { userServices } from "../../services/userServices";
 
 // Temporary
 const serviceOptions = [
@@ -29,7 +29,9 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    getAllStores().then(stores => this.setState({ stores, loading: false }));
+    userServices
+      .getAllStores()
+      .then(stores => this.setState({ stores, loading: false }));
   }
 
   handleChange = e => {

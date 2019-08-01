@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import AddStore from "./AddStore";
 import AddOwner from "./AddOwner";
-import Role from "../../../utils/role";
-import { createStoreAndOwner } from "../../../services/superAdmin";
+import { superAdminServices } from "../../../services/superAdmin";
 import UserDto from "../../../services/backendModels/dto/userDto";
 import StoreModel from "../../../services/backendModels/models/storeModel";
 import {
@@ -36,7 +35,6 @@ class AddStoreAndOwner extends Component {
     event.preventDefault();
 
     const owner = this.state.owner;
-    owner.role = Role.SuperAdmin;
     const store = this.state.store;
 
     if (!validateName(owner.firstName)) {
@@ -81,8 +79,7 @@ class AddStoreAndOwner extends Component {
       owner.lastName,
       owner.email,
       owner.username,
-      owner.password,
-      Role.SuperAdmin
+      owner.password
     );
 
     const storeModel = new StoreModel(
@@ -92,7 +89,7 @@ class AddStoreAndOwner extends Component {
       store.closingTime
     );
 
-    createStoreAndOwner(storeModel, ownerDto);
+    superAdminServices.createStoreAndOwner(storeModel, ownerDto);
   };
 
   handleChange = formInformation => {
