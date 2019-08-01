@@ -4,8 +4,6 @@ import { LinkContainer } from "react-router-bootstrap";
 import { connect } from "react-redux";
 import { login } from '../../store/actions/userActions'
 import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
-import UserDto from "../../services/backendModels/dto/userDto";
-import { authActions } from "../../store/actions/authActions";
 
 class Login extends Component {
   constructor(props) {
@@ -29,11 +27,6 @@ class Login extends Component {
     const { email, password } = this.state;
 
     login(email, password);
-      "",
-      this.state.password
-    );
-
-    this.props.dispatch(authActions.login(userToLogin));
   };
 
   render() {
