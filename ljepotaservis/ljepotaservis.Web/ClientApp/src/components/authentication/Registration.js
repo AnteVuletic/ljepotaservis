@@ -8,18 +8,24 @@ import {
   ControlLabel,
   Button
 } from "react-bootstrap";
+import { authentication } from "../../services/authentication";
+import UserDto from "../../services/backendModels/dto/userDto";
 
 export default class Registration extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      firstName: "",
+      lastName: "",
+      username: "",
       email: "",
       password: "",
       passwordConfirmation: "",
       emailValidationState: null,
       passwordValidationState: null,
-      passwordConfirmationValidationState: null
+      passwordConfirmationValidationState: null,
+      isRegistrationSubmited: false
     };
   }
 
@@ -30,15 +36,38 @@ export default class Registration extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const { email, password, passwordConfirmation } = this.state;
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      passwordConfirmation
+    } = this.state;
 
     if (
       regexEmail(email) &&
       validatePassword(password) &&
       password === passwordConfirmation
     ) {
-      // HTTP post request here
-      return;
+      const userToRegister = new UserDto(
+        firstName,
+        lastName,
+        email,
+        username,
+        password
+      );
+
+      authentication.register(userToRegister).then(
+        () => {
+          this.setState({ isRegistrationSubmited: true });
+          return;
+        },
+        error => {
+          console.log(error);
+          alert("Validation failed");
+        }
+      );
     }
     alert("Validation failed!");
   };
@@ -69,13 +98,21 @@ export default class Registration extends Component {
 
   render() {
     const {
+      firstName,
+      lastName,
+      username,
       email,
       password,
       passwordConfirmation,
       emailValidationState,
       passwordValidationState,
-      passwordConfirmationValidationState
+      passwordConfirmationValidationState,
+      isRegistrationSubmited
     } = this.state;
+
+    if (isRegistrationSubmited) {
+      return <div>Provjerite mail za nastavak!</div>;
+    }
 
     return (
       <div
@@ -87,6 +124,36 @@ export default class Registration extends Component {
         }}
       >
         <form onSubmit={this.handleSubmit} noValidate>
+          <FormGroup controlId="firstName">
+            <ControlLabel>Ime</ControlLabel>
+            <FormControl
+              type="text"
+              value={firstName}
+              placeholder="Ime"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+
+          <FormGroup controlId="lastName">
+            <ControlLabel>Prezime</ControlLabel>
+            <FormControl
+              type="text"
+              value={lastName}
+              placeholder="Prezime"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+
+          <FormGroup controlId="username">
+            <ControlLabel>Korisničko ime</ControlLabel>
+            <FormControl
+              type="text"
+              value={username}
+              placeholder="Korisničko ime"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
+
           <FormGroup
             controlId="email"
             validationState={emailValidationState}

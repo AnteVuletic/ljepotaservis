@@ -1,8 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
+import UserDto from "../../services/backendModels/dto/userDto";
+import { authActions } from "../../store/actions/authActions";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -20,8 +23,15 @@ export default class Login extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    //const { email, password } = this.state;
-    // HTTP post request here
+    const userToLogin = new UserDto(
+      "",
+      "",
+      this.state.email,
+      "",
+      this.state.password
+    );
+
+    this.props.dispatch(authActions.login(userToLogin));
   };
 
   render() {
@@ -69,3 +79,5 @@ export default class Login extends Component {
     );
   }
 }
+
+export default connect()(Login);
