@@ -1,19 +1,23 @@
 import { authHeader } from "../utils/authHeader";
+import { LOGIN } from "./constants/endpoints"
 import { handleResponse } from "../utils/handleResponse";
 
 export const userService = {
   login,
+  register,
+  checkEmailTaken,
+  checkUsernameTaken,
   logout
 };
 
-function login(username, password) {
+function login(email, password) {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
+    body: JSON.stringify({ email, password })
   };
 
-  return fetch("api/login", requestOptions)
+  return fetch(LOGIN.LOGIN, requestOptions)
     .then(handleResponse)
     .then(user => {
       localStorage.setItem("user", JSON.stringify(user));
@@ -22,8 +26,43 @@ function login(username, password) {
     });
 }
 
+function register(username, email, password) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, email, password })
+  };
+
+  return fetch(LOGIN.REGISTER, requestOptions)
+    .then(handleResponse);
+}
+
 function logout() {
   localStorage.removeItem("user");
+}
+
+function checkEmailTaken(email) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  };
+
+  return fetch(LOGIN.EMAIL_CHECK, requestOptions)
+    .then(handleResponse)
+    .then(isTaken => isTaken);
+}
+
+function checkUsernameTaken(username){
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username })
+  };
+
+  return fetch(LOGIN.USERNAME_CHECK, requestOptions)
+    .then(handleResponse)
+    .then(isTaken => isTaken);
 }
 
 // samo mock za testirat react maknit kasnije

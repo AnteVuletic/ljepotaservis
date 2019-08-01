@@ -1,28 +1,21 @@
 import { userConstants } from "../constants/userConstants";
 import { userService } from "../../services/userServices";
 
-export const userActions = {
-  login,
-  logout,
-  getAll
-};
-
-function login(username, password) {
+export const login = (email, password) => {
   return dispatch => {
-    dispatch(request({ username }));
+    dispatch(request());
 
-    userService.login(username, password).then(
-      user => {
+    userService.login(email, password)
+    .then(user => {
         dispatch(success(user));
       },
       error => {
         dispatch(failure(error));
-      }
-    );
+      });
   };
 
-  function request(user) {
-    return { type: userConstants.LOGIN_REQUEST, user };
+  function request() {
+    return { type: userConstants.LOGIN_REQUEST };
   }
   function success(user) {
     return { type: userConstants.LOGIN_SUCCESS, user };
@@ -32,12 +25,37 @@ function login(username, password) {
   }
 }
 
-function logout() {
+export const register = (username, email, password) => {
+  return dispatch => {
+    dispatch(request());
+    
+    userService.register(username, email, password)
+      .then(() => {
+        dispatch(success());
+      },
+      error => {
+        dispatch(failure(error));
+      });
+  }
+
+  
+  function request() {
+    return { type: userConstants.REGISTER_REQUEST };
+  }
+  function success() {
+    return { type: userConstants.REGISTER_SUCCESS };
+  }
+  function failure(error) {
+    return { type: userConstants.REGISTER_FAILURE, error };
+  }
+}
+
+export const logout = () => {
   userService.logout();
   return { type: userConstants.LOGOUT };
 }
 
-function getAll() {
+export const getAll = () => {
   return dispatch => {
     dispatch(request());
 

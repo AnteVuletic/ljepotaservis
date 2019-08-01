@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { LinkContainer } from "react-router-bootstrap";
+import { connect } from "react-redux";
+import { login } from '../../store/actions/userActions'
 import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -20,8 +22,10 @@ export default class Login extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    //const { email, password } = this.state;
-    // HTTP post request here
+    const { login } = this.props;
+    const { email, password } = this.state;
+
+    login(email, password);
   };
 
   render() {
@@ -69,3 +73,16 @@ export default class Login extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  authentication: state.authentication
+});
+
+const mapDispatchToProps = {
+  login
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

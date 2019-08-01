@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { register } from "../../store/actions/userActions";
 import { LinkContainer } from "react-router-bootstrap";
 import { regexEmail, validatePassword } from "../../utils/ValidationHelper";
+import { userService } from "../../services/userServices";
 import {
   FormGroup,
   FormControl,
@@ -9,14 +12,16 @@ import {
   Button
 } from "react-bootstrap";
 
-export default class Registration extends Component {
+class Registration extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      username: "",
       email: "",
       password: "",
       passwordConfirmation: "",
+      usernameValidationState: null,
       emailValidationState: null,
       passwordValidationState: null,
       passwordConfirmationValidationState: null
@@ -30,25 +35,36 @@ export default class Registration extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const { email, password, passwordConfirmation } = this.state;
+    const { register } = this.props;
+    const { username, email, password, passwordConfirmation } = this.state;
 
     if (
       regexEmail(email) &&
       validatePassword(password) &&
       password === passwordConfirmation
     ) {
-      // HTTP post request here
+      register(username, email, password);
       return;
     }
     alert("Validation failed!");
   };
 
+  handleUserNameBlur = () => {
+    userService.checkUsernameTaken(this.state.username)
+    .then(isTaken => {
+      isTaken ? 
+      this.setState({ usernameValidationState: "success" }):
+      this.setState({ usernameValidationState: "error" })
+    });
+  }
+
   handleEmailBlur = () => {
-    if (regexEmail(this.state.email)) {
-      this.setState({ emailValidationState: "success" });
-    } else {
-      this.setState({ emailValidationState: "error" });
-    }
+    userService.checkEmailTaken(this.state.email)
+    .then(isTaken => {
+      isTaken && regexEmail(this.state.email) ?
+      this.setState({ emailValidationState: "success" }):
+      this.setState({ emailValidationState: "error" })
+    });
   };
 
   handlePasswordBlur = () => {
@@ -69,6 +85,7 @@ export default class Registration extends Component {
 
   render() {
     const {
+      username,
       email,
       password,
       passwordConfirmation,
@@ -87,6 +104,19 @@ export default class Registration extends Component {
         }}
       >
         <form onSubmit={this.handleSubmit} noValidate>
+          <FormGroup
+            controlId="username"
+            validationState="Korisničko ime"
+            onBlur={this.handleUsernameBlur}
+          >
+            <ControlLabel>Korisničko ime</ControlLabel>
+            <FormControl 
+              type="text"
+              value={username}
+              placeholder="Korisničko ime"
+              onChange={this.handleChange}
+            />
+          </FormGroup>
           <FormGroup
             controlId="email"
             validationState={emailValidationState}
@@ -150,3 +180,16 @@ export default class Registration extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  authentication: state.authentication
+});
+
+const mapDispatchToProps = {
+  register
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Registration);

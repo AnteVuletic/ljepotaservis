@@ -124,6 +124,20 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
         }
 
+        public async Task<bool> CheckEmailTaken(string email)
+        {
+            var isEmailTaken = await _dbLjepotaServisContext.Users.AnyAsync(user =>
+                string.Equals(email, user.Email, StringComparison.CurrentCultureIgnoreCase));
+            return isEmailTaken;
+        }
+
+        public async Task<bool> CheckUsernameTaken(string username)
+        {
+            var isUsernameTaken = await _dbLjepotaServisContext.Users.AnyAsync(user =>
+                string.Equals(username, user.UserName, StringComparison.CurrentCultureIgnoreCase));
+            return isUsernameTaken;
+        }
+
         public async Task<ICollection<User>> GetEmployeesByStore(Store store)
         {
             var usersWithStoreClaims = _dbLjepotaServisContext.Users.Where(user => user.Claims.Any(claim => claim.ClaimType == "Store"));
