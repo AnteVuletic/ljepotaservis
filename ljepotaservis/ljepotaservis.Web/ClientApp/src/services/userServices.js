@@ -1,46 +1,13 @@
 import { authHeader } from "../utils/authHeader";
-import { LOGIN } from "./constants/endpoints"
 import { handleResponse } from "../utils/handleResponse";
+import { CHECK } from "./constants/endpoints";
 
 export const userService = {
-  login,
-  register,
   checkEmailTaken,
   checkUsernameTaken,
-  logout,
+  getAllStores
   confirmEmail
 };
-
-function login(email, password) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
-  };
-
-  return fetch(LOGIN.LOGIN, requestOptions)
-    .then(handleResponse)
-    .then(user => {
-      localStorage.setItem("user", JSON.stringify(user));
-
-      return user;
-    });
-}
-
-function register(username, email, password) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, email, password })
-  };
-
-  return fetch(LOGIN.REGISTER, requestOptions)
-    .then(handleResponse);
-}
-
-function logout() {
-  localStorage.removeItem("user");
-}
 
 function checkEmailTaken(email) {
   const requestOptions = {
@@ -49,19 +16,19 @@ function checkEmailTaken(email) {
     body: JSON.stringify({ email })
   };
 
-  return fetch(LOGIN.EMAIL_CHECK, requestOptions)
+  return fetch(CHECK.EMAIL_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
 }
 
-function checkUsernameTaken(username){
+function checkUsernameTaken(username) {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username })
   };
 
-  return fetch(LOGIN.USERNAME_CHECK, requestOptions)
+  return fetch(CHECK.USERNAME_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
 }
@@ -79,8 +46,8 @@ function confirmEmail(userId, emailToken) {
 }
 
 // samo mock za testirat react maknit kasnije
-export const getAllStores = () =>
-  new Promise(function(resolve, reject) {
+function getAllStores() {
+  return new Promise(function(resolve, reject) {
     setTimeout(() => {
       resolve([
         {
@@ -114,3 +81,4 @@ export const getAllStores = () =>
       ]);
     }, 2000);
   });
+}

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { register } from "../../store/actions/userActions";
 import { LinkContainer } from "react-router-bootstrap";
 import { regexEmail, validatePassword } from "../../utils/ValidationHelper";
+import { authentication } from "../../services/authentication";
 import { userService } from "../../services/userServices";
 import {
   FormGroup,
@@ -12,12 +12,12 @@ import {
   Button
 } from "react-bootstrap";
 
-class Registration extends Component{
+class Registration extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
+      firstName: "",
       lastName: "",
       username: "",
       email: "",
@@ -38,39 +38,51 @@ class Registration extends Component{
   handleSubmit = event => {
     event.preventDefault();
 
-    const { register } = this.props;
-    const { username, email, password, passwordConfirmation } = this.state;
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      passwordConfirmation
+    } = this.state;
 
     if (
       regexEmail(email) &&
       validatePassword(password) &&
       password === passwordConfirmation
     ) {
-      register(username, email, password);
+      const userToRegister = {
+        firstName,
+        lastName,
+        username,
+        email,
+        password
+      };
+
+      authentication.register(userToRegister);
     }
   };
 
-  handleUserNameBlur = () => {
-    userService.checkUsernameTaken(this.state.username)
-    .then(isTaken => {
-      isTaken ? 
-      this.setState({ usernameValidationState: "success" }):
-      this.setState({ usernameValidationState: "error" })
+  handleUsernameBlur = () => {
+    userService.checkUsernameTaken(this.state.username).then(isTaken => {
+      isTaken
+        ? this.setState({ usernameValidationState: "success" })
+        : this.setState({ usernameValidationState: "error" });
     });
-  }
+  };
 
   handleEmailBlur = () => {
     let isValidEmail = regexEmail(this.state.email);
-    if(!isValidEmail) {
+    if (!isValidEmail) {
       this.setState({ emailValidationState: "error" });
       return;
     }
-    
-    userService.checkEmailTaken(this.state.email)
-    .then(isTaken => {
-      isTaken ?
-      this.setState({ emailValidationState: "success" }):
-      this.setState({ emailValidationState: "error" })
+
+    userService.checkEmailTaken(this.state.email).then(isTaken => {
+      isTaken
+        ? this.setState({ emailValidationState: "success" })
+        : this.setState({ emailValidationState: "error" });
     });
   };
 
@@ -92,7 +104,7 @@ class Registration extends Component{
 
   render() {
     const {
-      username,
+      firstName,
       lastName,
       username,
       email,
@@ -105,7 +117,7 @@ class Registration extends Component{
     } = this.state;
 
     if (isRegistrationSubmited) {
-      return <div>Provjerite mail za nastavak!</div>;
+      return <div>Provjerite e-mail za nastavak!</div>;
     }
 
     return (
@@ -138,27 +150,18 @@ class Registration extends Component{
             />
           </FormGroup>
 
-          <FormGroup controlId="username">
-            <ControlLabel>Korisničko ime</ControlLabel>
-            <FormControl
-              type="text"
-              value={username}
-              placeholder="Korisničko ime"
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-
           <FormGroup
             controlId="username"
             validationState="Korisničko ime"
             onBlur={this.handleUsernameBlur}
           >
             <ControlLabel>Korisničko ime</ControlLabel>
-            <FormControl 
+            <FormControl
               type="text"
               value={username}
               placeholder="Korisničko ime"
               onChange={this.handleChange}
+              onBlur={this.handleUsernameBlur}
             />
           </FormGroup>
           <FormGroup
@@ -225,16 +228,4 @@ class Registration extends Component{
   }
 }
 
-
-const mapStateToProps = state => ({
-  authentication: state.authentication
-});
-
-const mapDispatchToProps = {
-  register
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Registration);
+export default Registration;

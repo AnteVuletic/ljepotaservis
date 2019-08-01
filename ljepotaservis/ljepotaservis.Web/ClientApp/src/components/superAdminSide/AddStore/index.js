@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import AddStore from "./AddStore";
 import AddOwner from "./AddOwner";
 import { superAdminServices } from "../../../services/superAdmin";
-import UserDto from "../../../services/backendModels/dto/userDto";
-import StoreModel from "../../../services/backendModels/models/storeModel";
 import {
   regexEmail,
   validatePassword,
@@ -34,8 +32,8 @@ class AddStoreAndOwner extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const owner = this.state.owner;
-    const store = this.state.store;
+    const owner = { ...this.state.owner };
+    const store = { ...this.state.store };
 
     if (!validateName(owner.firstName)) {
       alert("First name not valid");
@@ -74,22 +72,7 @@ class AddStoreAndOwner extends Component {
       return;
     }
 
-    const ownerDto = new UserDto(
-      owner.firstName,
-      owner.lastName,
-      owner.email,
-      owner.username,
-      owner.password
-    );
-
-    const storeModel = new StoreModel(
-      store.name,
-      store.address,
-      store.openingTime,
-      store.closingTime
-    );
-
-    superAdminServices.createStoreAndOwner(storeModel, ownerDto);
+    superAdminServices.createStoreAndOwner(store, owner);
   };
 
   handleChange = formInformation => {
