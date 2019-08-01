@@ -1,15 +1,31 @@
-// samo mock za testirat react maknit kasnije
-import { AUTHENTICATION } from "./constants/endpoints"
-  getAllStores
+import { authHeader } from "../utils/authHeader";
+import { LOGIN } from "./constants/endpoints"
+import { handleResponse } from "../utils/handleResponse";
+
+export const userService = {
+  login,
   register,
   checkEmailTaken,
   checkUsernameTaken,
-function login(email, password) {
-    body: JSON.stringify({ email, password })
+  logout
 };
 
-  return fetch(AUTHENTICATION.LOGIN, requestOptions)
-  return new Promise(function(resolve) {
+function login(email, password) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  };
+
+  return fetch(LOGIN.LOGIN, requestOptions)
+    .then(handleResponse)
+    .then(user => {
+      localStorage.setItem("user", JSON.stringify(user));
+
+      return user;
+    });
+}
+
 function register(username, email, password) {
   const requestOptions = {
     method: "POST",
@@ -17,10 +33,12 @@ function register(username, email, password) {
     body: JSON.stringify({ username, email, password })
   };
 
-  return fetch(AUTHENTICATION.REGISTER, requestOptions)
+  return fetch(LOGIN.REGISTER, requestOptions)
     .then(handleResponse);
 }
 
+function logout() {
+  localStorage.removeItem("user");
 }
 
 function checkEmailTaken(email) {
@@ -30,7 +48,7 @@ function checkEmailTaken(email) {
     body: JSON.stringify({ email })
   };
 
-  return fetch(AUTHENTICATION.EMAIL_CHECK, requestOptions)
+  return fetch(LOGIN.EMAIL_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
 }
@@ -45,6 +63,11 @@ function checkUsernameTaken(username){
   return fetch(LOGIN.USERNAME_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
+}
+
+// samo mock za testirat react maknit kasnije
+export const getAllStores = () =>
+  new Promise(function(resolve, reject) {
     setTimeout(() => {
       resolve([
         {
@@ -78,4 +101,3 @@ function checkUsernameTaken(username){
       ]);
     }, 2000);
   });
-}

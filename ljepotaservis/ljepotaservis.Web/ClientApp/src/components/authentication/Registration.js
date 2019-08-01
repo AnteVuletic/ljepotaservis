@@ -11,10 +11,8 @@ import {
   ControlLabel,
   Button
 } from "react-bootstrap";
-import { authentication } from "../../services/authentication";
-import UserDto from "../../services/backendModels/dto/userDto";
 
-class Registration extends Component {
+class Registration extends Component{
   constructor(props) {
     super(props);
 
@@ -42,12 +40,6 @@ class Registration extends Component {
 
     const { register } = this.props;
     const { username, email, password, passwordConfirmation } = this.state;
-      lastName,
-      username,
-      email,
-      password,
-      passwordConfirmation
-    } = this.state;
 
     if (
       regexEmail(email) &&
@@ -55,25 +47,6 @@ class Registration extends Component {
       password === passwordConfirmation
     ) {
       register(username, email, password);
-        firstName,
-        lastName,
-        email,
-        username,
-        password
-      );
-
-      authentication.register(userToRegister).then(
-        () => {
-          this.setState({ isRegistrationSubmited: true });
-          return;
-        },
-        error => {
-          console.log(error);
-          alert("Validation failed");
-        }
-      );
-    }
-    alert("Validation failed!");
   };
 
   handleUserNameBlur = () => {
@@ -114,6 +87,8 @@ class Registration extends Component {
     } else {
       this.setState({ passwordConfirmationValidationState: "error" });
     }
+  };
+
   };
 
   render() {
@@ -250,6 +225,7 @@ class Registration extends Component {
     );
   }
 }
+
 
 const mapStateToProps = state => ({
   authentication: state.authentication
