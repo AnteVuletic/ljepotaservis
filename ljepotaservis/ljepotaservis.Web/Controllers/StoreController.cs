@@ -49,10 +49,10 @@ namespace ljepotaservis.Web.Controllers
 
         [Authorize(Roles = "SuperAdmin")]
         [HttpPost]
-        public async Task<IActionResult> CreateStoreAndOwner([FromBody] JObject StoreAndOwner )
+        public async Task<IActionResult> CreateStoreAndOwner([FromBody] JObject storeAndOwner )
         {
-            var store = StoreAndOwner["store"].ToObject<Store>();
-            var owner = StoreAndOwner["owner"].ToObject<UserDto>();
+            var store = storeAndOwner["store"].ToObject<Store>();
+            var owner = storeAndOwner["owner"].ToObject<UserDto>();
 
             await _storeRepository.CreateStoreAndOwner(store, owner);
             return Ok();

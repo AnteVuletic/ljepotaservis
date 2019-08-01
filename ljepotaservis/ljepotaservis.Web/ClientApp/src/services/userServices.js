@@ -7,7 +7,8 @@ export const userService = {
   register,
   checkEmailTaken,
   checkUsernameTaken,
-  logout
+  logout,
+  confirmEmail
 };
 
 function login(email, password) {
@@ -63,6 +64,18 @@ function checkUsernameTaken(username){
   return fetch(LOGIN.USERNAME_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
+}
+
+function confirmEmail(userId, emailToken) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, emailToken })
+  };
+
+  return fetch(LOGIN.CONFIRM_EMAIL, requestOptions)
+    .then(handleResponse)
+    .then(isConfirmed => isConfirmed);
 }
 
 // samo mock za testirat react maknit kasnije

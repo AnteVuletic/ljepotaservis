@@ -47,6 +47,7 @@ class Registration extends Component{
       password === passwordConfirmation
     ) {
       register(username, email, password);
+    }
   };
 
   handleUserNameBlur = () => {
@@ -87,8 +88,6 @@ class Registration extends Component{
     } else {
       this.setState({ passwordConfirmationValidationState: "error" });
     }
-  };
-
   };
 
   render() {
