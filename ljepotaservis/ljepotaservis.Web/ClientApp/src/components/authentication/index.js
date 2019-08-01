@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from "react-router";
 import { connect } from "react-redux";
 import Login from "./Login";
 import Registration from "./Registration";
+import EmailConfirmation from "./EmailConfirmation";
 import RoleNavbar from "../navbar";
 
 const Authentication = props => {
@@ -13,6 +14,10 @@ const Authentication = props => {
       <Switch>
         <Route path={path + "/login"} component={Login} />
         <Route path={path + "/registration"} component={Registration} />
+        <Route
+          path={path + "/emailconfirmation/:email/:token"}
+          component={EmailConfirmation}
+        />
         <Redirect to={path + "/registration"} />
       </Switch>
     </div>

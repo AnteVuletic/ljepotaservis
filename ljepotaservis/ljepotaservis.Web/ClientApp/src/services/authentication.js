@@ -15,18 +15,21 @@ function login(userDto) {
 
   return fetch("api/login/login", requestOptions)
     .then(handleResponse)
-    .then(user => {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: user.email,
-          token: user.token,
-          role: user.role
-        })
-      );
+    .then(
+      user => {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            email: user.email,
+            token: user.token,
+            role: user.role
+          })
+        );
 
-      return user;
-    });
+        return user;
+      },
+      error => console.log(error)
+    );
 }
 
 function register(userDto) {
