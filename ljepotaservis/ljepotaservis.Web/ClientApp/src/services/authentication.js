@@ -1,4 +1,5 @@
 import { handleResponse } from "../utils/handleResponse";
+import { AUTHENTICATION } from "./constants/endpoints";
 
 export const authentication = {
   login,
@@ -6,14 +7,14 @@ export const authentication = {
   logout
 };
 
-function login(userDto) {
+function login(email, password) {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(userDto)
+    body: JSON.stringify({ email, password })
   };
 
-  return fetch("api/login/login", requestOptions)
+  return fetch(AUTHENTICATION.LOGIN, requestOptions)
     .then(handleResponse)
     .then(
       user => {
@@ -32,14 +33,16 @@ function login(userDto) {
     );
 }
 
-function register(userDto) {
+function register(user) {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(userDto)
+    body: JSON.stringify(user)
   };
 
-  return fetch("api/login/register", requestOptions).then(handleResponse);
+  return fetch(AUTHENTICATION.REGISTER, requestOptions)
+    .then(handleResponse)
+    .then(() => true, error => console.log(error));
 }
 
 function logout() {
