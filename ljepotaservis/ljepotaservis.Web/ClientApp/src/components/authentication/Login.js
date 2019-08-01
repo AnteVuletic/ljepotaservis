@@ -22,7 +22,7 @@ export default class Login extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    const userToAdd = new UserDto(
+    const userToLogin = new UserDto(
       "",
       "",
       this.state.email,
@@ -30,7 +30,7 @@ export default class Login extends Component {
       this.state.email
     );
 
-    authActions(userToAdd);
+    authActions.login(userToLogin);
   };
 
   render() {

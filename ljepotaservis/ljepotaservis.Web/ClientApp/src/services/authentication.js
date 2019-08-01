@@ -2,6 +2,7 @@ import { handleResponse } from "../utils/handleResponse";
 
 export const authentication = {
   login,
+  register,
   logout
 };
 
@@ -26,6 +27,16 @@ function login(userDto) {
 
       return user;
     });
+}
+
+function register(userDto) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userDto)
+  };
+
+  return fetch("api/login/register", requestOptions).then(handleResponse);
 }
 
 function logout() {
