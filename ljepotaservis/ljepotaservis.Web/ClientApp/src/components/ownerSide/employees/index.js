@@ -71,7 +71,7 @@ export default class Employees extends Component {
         <ul>
           {this.state.employees.map(employee => (
             <li key={employee.id}>
-              Ime: {employee.firstname} Prezime: {employee.lastname}
+              Ime: {employee.firstName} Prezime: {employee.lastName}
               <button onClick={() => this.handleRemoveEmployee(employee)}>
                 Obriši zaposlenika
               </button>
