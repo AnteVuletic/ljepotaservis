@@ -112,6 +112,7 @@ class Registration extends Component {
       password,
       passwordConfirmation,
       emailValidationState,
+      usernameValidationState,
       passwordValidationState,
       passwordConfirmationValidationState,
       isRegistrationSubmited
@@ -151,14 +152,17 @@ class Registration extends Component {
             />
           </FormGroup>
 
-          <FormGroup controlId="username">
+          <FormGroup 
+          controlId="username"
+          validationState={usernameValidationState}
+          onBlur={this.handleUsernameBlur}
+          >
             <ControlLabel>Korisničko ime</ControlLabel>
             <FormControl
               type="text"
               value={username}
               placeholder="Korisničko ime"
               onChange={this.handleChange}
-              onBlur={this.handleUsernameBlur}
             />
           </FormGroup>
           <FormGroup

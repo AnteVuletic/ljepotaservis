@@ -7,9 +7,9 @@ using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Abstractions;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
-using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
+using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -57,33 +57,41 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             return await _dbLjepotaServisContext.Stores.FindAsync(id);
         }
 
-        public async Task AddEditServicesToStore(StoreDto storeDto)
+        public async Task AddEditServicesToStore(Store store, ICollection<Service> services)
         {
-            foreach (var service in storeDto.Services)
+            var dbStore = await _dbLjepotaServisContext.Stores.FindAsync(store.Id);
+            var dbServices = _dbLjepotaServisContext.Services.Where(service => service.StoreId == dbStore.Id);
+            var newServices = services.Where(service => service.Id == 0).ToList();
+            services = services.Except(newServices).ToList();
+
+            foreach (var newService in newServices)
             {
-                var serviceOrNull = await _dbLjepotaServisContext
-                    .Services
-                    .SingleOrDefaultAsync(srv => srv.Name == service.Name && srv.StoreId == storeDto.Store.Id);
-                if (serviceOrNull == null)
+                var dbNewService = new Service
                 {
-                    serviceOrNull = new Service
-                    {
-                        Store = storeDto.Store,
-                        StoreId = storeDto.Store.Id,
-                        Duration = service.Duration,
-                        Name = service.Name,
-                        Price = service.Price
-                    };
-                }
-                else
-                {
-                    serviceOrNull.Duration = service.Duration;
-                    serviceOrNull.Name = service.Name;
-                    serviceOrNull.Price = service.Price;
-                }
-                await _dbLjepotaServisContext.Services.AddAsync(serviceOrNull);
-                await _dbLjepotaServisContext.SaveChangesAsync();
+                    Store = dbStore,
+                    StoreId = dbStore.Id,
+                    DurationTicks = newService.Duration.Ticks,
+                    Name = newService.Name,
+                    Price = newService.Price
+                };
+
+                await _dbLjepotaServisContext.AddAsync(dbNewService);
             }
+            foreach (var dbService in dbServices)
+            {
+                var isEdit = services.All(srv => srv.Id != dbService.Id);
+                if (!isEdit)
+                {
+                    _dbLjepotaServisContext.Services.Remove(dbService);
+                    continue;
+                }
+
+                var service = services.Single(srv => srv.Id == dbService.Id);
+                dbService.Name = service.Name;
+                dbService.DurationTicks = service.Duration.Ticks;
+                dbService.Price = service.Price;
+            }
+            await _dbLjepotaServisContext.SaveChangesAsync();
         }
 
         public async Task CreateStoreAndOwner(Store store, UserDto owner)
@@ -97,9 +105,18 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             if (!result.Result.Succeeded)
                 throw new Exception("Unable to create user");
 
+            await _userManager.AddClaimAsync(userOwner, new Claim(ClaimTypes.Role, ownerRole.Name));
             var storeCreated = await Create(store);
 
             await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Store.Id.ToString()));
+        }
+
+        public async Task<ICollection<Service>> GetStoreServices(int storeId)
+        {
+            var store = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
+            if (store == null) throw new Exception("Store not exists");
+
+            return await _dbLjepotaServisContext.Services.Where(service => service.StoreId == storeId).ToListAsync();
         }
 
         public async Task UpdateStoreDetails(int storeId, Store store, Resource resource = null)

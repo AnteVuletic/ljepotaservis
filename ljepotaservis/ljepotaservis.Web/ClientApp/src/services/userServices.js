@@ -1,4 +1,3 @@
-import { authHeader } from "../utils/authHeader";
 import { handleResponse } from "../utils/handleResponse";
 import { CHECK } from "./constants/endpoints";
 

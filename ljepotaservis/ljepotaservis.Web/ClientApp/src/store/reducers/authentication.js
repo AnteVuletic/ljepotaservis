@@ -23,8 +23,7 @@ export function authentication(state = initialState, action) {
     case userConstants.LOGIN_REQUEST:
       return {
         loggedIn: false,
-        loading: true,
-        ...state
+        loading: true
       };
     case userConstants.LOGIN_SUCCESS:
       return {
@@ -38,21 +37,6 @@ export function authentication(state = initialState, action) {
         loading: false,
         user: { role: "Guest" }
       };
-    case userConstants.REGISTER_REQUEST:
-      return {
-        loading: true,
-        ...state
-      };
-    case userConstants.REGISTER_SUCCESS:
-      return {
-        loading: false,
-        ...state
-      };
-    case userConstants.REGISTER_FAILURE:
-      return {
-        loading: false,
-        ...state
-      }
     case userConstants.LOGOUT:
       return {
         loggedIn: false,

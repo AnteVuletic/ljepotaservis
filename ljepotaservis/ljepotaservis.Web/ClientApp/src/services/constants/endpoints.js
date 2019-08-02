@@ -14,5 +14,12 @@ export const CHECK = {
 };
 
 export const SUPER_ADMIN = {
-    CREATE_STORE_OWNER: `${STORE_BASE}/CreateStoreAndOwner`
+  CREATE_STORE_OWNER: `${STORE_BASE}/CreateStoreAndOwner`
+};
+
+export const OWNER = {
+  ADD_EDIT_SERVICES: `${STORE_BASE}/AddEditServicesToStore`,
+  ADD_EDIT_EMPLOYEES: `${STORE_BASE}/AddEditEmployeesToStore`,
+  GET_STORE_SERVICES: `${STORE_BASE}/GetStoreServices`,
+  GET_STORE_EMPLOYEES: `${STORE_BASE}/GetStoreEmployees`
 };

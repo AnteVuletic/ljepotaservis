@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Repositories.Interfaces;
+using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using ljepotaservis.Infrastructure.Helpers;
@@ -29,21 +30,20 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.Owner)]
-        public async Task<IActionResult> AddEditServicesToStore([FromBody] StoreDto storeDto)
+        public async Task<IActionResult> AddEditServicesToStore([FromBody] ServicesDto servicesDto)
         {
             var store = await ResolveStore();
-            if (storeDto.Store.Id != store.Id) return Unauthorized();
-
-            await _storeRepository.AddEditServicesToStore(storeDto);
+            var services = servicesDto.Services.Select(service => service.ProjectServiceDtoToService()).ToList();
+            await _storeRepository.AddEditServicesToStore(store, services);
             return Ok();
         }
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.Owner)]
-        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] ICollection<UserDto> employees)
+        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] UsersDto employees)
         {
             var store = await ResolveStore();
-            await _userRepository.AddEditEmployeesToStore(store, employees);
+            await _userRepository.AddEditEmployeesToStore(store, employees.Employees);
             return Ok();
         }
 
@@ -57,6 +57,30 @@ namespace ljepotaservis.Web.Controllers
 
             await _storeRepository.CreateStoreAndOwner(store, owner);
             return Ok();
+        }
+
+
+        [Authorize(Roles = RoleHelper.Owner)]
+        [HttpGet]
+        public async Task<IActionResult> GetStoreServices([FromRoute] int storeId)
+        {
+            var store = await ResolveStore();
+            var services = await _storeRepository.GetStoreServices(store.Id);
+            var servicesDto = new ServicesDto
+            {
+                Services = services.Select((Service service) => service.ProjectServiceToServiceDto()).ToList()
+            };
+            return Ok(servicesDto);
+        }
+
+        [Authorize(Roles = RoleHelper.Owner)]
+        [HttpGet]
+        public async Task<IActionResult> GetStoreEmployees()
+        {
+            var store = await ResolveStore();
+            var employees = await _userRepository.GetEmployeesByStore(store.Id);
+
+            return Ok(employees);
         }
 
         private async Task<Store> ResolveStore()
