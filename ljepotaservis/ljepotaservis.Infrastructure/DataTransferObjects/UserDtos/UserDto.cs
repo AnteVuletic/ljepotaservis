@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ljepotaservis.Data.Entities.Models;
-using Microsoft.AspNetCore.Http;
+﻿using ljepotaservis.Data.Entities.Models;
 
 namespace ljepotaservis.Infrastructure.DataTransferObjects.UserDtos
 {

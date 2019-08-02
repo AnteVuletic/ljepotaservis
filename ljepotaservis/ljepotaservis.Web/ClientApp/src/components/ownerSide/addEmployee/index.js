@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NewEmployee from "./NewEmployee";
+import { getStoreEmployees, addEditEmployees } from "../../../services/ownerServices";
 
 export default class AddServices extends Component {
   constructor(props) {
@@ -11,25 +12,33 @@ export default class AddServices extends Component {
   }
 
   componentDidMount() {
-    //fetch services i poslat ih u state
+    this.loadEmployees();
+  }
+
+  loadEmployees = () => {
+    getStoreEmployees().then(employees =>{
+      this.setState({
+        employees
+      });
+    });
   }
 
   handleAddEmployee = employeeToAdd => {
-    this.setState(state => ({
-      employees: [...state.employees, employeeToAdd]
-    }));
-
-    //http request post koji vraca listu postojecih zaposlenika
+    addEditEmployees([...this.state.employees, employeeToAdd])
+    .then(() => {
+      this.loadEmployees();
+    });
   };
 
   handleRemoveEmployee = employeeToRemove => {
-    this.setState(state => ({
-      employee: state.employees.filter(
-        employee => employee.id !== employeeToRemove.id
-      )
-    }));
+    const employees = this.state.employees.filter(
+      employee => employee.id !== employeeToRemove.id
+    );
 
-    // http request here
+    addEditEmployees(employees)
+    .then(() => {
+      this.loadEmployees();
+    });
   };
 
   render() {
@@ -39,7 +48,7 @@ export default class AddServices extends Component {
         <ul>
           {this.state.employees.map(employee => (
             <li key={employee.id}>
-              Ime: {employee.firstName} Prezime: {employee.lastName}
+              Ime: {employee.firstname} Prezime: {employee.lastname}
               <button onClick={() => this.handleRemoveEmployee(employee)}>
                 Obriši zaposlenika
               </button>

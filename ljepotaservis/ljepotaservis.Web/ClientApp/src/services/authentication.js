@@ -4,7 +4,8 @@ import { AUTHENTICATION } from "./constants/endpoints";
 export const authentication = {
   login,
   register,
-  logout
+  logout,
+  confirmEmail
 };
 
 function login(email, password) {
@@ -40,4 +41,16 @@ function register(user) {
 
 function logout() {
   localStorage.removeItem("user");
+}
+
+function confirmEmail(userId, emailToken) {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, emailToken })
+  };
+
+  return fetch(AUTHENTICATION.CONFIRM_EMAIL, requestOptions)
+    .then(handleResponse)
+    .then(isConfirmed => isConfirmed);
 }

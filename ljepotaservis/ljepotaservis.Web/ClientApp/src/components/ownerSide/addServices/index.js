@@ -1,20 +1,27 @@
 import React, { Component } from "react";
 import NewService from "./NewService";
+import { getStoreServices, addEditServices } from "../../../services/ownerServices"
 
 export default class AddServices extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      services: [
-        { name: "Brijanje", price: 20, duration: 20 },
-        { name: "Sisanje", price: 120, duration: 60 }
-      ]
+      services: []
     };
   }
-
+  
   componentDidMount() {
-    //fetch services i poslat ih u state
+    this.loadServices();
+  }
+
+  loadServices = () =>{
+    getStoreServices()
+      .then(response =>{
+        this.setState({
+          services: response.services
+        });
+    });
   }
 
   handleAddService = serviceToAdd => {
@@ -26,20 +33,21 @@ export default class AddServices extends Component {
       return;
     }
 
-    this.setState(state => ({ services: [...state.services, serviceToAdd] }));
-
-    //http request ode
+    addEditServices([...this.state.services, serviceToAdd])
+    .then(() => {
+      this.loadServices();
+    });
   };
 
   handleRemoveService = serviceToRemove => {
-    // tribat ce pazit da salon nemoze imat dvi usluge istog imena
-    this.setState(state => ({
-      services: state.services.filter(
-        service => service.name !== serviceToRemove.name
-      )
-    }));
+    var services = this.state.services.filter(
+      service => service.name !== serviceToRemove.name
+    );
 
-    // http request here
+    addEditServices(services)
+    .then(() => {
+      this.loadServices();
+    });
   };
 
   render() {

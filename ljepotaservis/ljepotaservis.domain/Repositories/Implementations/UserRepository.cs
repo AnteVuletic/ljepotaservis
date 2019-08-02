@@ -49,6 +49,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             var dbUser = user.ProjectUserDtoToUser();
             var result = await _userManager.CreateAsync(dbUser, user.Password);
             await _userManager.AddToRoleAsync(dbUser, userRole.Name);
+            await _userManager.AddClaimAsync(dbUser, new Claim(ClaimTypes.Role, userRole.Name));
 
             if (!result.Succeeded) throw new Exception("Unable to create user");
 
@@ -74,8 +75,10 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 
             if (!userSigninResult.Succeeded) throw new Exception("Invalid password");
             var userRoles = await _userManager.GetRolesAsync(dbUser);
-            var token = _jwtHelper.GenerateJwtToken(dbUser);
-            return dbUser.ProjectUserToDtoUser(token, userRoles.First());
+            var identityRoles = await _userManager.GetClaimsAsync(dbUser);
+            var userRole = userRoles.First();
+            var token = _jwtHelper.GenerateJwtToken(dbUser, userRole, identityRoles);
+            return dbUser.ProjectUserToDtoUser(token, userRole);
         }
 
         public async Task<bool> ConfirmEmail(string userId, string emailToken)
@@ -89,39 +92,50 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 
         public async Task AddEditEmployeesToStore(Store store, ICollection<UserDto> employees)
         {
-            foreach (var userDto in employees)
+            var employeeRole = await _roleManager.Roles.SingleAsync(role => role.Name == "Employee");
+            var dbStore = await _dbLjepotaServisContext.Stores.FindAsync(store.Id);
+            var owner = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, RoleHelper.Owner));
+            var dbEmployees = await _userManager.GetUsersForClaimAsync(new Claim("Store", dbStore.Id.ToString()));
+            dbEmployees = dbEmployees.Except(owner).ToList();
+            var newEmployees = employees.Where(employee => employee.Id == null).ToList();
+            employees = employees.Except(newEmployees).ToList();
+            foreach (var newEmployee in newEmployees)
             {
-                var employeeRole = await _roleManager.Roles.SingleAsync(role => role.Name == "Employee");
-                if (userDto.Id != "")
-                {
-                    var employeeOrNull = await _userManager.FindByIdAsync(userDto.Id);
-                    if (employeeOrNull == null) throw new Exception("User has ID which cannot be found in database");
-                    employeeOrNull.Email = userDto.Email;
-                    employeeOrNull.Firstname = userDto.FirstName;
-                    employeeOrNull.Lastname = userDto.LastName;
-                    employeeOrNull.Email = userDto.Email;
-                    employeeOrNull.UserName = userDto.Username;
+                var employee = newEmployee.ProjectUserDtoToUser(true);
+                await _userManager.CreateAsync(employee, newEmployee.Password);
+                await _userManager.AddToRoleAsync(employee, employeeRole.Name);
+                await _userManager.AddClaimAsync(employee, new Claim("Store", store.Id.ToString()));
+                await _userManager.AddClaimAsync(employee, new Claim(ClaimTypes.Role, employeeRole.Name));
 
-                    await _userManager.UpdateAsync(employeeOrNull);
-                }
-                else
+                var userStore = new UserStore
                 {
-                    var employee = userDto.ProjectUserDtoToUser(true);
-                    await _userManager.CreateAsync(employee, userDto.Password);
-                    await _userManager.AddToRoleAsync(employee, employeeRole.Name);
-                    await _userManager.AddClaimAsync(employee, new Claim("Store", store.Id.ToString()));
-
-                    var userStore = new UserStore
-                    {
-                        Store = store,
-                        StoreId = store.Id,
-                        User = employee,
-                        UserId = employee.Id
-                    };
-                    await _dbLjepotaServisContext.AddAsync(userStore);
-                    await _dbLjepotaServisContext.SaveChangesAsync();
-                }
+                    Store = store,
+                    StoreId = store.Id,
+                    User = employee,
+                    UserId = employee.Id
+                };
+                await _dbLjepotaServisContext.AddAsync(userStore);
             }
+            foreach (var dbEmployee in dbEmployees)
+            {
+                var isEdit = employees.All(employee => employee.Id != dbEmployee.Id);
+                if (!isEdit)
+                {
+                    await _userManager.DeleteAsync(dbEmployee);
+                    continue;
+                }
+                var userDto = employees.Single(employee => employee.Id == dbEmployee.Id);
+                var employeeOrNull = await _userManager.FindByIdAsync(userDto.Id);
+                if (employeeOrNull == null) throw new Exception("User has ID which cannot be found in database");
+                employeeOrNull.Email = userDto.Email;
+                employeeOrNull.Firstname = userDto.FirstName;
+                employeeOrNull.Lastname = userDto.LastName;
+                employeeOrNull.Email = userDto.Email;
+                employeeOrNull.UserName = userDto.Username;
+
+                await _userManager.UpdateAsync(employeeOrNull);
+            }
+            await _dbLjepotaServisContext.SaveChangesAsync();
         }
 
         public async Task<bool> CheckEmailTaken(string email)
@@ -138,15 +152,16 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             return isUsernameTaken;
         }
 
-        public async Task<ICollection<User>> GetEmployeesByStore(Store store)
+        public async Task<ICollection<User>> GetEmployeesByStore(int storeId)
         {
-            var usersWithStoreClaims = _dbLjepotaServisContext.Users.Where(user => user.Claims.Any(claim => claim.ClaimType == "Store"));
-            var userEmployeesWithClaims =
-                usersWithStoreClaims.Where(user => user.UserRoles.Any(userRole => userRole.Role.Name == "Employee"));
-            var usersWithStoreId = userEmployeesWithClaims.Where(user =>
-                user.Claims.Any(claim => int.Parse(claim.ClaimValue) == store.Id));
+            var store = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
+            if (store == null) throw new Exception("Store not exists");
+            var usersWithStoreClaims =
+                await _userManager.GetUsersForClaimAsync(new Claim("Store", store.Id.ToString()));
+            var owner = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, RoleHelper.Owner));
+            usersWithStoreClaims = usersWithStoreClaims.Except(owner).ToList();
 
-            return await usersWithStoreId.ToListAsync();
+            return usersWithStoreClaims;
         }
     }
 }

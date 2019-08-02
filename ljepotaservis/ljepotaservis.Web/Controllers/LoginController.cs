@@ -3,6 +3,7 @@ using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace ljepotaservis.Web.Controllers
 {
@@ -34,26 +35,28 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckEmailTaken([FromBody] string email)
+        public async Task<IActionResult> CheckEmailTaken([FromBody] JObject emailObject)
         {
+            var email = emailObject["email"].ToString();
             var isEmailTaken = await _userRepository.CheckEmailTaken(email);
-            return Ok(isEmailTaken);
+            return Ok(!isEmailTaken);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckUsernameTaken([FromBody] string username)
+        public async Task<IActionResult> CheckUsernameTaken([FromBody] JObject usernameObject)
         {
+            var username = usernameObject["username"].ToString();
             var isUserNameTaken = await _userRepository.CheckUsernameTaken(username);
-            return Ok(isUserNameTaken);
+            return Ok(!isUserNameTaken);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ConfirmEmail(string userId, string emailToken)
+        [HttpPost]
+        public async Task<IActionResult> ConfirmEmail([FromBody] JObject userIdEmailTokenObject)
         {
+            var userId = userIdEmailTokenObject["userId"].ToString();
+            var emailToken = userIdEmailTokenObject["emailToken"].ToString();
             var hasSucceeded = await _userRepository.ConfirmEmail(userId, emailToken);
-            if(hasSucceeded)
-                return Ok();
-            return BadRequest();
+            return Ok(hasSucceeded);
         }
     }
 }

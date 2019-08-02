@@ -1,18 +1,14 @@
 import { authHeader } from "../utils/authHeader";
 import { handleResponse } from "../utils/handleResponse";
+import { SUPER_ADMIN } from "./constants/endpoints";
 
-export const superAdminServices = {
-  createStoreAndOwner
-};
-
-const createStoreAndOwner = (store, owner) => {
+export const createStoreAndOwner = (store, owner) => {
   const requestOptions = {
     method: "POST",
     headers: { "Content-Type": "application/json", ...authHeader() },
     body: JSON.stringify({ store, owner })
   };
-  console.log({ store, owner });
-  /*return fetch(`/api/store/createstoreandowner`, requestOptions).then(
-    handleResponse
-  );*/
+  
+  return fetch(SUPER_ADMIN.CREATE_STORE_OWNER, requestOptions)
+  .then(handleResponse);
 };

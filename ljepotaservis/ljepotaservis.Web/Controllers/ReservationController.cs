@@ -4,6 +4,7 @@ using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
+using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Owner, User, Employee")]
+        [Authorize(Roles = RoleHelper.OwnerUserEmployee)]
         public async Task<IActionResult> Create([FromBody] CreateReservationDto createReservationDto)
         {
             await _reservationRepository.Create(createReservationDto.Client, createReservationDto.Employee,
@@ -35,7 +36,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Owner, Employee")]
+        [Authorize(Roles = RoleHelper.OwnerEmployee)]
         public async Task<IActionResult> GetByEmployee([FromBody] UserDto userEmployee)
         {
             var reservations = await _reservationRepository.GetCurrentReservationsByEmployee(userEmployee);
@@ -44,7 +45,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = RoleHelper.Owner)]
         public async Task<IActionResult> GetReservations()
         {
             var store = await ResolveStore();
@@ -54,7 +55,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = RoleHelper.User)]
         public async Task<IActionResult> GetByUser([FromBody] UserDto client)
         {
             var reservations = await _reservationRepository.GetReservationsByUser(client);
