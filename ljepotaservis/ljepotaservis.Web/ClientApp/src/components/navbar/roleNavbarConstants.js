@@ -10,7 +10,7 @@ const roleNavbarConstants = {
     homePath: "/owner",
     items: [
       { text: "Naslovnica", path: "/owner" },
-      { text: "Zaposlenici", path: "/owner/employees" }
+      { text: "Dodaj uslugu", path: "/owner/add-service" }
     ]
   },
   Employee: {
