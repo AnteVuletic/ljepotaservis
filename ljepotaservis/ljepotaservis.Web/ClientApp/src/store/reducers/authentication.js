@@ -22,6 +22,7 @@ export function authentication(state = initialState, action) {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:
       return {
+        ...state,
         loggedIn: false,
         loading: true
       };
