@@ -65,10 +65,11 @@ class Registration extends Component {
   };
 
   handleUsernameBlur = () => {
-    userService.checkUsernameTaken(this.state.username).then(isTaken => {
-      isTaken
-        ? this.setState({ usernameValidationState: "success" })
-        : this.setState({ usernameValidationState: "error" });
+    userService.checkUsernameTaken(this.state.username)
+    .then(isTaken => {
+      isTaken ? 
+      this.setState({ usernameValidationState: "success" }) :
+      this.setState({ usernameValidationState: "error" });
     });
   };
 
@@ -80,9 +81,9 @@ class Registration extends Component {
     }
 
     userService.checkEmailTaken(this.state.email).then(isTaken => {
-      isTaken
-        ? this.setState({ emailValidationState: "success" })
-        : this.setState({ emailValidationState: "error" });
+      isTaken ? 
+      this.setState({ emailValidationState: "success" }) :
+      this.setState({ emailValidationState: "error" });
     });
   };
 
@@ -150,11 +151,7 @@ class Registration extends Component {
             />
           </FormGroup>
 
-          <FormGroup
-            controlId="username"
-            validationState="Korisničko ime"
-            onBlur={this.handleUsernameBlur}
-          >
+          <FormGroup controlId="username">
             <ControlLabel>Korisničko ime</ControlLabel>
             <FormControl
               type="text"

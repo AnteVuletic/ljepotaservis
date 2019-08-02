@@ -13,7 +13,7 @@ namespace ljepotaservis.Infrastructure.EmailTemplates
         {
             var emailTokenBytesEncoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(emailToken));
             var userIdEncoded = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(user.Id));
-            var url =$"https://localhost:44349/emailconfirmationuser/{userIdEncoded}/{emailTokenBytesEncoded}";
+            var url =$"https://localhost:44349/authentication/emailconfirmation/{userIdEncoded}?{emailTokenBytesEncoded}";
 
             var templateText = default(string);
             var executingAssembly = Assembly.GetExecutingAssembly();

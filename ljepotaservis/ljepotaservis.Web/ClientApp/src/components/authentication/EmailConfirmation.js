@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { userService } from "../../services/userServices"
+import { authentication } from "../../services/authentication"
 
 export default class EmailConfirmation extends Component {
   componentDidMount() {
-    const { userId, emailToken } = this.props.match.params;
-    
-    userService.confirmEmail(userId, emailToken);
+    const { userId } = this.props.match.params;
+    const emailToken = this.props.location.search.slice(1, this.props.location.search.length);
+    authentication.confirmEmail(userId, emailToken);
   }
   render() {
     return <div>Is confirmed</div>;

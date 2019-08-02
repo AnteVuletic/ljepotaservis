@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Entities.Data;
@@ -15,6 +16,8 @@ namespace ljepotaservis.Data.DataSeeds
         {
             var scope = scopeFactory.CreateScope();
             var context = scope.ServiceProvider.GetService<LjepotaServisContext>();
+            var hasSuperAdmin = context.Users.Any(usr => usr.UserName == "Admin");
+            if (hasSuperAdmin) return;
 
             var user = new User
             {
@@ -39,6 +42,7 @@ namespace ljepotaservis.Data.DataSeeds
         {
             var user = await userManager.FindByEmailAsync(email);
             var result = await userManager.AddToRoleAsync(user, role);
+            await userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, role));
 
             return result;
         }

@@ -6,7 +6,6 @@ export const userService = {
   checkEmailTaken,
   checkUsernameTaken,
   getAllStores
-  confirmEmail
 };
 
 function checkEmailTaken(email) {
@@ -31,18 +30,6 @@ function checkUsernameTaken(username) {
   return fetch(CHECK.USERNAME_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
-}
-
-function confirmEmail(userId, emailToken) {
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, emailToken })
-  };
-
-  return fetch(LOGIN.CONFIRM_EMAIL, requestOptions)
-    .then(handleResponse)
-    .then(isConfirmed => isConfirmed);
 }
 
 // samo mock za testirat react maknit kasnije

@@ -5,6 +5,7 @@ using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
+using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -27,7 +28,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = RoleHelper.Owner)]
         public async Task<IActionResult> AddEditServicesToStore([FromBody] StoreDto storeDto)
         {
             var store = await ResolveStore();
@@ -38,7 +39,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = RoleHelper.Owner)]
         public async Task<IActionResult> AddEditEmployeesToStore([FromBody] ICollection<UserDto> employees)
         {
             var store = await ResolveStore();
@@ -47,7 +48,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
 
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = RoleHelper.SuperAdmin)]
         [HttpPost]
         public async Task<IActionResult> CreateStoreAndOwner([FromBody] JObject storeAndOwner )
         {

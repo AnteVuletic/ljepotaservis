@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import AddStore from "./AddStore";
 import AddOwner from "./AddOwner";
-import { superAdminServices } from "../../../services/superAdmin";
+import { createStoreAndOwner } from "../../../services/superAdmin";
 import {
   regexEmail,
   validatePassword,
@@ -72,7 +72,7 @@ class AddStoreAndOwner extends Component {
       return;
     }
 
-    superAdminServices.createStoreAndOwner(store, owner);
+    createStoreAndOwner(store, owner);
   };
 
   handleChange = formInformation => {

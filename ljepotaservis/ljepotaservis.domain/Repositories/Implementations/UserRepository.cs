@@ -49,6 +49,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             var dbUser = user.ProjectUserDtoToUser();
             var result = await _userManager.CreateAsync(dbUser, user.Password);
             await _userManager.AddToRoleAsync(dbUser, userRole.Name);
+            await _userManager.AddClaimAsync(dbUser, new Claim(ClaimTypes.Role, userRole.Name));
 
             if (!result.Succeeded) throw new Exception("Unable to create user");
 
@@ -74,8 +75,10 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 
             if (!userSigninResult.Succeeded) throw new Exception("Invalid password");
             var userRoles = await _userManager.GetRolesAsync(dbUser);
-            var token = _jwtHelper.GenerateJwtToken(dbUser);
-            return dbUser.ProjectUserToDtoUser(token, userRoles.First());
+            var identityRoles = await _userManager.GetClaimsAsync(dbUser);
+            var userRole = userRoles.First();
+            var token = _jwtHelper.GenerateJwtToken(dbUser, userRole, identityRoles);
+            return dbUser.ProjectUserToDtoUser(token, userRole);
         }
 
         public async Task<bool> ConfirmEmail(string userId, string emailToken)

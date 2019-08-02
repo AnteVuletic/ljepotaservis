@@ -18,12 +18,12 @@ namespace ljepotaservis.Domain.Repositories.Implementations
     public class StoreRepository : ARepository, IStoreRepository
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public StoreRepository(
             LjepotaServisContext dbLjepotaServisContext,
             UserManager<User> userManager,
-            RoleManager<ApplicationRole> roleManager) 
+            RoleManager<IdentityRole> roleManager) 
             : base(dbLjepotaServisContext)
         {
             _userManager = userManager;

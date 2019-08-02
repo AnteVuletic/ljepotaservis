@@ -16,7 +16,7 @@ const UserSide = props => {
       <RoleNavbar role={props.user.role} />
       <Switch>
         <Route exact path={path} component={Home} />
-        <Route path={path + "stores/:id"} component={Store} />
+        <Route path={path + "/stores/:id"} component={Store} />
         <PrivateRoute
           path={path + "authentication"}
           user={props.user}

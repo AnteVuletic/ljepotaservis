@@ -15,7 +15,7 @@ const Authentication = props => {
         <Route path={path + "/login"} component={Login} />
         <Route path={path + "/registration"} component={Registration} />
         <Route
-          path={path + "/emailconfirmation/:userId/:emailToken"}
+          path={path + "/emailconfirmation/:userId"}
           component={EmailConfirmation}
         />
         <Redirect to={path + "/registration"} />

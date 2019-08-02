@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -21,22 +22,26 @@ namespace ljepotaservis.Infrastructure.Helpers
             _audience = configuration["Jwt:Audience"];
             _key = configuration["Jwt:Key"];
         }
-        public string GenerateJwtToken(User user)
+        public string GenerateJwtToken(User user, string role, ICollection<Claim> roleClaim)
         {
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Role, role)
             };
 
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key)), SecurityAlgorithms.HmacSha256);
+            claims.AddRange(roleClaim);
 
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key)), SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
                 _issuer,
                 _audience,
                 claims,
-                expires: DateTime.Now.AddMonths(1));
+                DateTime.UtcNow,
+                DateTime.Now.AddMonths(1),
+                credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

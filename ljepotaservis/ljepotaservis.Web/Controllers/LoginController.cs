@@ -35,20 +35,22 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckEmailTaken([FromBody] string email)
+        public async Task<IActionResult> CheckEmailTaken([FromBody] JObject emailObject)
         {
+            var email = emailObject["email"].ToString();
             var isEmailTaken = await _userRepository.CheckEmailTaken(email);
-            return Ok(isEmailTaken);
+            return Ok(!isEmailTaken);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CheckUsernameTaken([FromBody] string username)
+        public async Task<IActionResult> CheckUsernameTaken([FromBody] JObject usernameObject)
         {
+            var username = usernameObject["username"].ToString();
             var isUserNameTaken = await _userRepository.CheckUsernameTaken(username);
-            return Ok(isUserNameTaken);
+            return Ok(!isUserNameTaken);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> ConfirmEmail([FromBody] JObject userIdEmailTokenObject)
         {
             var userId = userIdEmailTokenObject["userId"].ToString();
