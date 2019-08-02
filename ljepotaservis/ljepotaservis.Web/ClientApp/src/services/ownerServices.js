@@ -14,7 +14,6 @@ export const addEditEmployees = (employees) => {
 };
 
 export const addEditServices = (services) => {
-    console.log(services);
     const requestOptions = {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeader() },
