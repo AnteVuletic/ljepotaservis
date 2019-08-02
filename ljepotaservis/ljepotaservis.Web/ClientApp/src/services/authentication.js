@@ -18,14 +18,7 @@ function login(email, password) {
     .then(handleResponse)
     .then(
       user => {
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            email: user.email,
-            token: user.token,
-            role: user.role
-          })
-        );
+        localStorage.setItem("user", JSON.stringify(user));
 
         return user;
       },
