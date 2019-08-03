@@ -1,22 +1,43 @@
-import React from "react";
+import React, { Component } from "react";
 
-const ServicePicker = props => {
-  const handleChange = event => {
-    console.log(event.target.value);
+class ServicePicker extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      checkedItems: []
+    };
+  }
+
+  handleChange = async (event, service) => {
+    if (event.target.checked) {
+      await this.setState(state => ({
+        checkedItems: [...state.checkedItems, service]
+      }));
+    } else {
+      await this.setState(state => ({
+        checkedItems: state.checkedItems.filter(item => item.id !== service.id)
+      }));
+    }
+
+    this.props.onChange(this.state.checkedItems);
   };
 
-  return (
-    <form>
-      {props.services.map(service => (
-        <input
-          key={service.id}
-          type="checkbox"
-          value={service.name}
-          onChange={handleChange}
-        />
-      ))}
-    </form>
-  );
-};
+  render() {
+    return (
+      <form>
+        {this.props.services.map(service => (
+          <div key={service.id}>
+            <input
+              type="checkbox"
+              onChange={event => this.handleChange(event, service)}
+            />
+            <label>{service.name}</label>
+          </div>
+        ))}
+      </form>
+    );
+  }
+}
 
 export default ServicePicker;

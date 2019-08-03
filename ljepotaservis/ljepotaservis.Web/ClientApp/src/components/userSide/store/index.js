@@ -55,9 +55,15 @@ class Store extends Component {
     });
   }
 
+  handleServiceChange = selectedServices => {
+    this.setState(state => ({
+      reservation: { ...state.reservation, services: selectedServices }
+    }));
+    console.log(selectedServices);
+  };
+
   render() {
     const { store, employees, services } = this.state;
-    console.log(this.state);
     return (
       <div>
         <h1>Ime {store.name}</h1>
@@ -65,7 +71,10 @@ class Store extends Component {
         <h3>
           Radno vrijeme: {store.openingTime}-{store.closingTime}
         </h3>
-        <ServicePicker services={services} />
+        <ServicePicker
+          services={services}
+          onChange={this.handleServiceChange}
+        />
       </div>
     );
   }
