@@ -1,18 +1,11 @@
 import React from "react";
-import { connect } from "react-redux";
-import RoleNavbar from "../navbar";
 
 const Store = props => {
   return (
     <div>
-      <RoleNavbar role={props.role} />
-      <div>id: {props.match.params.id}</div>;
+      <h1>id: {props.match.params.id}</h1>
     </div>
   );
 };
 
-const mapStateToProps = state => ({
-  role: state.authentication.user.role
-});
-
-export default connect(mapStateToProps)(Store);
+export default Store;

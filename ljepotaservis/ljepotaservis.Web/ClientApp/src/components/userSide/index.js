@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Route, Switch, Redirect } from "react-router";
 import RoleNavbar from "../navbar";
 import PrivateRoute from "../routeHelpers/PrivateRoute";
-import Home from "./Home";
+import Home from "./home";
 import Store from "./Store";
 import Authentication from "../authentication";
 import Role from "../../utils/role";

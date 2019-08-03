@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-export default class NewService extends Component {
+export default class NewEmployee extends Component {
   constructor(props) {
     super(props);
 
@@ -30,13 +30,13 @@ export default class NewService extends Component {
   };
 
   render() {
-    const { firstname, lastName, username, email, password } = this.state;
+    const { firstName, lastName, username, email, password } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <input
           type="text"
           name="firstName"
-          value={firstname}
+          value={firstName}
           placeholder="Ime"
           onChange={this.handleChange}
         />
