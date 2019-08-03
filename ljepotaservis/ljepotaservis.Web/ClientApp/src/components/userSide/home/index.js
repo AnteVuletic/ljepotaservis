@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import Filters from "./Filters";
 import StoreList from "./StoreList";
 import ServiceTypePicker from "./ServiceTypePicker";
+import Calendar from "./Calendar";
 
 class Home extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class Home extends Component {
       stores: [{ id: 1, name: "Linea", score: 4, workingHours: "08-21" }],
       searchBar: "",
       selectedServiceType: null,
-      dateTime: null,
+      dateTime: new Date(),
       filtersAreOpen: false
     };
   }
@@ -62,13 +62,13 @@ class Home extends Component {
           <button
             onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
           >
-            Filteri
+            Datum
           </button>
           {filtersAreOpen ? (
-            <Filters
-              dateTime={dateTime}
-              onDateChange={this.handleDateChange}
-              onFilter={this.handleFilter}
+            <Calendar
+              selected={dateTime}
+              onChange={this.handleDateChange}
+              onSave={this.handleFilter}
             />
           ) : null}
         </div>
