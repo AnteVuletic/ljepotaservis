@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from "react-router";
 import RoleNavbar from "../navbar";
 import PrivateRoute from "../routeHelpers/PrivateRoute";
 import Home from "./home";
-import Store from "./Store";
+import Store from "./store";
 import Authentication from "../authentication";
 import Role from "../../utils/role";
 
