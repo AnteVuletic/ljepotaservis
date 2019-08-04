@@ -3,6 +3,16 @@ import { LinkContainer } from "react-router-bootstrap";
 import "../../../styling/store/storelist.css";
 
 const StoreList = props => {
+  const getScore = score => {
+    let scoreElement = [];
+    for (let i = 0; i < 5; i++) {
+      score < i
+        ? scoreElement.push(<label>U+2605</label>)
+        : score.push(<label>U+2606</label>);
+    }
+    return scoreElement;
+  };
+
   return (
     <div className="store__wrapper">
       {props.stores

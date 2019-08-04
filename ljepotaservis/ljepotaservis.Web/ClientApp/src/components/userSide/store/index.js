@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ServicePicker from "./ServicePicker";
+import EmployeePicker from "./EmployeePicker";
+import DatePicker from "./DatePicker";
 
 class Store extends Component {
   constructor(props) {
@@ -15,7 +17,12 @@ class Store extends Component {
       },
       employees: [],
       services: [],
-      reservation: {}
+      reservation: {
+        services: [],
+        employee: null,
+        date: new Date()
+      },
+      currentStep: "Service pick"
     };
   }
 
@@ -61,8 +68,45 @@ class Store extends Component {
     }));
   };
 
+  handleEmployeeChange = selectedEmployee => {
+    this.setState(state => ({
+      reservation: { ...state.reservation, employee: selectedEmployee }
+    }));
+  };
+
+  handleDateChange = selectedDate => {
+    this.setState(state => ({
+      reservation: { ...state.reservation, date: selectedDate }
+    }));
+  };
+
+  handleNextStep = () => {
+    const { currentStep, reservation } = this.state;
+    switch (currentStep) {
+      case "Service pick":
+        if (reservation.services.length < 1) {
+          alert("Odaberi barem jednu uslugu");
+          break;
+        }
+        this.setState({ currentStep: "Employee pick" });
+        break;
+      case "Employee pick":
+        if (reservation.employee === null) {
+          alert("Odaberi zaposlenika");
+          break;
+        }
+        this.setState({ currentStep: "Date pick" });
+        break;
+      case "Date pick":
+        alert("reserved");
+        console.log(this.state.reservation);
+        break;
+    }
+  };
+
   render() {
-    const { store, employees, services } = this.state;
+    const { store, employees, services, currentStep } = this.state;
+
     return (
       <div>
         <h1>Ime {store.name}</h1>
@@ -70,10 +114,26 @@ class Store extends Component {
         <h3>
           Radno vrijeme: {store.openingTime}-{store.closingTime}
         </h3>
-        <ServicePicker
-          services={services}
-          onChange={this.handleServiceChange}
-        />
+        {currentStep === "Service pick" && (
+          <ServicePicker
+            services={services}
+            onChange={this.handleServiceChange}
+          />
+        )}
+        {currentStep === "Employee pick" && (
+          <EmployeePicker
+            employees={employees}
+            onClick={this.handleEmployeeChange}
+          />
+        )}
+        {currentStep === "Date pick" && (
+          <DatePicker
+            date={this.state.reservation.date}
+            employee={this.state.reservation.employee}
+            onChange={this.handleDateChange}
+          />
+        )}
+        <button onClick={this.handleNextStep}>Sljedeći korak</button>
       </div>
     );
   }
