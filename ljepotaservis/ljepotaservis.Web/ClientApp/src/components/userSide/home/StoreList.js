@@ -13,7 +13,7 @@ const StoreList = props => {
           <div key={store.id} className="store__tile">
             <img src={`https://localhost:44349/images/${store.imageName}`} />
             <h1>{store.name}</h1>
-            <h5>Ocijena {store.score}/5</h5>
+            <div>Ocijena</div>
             <h5>Radno vrijem: {store.workingHours}</h5>
             <LinkContainer to={`/stores/${store.id}`}>
               <button>Više...</button>

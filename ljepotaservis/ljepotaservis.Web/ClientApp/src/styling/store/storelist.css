@@ -1,0 +1,17 @@
+.store__wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.store__tile img {
+    display: block;
+    border-radius: 5px;
+    width: 50%;
+}
+
+.store__tile h1 {
+    font-size: 12px;
+    margin: 9px 0;
+}
