@@ -53,13 +53,16 @@ class Calendar extends Component {
         "Nedjelja"
       ]
     }).of(this.state.year, this.state.month);
+    const today = new Date();
 
     return (
       <div>
         <h3>
           {date.month} {date.year}.
         </h3>
-        <button onClick={this.handlePreviousMonth}>{"<"}</button>
+        {this.state.month === today.getMonth() ? null : (
+          <button onClick={this.handlePreviousMonth}>{"<"}</button>
+        )}
         <button onClick={this.handleNextMonth}>{">"}</button>
         {date.weekdaysAbbr.map((day, index) => (
           <span key={index}>{day}</span>
@@ -70,6 +73,18 @@ class Calendar extends Component {
               if (day === 0) {
                 return <button key={dayIndex} />;
               }
+
+              if (
+                day < today.getDate() &&
+                this.state.month === today.getMonth()
+              ) {
+                return (
+                  <button disabled key={dayIndex}>
+                    {day}
+                  </button>
+                );
+              }
+
               return (
                 <button
                   onClick={() =>
