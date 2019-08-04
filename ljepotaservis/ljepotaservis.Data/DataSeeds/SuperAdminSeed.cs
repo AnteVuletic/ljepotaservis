@@ -28,10 +28,7 @@ namespace ljepotaservis.Data.DataSeeds
             };
 
             var userManager = scope.ServiceProvider.GetService<UserManager<User>>();
-            if (!context.Users.Any(u => u.UserName == user.UserName))
-            {
-                var result = await userManager.CreateAsync(user, "SuperAdmin$2u");
-            }
+            await userManager.CreateAsync(user, "SuperAdmin$2u");
 
             await AssignRoles(userManager, user.Email, "SuperAdmin");
 

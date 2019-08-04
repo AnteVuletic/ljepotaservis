@@ -15,7 +15,12 @@ namespace ljepotaservis.Data.Entities.Models
         public TimeSpan Duration
         {
             get => new TimeSpan(DurationTicks);
-            set => DurationTicks = value.Ticks;
+            set
+            {
+                var totalMinutes = (int)(new TimeSpan(value.Ticks) + new TimeSpan(0, 15 / 2, 0)).TotalMinutes;
+                var roundedToMinutes = new TimeSpan(0, totalMinutes - totalMinutes % 15, 0);
+                DurationTicks = roundedToMinutes.Ticks;
+            }
         }
 
         public int StoreId { get; set; }

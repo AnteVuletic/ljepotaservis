@@ -9,6 +9,7 @@ using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Abstractions;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
+using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using ljepotaservis.Infrastructure.EmailTemplates;
 using ljepotaservis.Infrastructure.Helpers;
@@ -90,7 +91,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             return result.Succeeded;
         }
 
-        public async Task AddEditEmployeesToStore(Store store, ICollection<UserDto> employees)
+        public async Task AddEditEmployeesToStore(Store store, ICollection<EmployeeDto> employees)
         {
             var employeeRole = await _roleManager.Roles.SingleAsync(role => role.Name == "Employee");
             var dbStore = await _dbLjepotaServisContext.Stores.FindAsync(store.Id);
@@ -101,7 +102,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             employees = employees.Except(newEmployees).ToList();
             foreach (var newEmployee in newEmployees)
             {
-                var employee = newEmployee.ProjectUserDtoToUser(true);
+                var employee = newEmployee.ProjectEmployeeDtoToUser();
                 await _userManager.CreateAsync(employee, newEmployee.Password);
                 await _userManager.AddToRoleAsync(employee, employeeRole.Name);
                 await _userManager.AddClaimAsync(employee, new Claim("Store", store.Id.ToString()));
@@ -112,26 +113,33 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                     Store = store,
                     StoreId = store.Id,
                     User = employee,
-                    UserId = employee.Id
+                    UserId = employee.Id,
+                    StartOfShift = newEmployee.StartOfShift,
+                    EndOfShift = newEmployee.EndOfShift
                 };
                 await _dbLjepotaServisContext.AddAsync(userStore);
             }
             foreach (var dbEmployee in dbEmployees)
             {
                 var isEdit = employees.All(employee => employee.Id != dbEmployee.Id);
+                var employeeStore =_dbLjepotaServisContext.UserStores.Single(userStore => userStore.UserId == dbEmployee.Id);
                 if (!isEdit)
                 {
+                    _dbLjepotaServisContext.UserStores.Remove(employeeStore);
                     await _userManager.DeleteAsync(dbEmployee);
                     continue;
                 }
-                var userDto = employees.Single(employee => employee.Id == dbEmployee.Id);
-                var employeeOrNull = await _userManager.FindByIdAsync(userDto.Id);
+                var employeeDto = employees.Single(employee => employee.Id == dbEmployee.Id);
+                var employeeOrNull = await _userManager.FindByIdAsync(employeeDto.Id);
                 if (employeeOrNull == null) throw new Exception("User has ID which cannot be found in database");
-                employeeOrNull.Email = userDto.Email;
-                employeeOrNull.Firstname = userDto.FirstName;
-                employeeOrNull.Lastname = userDto.LastName;
-                employeeOrNull.Email = userDto.Email;
-                employeeOrNull.UserName = userDto.Username;
+                employeeOrNull.Email = employeeDto.Email;
+                employeeOrNull.Firstname = employeeDto.FirstName;
+                employeeOrNull.Lastname = employeeDto.LastName;
+                employeeOrNull.Email = employeeDto.Email;
+                employeeOrNull.UserName = employeeDto.Username;
+                employeeOrNull.ImageName = employeeDto.ImageName;
+                employeeStore.EndOfShift = employeeDto.EndOfShift;
+                employeeStore.StartOfShift = employeeDto.EndOfShift;
 
                 await _userManager.UpdateAsync(employeeOrNull);
             }
@@ -152,7 +160,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             return isUsernameTaken;
         }
 
-        public async Task<ICollection<User>> GetEmployeesByStore(int storeId)
+        public async Task<ICollection<EmployeeDto>> GetEmployeesByStore(int storeId)
         {
             var store = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
             if (store == null) throw new Exception("Store not exists");
@@ -160,8 +168,16 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 await _userManager.GetUsersForClaimAsync(new Claim("Store", store.Id.ToString()));
             var owner = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, RoleHelper.Owner));
             usersWithStoreClaims = usersWithStoreClaims.Except(owner).ToList();
+            var employeeStores = _dbLjepotaServisContext.UserStores.Where(userStore =>
+                usersWithStoreClaims.Any(userWithStoreClaim => userStore.UserId == userWithStoreClaim.Id));
 
-            return usersWithStoreClaims;
+            var employeesWithStoreClaim =usersWithStoreClaims.Select(userWithStoreClaim =>
+            {
+                var employeeStore = employeeStores.Single(empStore => empStore.UserId == userWithStoreClaim.Id);
+                return userWithStoreClaim.ProjectUserAndUserStoreToEmployeeDto(employeeStore);
+            }).ToList();
+
+            return employeesWithStoreClaim;
         }
     }
 }

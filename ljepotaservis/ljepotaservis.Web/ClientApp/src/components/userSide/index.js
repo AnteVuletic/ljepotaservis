@@ -12,8 +12,7 @@ const UserSide = props => {
   const { path } = props.match;
 
   return (
-    <div>
-      <RoleNavbar role={props.user.role} />
+    <React.Fragment>
       <Switch>
         <Route exact path={path} component={Home} />
         <Route path={path + "stores/:id"} component={Store} />
@@ -25,7 +24,7 @@ const UserSide = props => {
         />
         <Redirect to="/" />
       </Switch>
-    </div>
+    </React.Fragment>
   );
 };
 
