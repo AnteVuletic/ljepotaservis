@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { LinkContainer } from "react-router-bootstrap";
 import { login } from "../../store/actions/authActions";
 import "../../styling/authentication/authentication.css";
 
@@ -60,8 +61,9 @@ class Login extends Component {
           </form>
           <div className="authentication__navigate">
             <span>Nemaš račun?</span>             
-            <a href="/authentication/registration">Registriraj se!
-            </a>
+            <LinkContainer to="/authentication/registration">
+              <span className="authentication__navigate__link">Registriraj se!</span>
+            </LinkContainer>
           </div>
         </div>
       </div>

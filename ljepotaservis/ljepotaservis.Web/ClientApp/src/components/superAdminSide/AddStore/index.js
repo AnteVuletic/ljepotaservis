@@ -73,7 +73,7 @@ class AddStoreAndOwner extends Component {
       alert("store name and address longer than 3");
       return;
     }
-    console.log(store)
+  
     createStoreAndOwner(store, owner);
   };
 

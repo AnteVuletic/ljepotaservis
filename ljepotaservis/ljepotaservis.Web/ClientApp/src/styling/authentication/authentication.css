@@ -100,8 +100,9 @@
     font-size: 12px;
 }
 
-.authentication__navigate a {
+.authentication__navigate__link {
     font-weight: 700;
+    cursor: pointer;
 }
 
 .authentication__header--register{

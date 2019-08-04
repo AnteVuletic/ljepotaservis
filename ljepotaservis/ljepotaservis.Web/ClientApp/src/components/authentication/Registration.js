@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { regexEmail, validatePassword } from "../../utils/ValidationHelper";
+import { LinkContainer } from "react-router-bootstrap";
 import { authentication } from "../../services/authentication";
 import { userService } from "../../services/userServices";
 import "../../styling/authentication/authentication.css"; 
@@ -173,9 +174,9 @@ class Registration extends Component {
           </form>
           <div className="authentication__navigate">
             <span>Već imaš račun?</span>             
-            <a href="/authentication/login">
-              Prijavi se!
-            </a>
+            <LinkContainer to="/authentication/login">
+              <span className="authentication__navigate__link">Prijavi se!</span>
+            </LinkContainer>
           </div>
         </div>
       </div>
