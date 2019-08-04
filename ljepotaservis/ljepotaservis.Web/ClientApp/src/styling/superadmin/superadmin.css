@@ -1,0 +1,15 @@
+.form__superadmin{
+    display: flex;
+    flex-direction: column;
+}
+
+.form__superadmin input {
+    border: 1px solid #cccccc;
+    margin: 5px;
+    font-size: 20px;
+}
+
+.form__superadmin label {
+    margin: 5px;
+    display: block;
+}

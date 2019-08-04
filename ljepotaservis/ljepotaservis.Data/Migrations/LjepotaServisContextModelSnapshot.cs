@@ -50,29 +50,29 @@ namespace ljepotaservis.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "aed14f3c-c6bc-4c25-9627-2479d0febe08",
-                            ConcurrencyStamp = "de1035ff-fe27-4634-8865-efae7ac702de",
+                            Id = "bfdfa84a-180a-4174-a84e-e2f353617625",
+                            ConcurrencyStamp = "bf5c79a3-d99e-4197-8a73-3e1b06c0322b",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "09d86526-c653-42a3-93a8-71f3b220101d",
-                            ConcurrencyStamp = "7ea4e211-ead5-4108-9fa9-d9d848628912",
+                            Id = "4c869e9f-6daa-440e-b943-b032cac7f8cf",
+                            ConcurrencyStamp = "fa683cc9-923f-4da1-8aa8-e99a03a27bfb",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = "cb3f0b72-4521-431e-a07c-934ef3e56303",
-                            ConcurrencyStamp = "2ca5dd25-c440-42dd-a14b-1d02836afe07",
+                            Id = "91febb14-a18d-4cbd-8e96-5ad86ed00d91",
+                            ConcurrencyStamp = "53d327be-1f19-4e35-90e8-9c24870897dd",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "bf76ea71-c97a-4d2f-bb1e-12576bfe2580",
-                            ConcurrencyStamp = "2107b290-58bf-4a16-879f-e451304b6c91",
+                            Id = "f721bcab-5d43-4ab3-a6f7-77f77cc01a3d",
+                            ConcurrencyStamp = "af133680-6be7-4d1a-9539-afcd47c0bdde",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -177,6 +177,24 @@ namespace ljepotaservis.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Portfolio", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("ImageName");
+
+                    b.Property<int>("StoreId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("Portfolios");
+                });
+
             modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Reservation", b =>
                 {
                     b.Property<int>("Id")
@@ -215,22 +233,6 @@ namespace ljepotaservis.Data.Migrations
                     b.ToTable("ReservationServices");
                 });
 
-            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Resource", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("OwnerId");
-
-                    b.Property<string>("Path");
-
-                    b.Property<int>("ResourceType");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Resources");
-                });
-
             modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -262,9 +264,15 @@ namespace ljepotaservis.Data.Migrations
 
                     b.Property<DateTime>("ClosingDateTime");
 
+                    b.Property<string>("ImageName");
+
                     b.Property<string>("Name");
 
+                    b.Property<string>("Neighborhood");
+
                     b.Property<DateTime>("OpenDateTime");
+
+                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
@@ -287,6 +295,8 @@ namespace ljepotaservis.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("Firstname");
+
+                    b.Property<string>("ImageName");
 
                     b.Property<string>("Lastname");
 
@@ -412,6 +422,14 @@ namespace ljepotaservis.Data.Migrations
                     b.HasOne("ljepotaservis.Data.Entities.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Portfolio", b =>
+                {
+                    b.HasOne("ljepotaservis.Data.Entities.Models.Store", "Store")
+                        .WithMany("Portfolios")
+                        .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

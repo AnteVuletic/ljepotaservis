@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using ljepotaservis.Data.Enums;
 
 namespace ljepotaservis.Infrastructure.DataTransferObjects.FilterDtos
 {
     public class SearchFilterDto
     {
-        public string StoreName { get; set; }
-        public string ServiceName { get; set; }
-        public int? ServicePrice { get; set; }
+        public string Name { get; set; }
         public DateTime DateOfReservation { get; set; }
+        public StoreType StoreType { get; set; }
     }
 }

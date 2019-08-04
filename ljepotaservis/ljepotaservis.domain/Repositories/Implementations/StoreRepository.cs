@@ -9,7 +9,6 @@ using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
-using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,8 +29,8 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             _roleManager = roleManager;
         }
 
-        public async Task<StoreDto> Create(Store store, Resource resourceProfilePicture = null)
-        {
+        public async Task<StoreDto> Create(Store store)
+        { 
             var storeOrDefault = _dbLjepotaServisContext.Stores.FirstOrDefault(str => str.Name == store.Name);
             if (storeOrDefault != null) throw new Exception("Store with name already exists");
 
@@ -40,16 +39,16 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 Address = store.Address,
                 Name = store.Name,
                 ClosingDateTime = store.ClosingDateTime,
-                OpenDateTime = store.OpenDateTime
+                OpenDateTime = store.OpenDateTime,
+                ImageName = store.ImageName,
+                Neighborhood = store.Neighborhood,
+                Type = store.Type
             };
 
             await _dbLjepotaServisContext.Stores.AddAsync(newStore);
             await _dbLjepotaServisContext.SaveChangesAsync();
 
-            return new StoreDto
-            {
-                Store = newStore
-            };
+            return newStore.ProjectStoreToStoreDto(0);
         }
 
         public async Task<Store> GetStoreById(int id)
@@ -101,14 +100,14 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             var userOwner = owner.ProjectUserDtoToUser(true);
 
             await _userManager.CreateAsync(userOwner, owner.Password);
-            var result = _userManager.AddToRoleAsync(userOwner, ownerRole.Name);
-            if (!result.Result.Succeeded)
+            var result = await _userManager.AddToRoleAsync(userOwner, ownerRole.Name);
+            if (!result.Succeeded)
                 throw new Exception("Unable to create user");
 
             await _userManager.AddClaimAsync(userOwner, new Claim(ClaimTypes.Role, ownerRole.Name));
             var storeCreated = await Create(store);
 
-            await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Store.Id.ToString()));
+            await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Id.ToString()));
         }
 
         public async Task<ICollection<Service>> GetStoreServices(int storeId)
@@ -119,7 +118,19 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             return await _dbLjepotaServisContext.Services.Where(service => service.StoreId == storeId).ToListAsync();
         }
 
-        public async Task UpdateStoreDetails(int storeId, Store store, Resource resource = null)
+        public async Task<StoreWorkingHoursDto> GetStoreWorkingHours(int storeId)
+        {
+            var store = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
+            var storeWorkingHoursDto = new StoreWorkingHoursDto
+            {
+                CloseTime = store.ClosingDateTime,
+                OpenTime = store.OpenDateTime
+            };
+
+            return storeWorkingHoursDto;
+        }
+
+        public async Task UpdateStoreDetails(int storeId, Store store)
         {
             var storeDb = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
 
@@ -128,11 +139,6 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             storeDb.OpenDateTime = store.OpenDateTime;
             storeDb.Name = store.Name;
             await _dbLjepotaServisContext.SaveChangesAsync();
-        }
-
-        public Task<StoreDto> UpdateStoreEmployees(Store store, ICollection<UserDto> employees)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -7,6 +7,7 @@ using ljepotaservis.Domain.Abstractions;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
 using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
+using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -60,7 +61,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 {
                     Reservation = reservation,
                     ReservationId = reservation.Id,
-                    Service = service,
+                    Service = service.ProjectServiceDtoToService(),
                     ServiceId = service.Id
                 }).ToList();
 

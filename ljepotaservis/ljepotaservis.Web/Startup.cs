@@ -30,6 +30,7 @@ namespace ljepotaservis.Web
             services.ConfigureSendGrid(Configuration);
             services.ConfigureIdentity(Configuration);
             services.ConfigureJwt(Configuration);
+            services.SetupJson();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

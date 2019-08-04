@@ -1,15 +1,9 @@
 import React, { Component } from "react";
-import { LinkContainer } from "react-router-bootstrap";
 import { regexEmail, validatePassword } from "../../utils/ValidationHelper";
+import { LinkContainer } from "react-router-bootstrap";
 import { authentication } from "../../services/authentication";
 import { userService } from "../../services/userServices";
-import {
-  FormGroup,
-  FormControl,
-  HelpBlock,
-  ControlLabel,
-  Button
-} from "react-bootstrap";
+import "../../styling/authentication/authentication.css"; 
 
 class Registration extends Component {
   constructor(props) {
@@ -31,7 +25,7 @@ class Registration extends Component {
   }
 
   handleChange = event => {
-    this.setState({ [event.target.id]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleSubmit = event => {
@@ -121,107 +115,70 @@ class Registration extends Component {
     }
 
     return (
-      <div
-        style={{
-          border: "1px solid",
-          margin: "5px",
-          padding: "15px",
-          maxWidth: "400px"
-        }}
-      >
-        <form onSubmit={this.handleSubmit} noValidate>
-          <FormGroup controlId="firstName">
-            <ControlLabel>Ime</ControlLabel>
-            <FormControl
+      <div className="authentication">
+        <div className="authentication__container">
+          <h1 className="authentication__header authentication__header--register">
+            <span>Ljepota servis</span>
+          </h1>
+          <form className="authentication__form" onSubmit={this.handleSubmit} noValidate>
+            <label>Ime</label>
+            <input
+              name="firstName"
               type="text"
               value={firstName}
               placeholder="Ime"
               onChange={this.handleChange}
             />
-          </FormGroup>
-
-          <FormGroup controlId="lastName">
-            <ControlLabel>Prezime</ControlLabel>
-            <FormControl
+            <label>Prezime</label>
+            <input
+              name="lastName"
               type="text"
               value={lastName}
               placeholder="Prezime"
               onChange={this.handleChange}
             />
-          </FormGroup>
-
-          <FormGroup
-            controlId="username"
-            validationState={usernameValidationState}
-            onBlur={this.handleUsernameBlur}
-          >
-            <ControlLabel>Korisničko ime</ControlLabel>
-            <FormControl
+            <label>Korisničko ime</label>
+            <input
+              name="username"
               type="text"
               value={username}
               placeholder="Korisničko ime"
               onChange={this.handleChange}
             />
-          </FormGroup>
-          <FormGroup
-            controlId="email"
-            validationState={emailValidationState}
-            onBlur={this.handleEmailBlur}
-          >
-            <ControlLabel>E-mail</ControlLabel>
-            <FormControl
+            <label>E-mail</label>
+            <input
+              name="email"
               type="email"
               value={email}
               placeholder="adresa@mail.com"
               onChange={this.handleChange}
             />
-            <FormControl.Feedback />
-            <HelpBlock>The address has to be valid.</HelpBlock>
-          </FormGroup>
-
-          <FormGroup
-            controlId="password"
-            validationState={passwordValidationState}
-            onBlur={this.handlePasswordBlur}
-          >
-            <ControlLabel>Password</ControlLabel>
-            <FormControl
+            <label>Password</label>
+            <input
+              name="password"
               type="password"
               value={password}
               placeholder="Lozinka"
               onChange={this.handleChange}
             />
-            <FormControl.Feedback />
-            <HelpBlock>
-              Lozinka treba sadržavati 7 ili više zankova, veliko i malo slovo i
-              broj!
-            </HelpBlock>
-          </FormGroup>
-
-          <FormGroup
-            controlId="passwordConfirmation"
-            validationState={passwordConfirmationValidationState}
-            onBlur={this.handlePasswordConfirmationBlur}
-          >
-            <ControlLabel>Confirm password</ControlLabel>
-            <FormControl
+            <input
+              name="passwordConfirm"
               type="password"
               value={passwordConfirmation}
               placeholder="Potvrdi lozinku"
               onChange={this.handleChange}
             />
-            <FormControl.Feedback />
-            <HelpBlock>Lozinke se trebaju podudarati!</HelpBlock>
-          </FormGroup>
-
-          <Button type="submit" bsStyle="success">
-            Registriraj se
-          </Button>
-        </form>
-
-        <LinkContainer to="/authentication/login">
-          <Button>Već imaš račun? Prijavi se!</Button>
-        </LinkContainer>
+            <div className="authentication__submit">
+              <input type="submit" value="Registriraj se!"/>
+            </div>
+          </form>
+          <div className="authentication__navigate">
+            <span>Već imaš račun?</span>             
+            <LinkContainer to="/authentication/login">
+              <span className="authentication__navigate__link">Prijavi se!</span>
+            </LinkContainer>
+          </div>
+        </div>
       </div>
     );
   }

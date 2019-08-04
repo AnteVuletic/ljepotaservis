@@ -49,12 +49,8 @@ export default class Employees extends Component {
   };
 
   handleEditEmployee = employeeToEdit => {
-    addEditEmployees([
-      ...this.state.employees.filter(
-        employee => employee.id !== employeeToEdit.id
-      ),
-      employeeToEdit
-    ]).then(() => {
+    const employees = [...this.state.employees.filter(employee => employee.id !== employeeToEdit.id), employeeToEdit];
+    addEditEmployees(employees).then(() => {
       this.loadEmployees();
       this.handleEditClose();
     });
