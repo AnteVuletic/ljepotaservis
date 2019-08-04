@@ -70,7 +70,7 @@ class NavbarTemplet extends Component {
             ) : (
               <LinkContainer to="/">
                 <button className="navigation__logout" onClick={logout}>
-                  Registration
+                  Odjavi se
                 </button>
               </LinkContainer>
             )}
