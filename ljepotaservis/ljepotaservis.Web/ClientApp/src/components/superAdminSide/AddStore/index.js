@@ -7,6 +7,7 @@ import {
   validatePassword,
   validateName
 } from "../../../utils/ValidationHelper";
+import "../../../styling/superadmin/superadmin.css";
 
 class AddStoreAndOwner extends Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class AddStoreAndOwner extends Component {
         name: "",
         address: "",
         openingTime: new Date(),
-        closingTime: new Date()
+        closingTime: new Date(),
+        imageName: ""
       },
       owner: {
         firstName: "",
@@ -71,7 +73,7 @@ class AddStoreAndOwner extends Component {
       alert("store name and address longer than 3");
       return;
     }
-
+    console.log(store)
     createStoreAndOwner(store, owner);
   };
 
@@ -85,10 +87,9 @@ class AddStoreAndOwner extends Component {
 
   render() {
     return (
-      <form>
+      <form className="form__superadmin">
         <AddStore
           onChange={this.handleChange}
-          handleSubmit={this.getStoreInformation}
         />
         <AddOwner onChange={this.handleChange} />
         <button type="submit" onClick={this.handleSubmit}>

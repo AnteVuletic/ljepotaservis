@@ -57,10 +57,8 @@ export default class Services extends Component {
   };
 
   handleEditService = serviceToEdit => {
-    addEditServices([
-      ...this.state.services.filter(service => service.id !== serviceToEdit.id),
-      serviceToEdit
-    ]).then(() => {
+    const services = [...this.state.services.filter(service => service.id !== serviceToEdit.id), serviceToEdit];
+    addEditServices(services).then(() => {
       this.loadServices();
       this.handleEditClose();
     });

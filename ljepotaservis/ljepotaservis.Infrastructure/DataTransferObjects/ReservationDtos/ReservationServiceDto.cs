@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using ljepotaservis.Data.Entities.Models;
+using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
 
 namespace ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos
 {
     public class ReservationServiceDto
     {
         public Reservation Reservation { get; set; }
-        public ICollection<Service> Services { get; set; }
+        public ICollection<ServiceDto> Services { get; set; }
         public TimeSpan DurationOfReservation { get; set; }
     }
 
@@ -21,7 +22,7 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos
                     (reservation, reservationService) => new ReservationServiceDto
                     {
                         Reservation = reservation,
-                        Services = reservationService.Select(rs => rs.Service).ToList()
+                        Services = reservationService.Select(rs => rs.Service.ProjectServiceToServiceDto()).ToList()
                     });
         }
     }

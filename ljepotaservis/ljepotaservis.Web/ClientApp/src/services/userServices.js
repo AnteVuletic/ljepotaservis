@@ -1,9 +1,10 @@
 import { handleResponse } from "../utils/handleResponse";
-import { CHECK } from "./constants/endpoints";
+import { CHECK, FILTER } from "./constants/endpoints";
 
 export const userService = {
   checkEmailTaken,
-  checkUsernameTaken
+  checkUsernameTaken,
+  searchStores
 };
 
 function checkEmailTaken(email) {
@@ -28,4 +29,16 @@ function checkUsernameTaken(username) {
   return fetch(CHECK.USERNAME_CHECK, requestOptions)
     .then(handleResponse)
     .then(isTaken => isTaken);
+}
+
+function searchStores(filters){
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ filters })
+  };
+
+  return fetch(FILTER.GET_FILTERED_STORES, requestOptions)
+    .then(handleResponse)
+    .then(filteredStores => filteredStores);
 }

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import StoreList from "./StoreList";
 import ServiceTypePicker from "./ServiceTypePicker";
 import Calendar from "./Calendar";
+import { userService } from "../../../services/userServices";
 
 class Home extends Component {
   constructor(props) {
@@ -14,6 +15,10 @@ class Home extends Component {
       dateTime: new Date(),
       filtersAreOpen: false
     };
+  }
+
+  componentDidMount(){
+    this.loadFilteredStores();
   }
 
   handleChange = e => {
@@ -30,9 +35,17 @@ class Home extends Component {
 
   handleFilter = () => {
     const { dateTime, selectedServiceType } = this.state;
-    console.log({ dateTime, selectedServiceType });
-    // request ode i puni state.stores
+    this.loadFilteredStores();
   };
+
+  loadFilteredStores = (filters) => {
+    userService.searchStores(filters)
+      .then(stores => {
+        this.setState({
+          stores
+        });
+      });
+  }
 
   render() {
     const {

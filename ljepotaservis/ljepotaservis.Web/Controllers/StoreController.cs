@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
+using ljepotaservis.Data.Enums;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
@@ -40,7 +41,7 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.Owner)]
-        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] UsersDto employees)
+        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] EmployeesDto employees)
         {
             var store = await ResolveStore();
             await _userRepository.AddEditEmployeesToStore(store, employees.Employees);
@@ -81,6 +82,23 @@ namespace ljepotaservis.Web.Controllers
             var employees = await _userRepository.GetEmployeesByStore(store.Id);
 
             return Ok(employees);
+        }
+
+        [Authorize(Roles = RoleHelper.SuperAdmin)]
+        [HttpGet]
+        public IActionResult GetStoreTypes()
+        {
+            var storeTypes = Enum.GetValues(typeof(StoreType)).Cast<StoreType>().ToList();
+            return Ok(storeTypes);
+        }
+
+        [Authorize(Roles = RoleHelper.Owner)]
+        public async Task<IActionResult> GetStoreWorkingHours()
+        {
+            var store = await ResolveStore();
+            var storeWorkingHoursDto = _storeRepository.GetStoreWorkingHours(store.Id);
+
+            return Ok(storeWorkingHoursDto);
         }
 
         private async Task<Store> ResolveStore()

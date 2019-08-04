@@ -1,0 +1,53 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: 'Modern Sans';
+    font-weight: normal;
+}
+
+html, #root, body{
+    position: relative;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+input {
+    outline: 0;
+    border: 0;
+    box-shadow: none;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+button {
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+a {
+    color: #FFFFFF;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover{
+    color: #FFFFFF;
+    outline: none;
+}
+
+@font-face {
+    font-family: 'Modern Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Modern Sans'), url('../../assets/fonts/ModernSans-Light.otf') format('woff');
+}
+
+.react-datepicker__input-container {
+    position: unset;
+}

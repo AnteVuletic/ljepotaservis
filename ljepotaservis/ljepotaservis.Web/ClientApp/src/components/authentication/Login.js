@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { LinkContainer } from "react-router-bootstrap";
 import { login } from "../../store/actions/authActions";
-import { FormGroup, FormControl, ControlLabel, Button } from "react-bootstrap";
+import "../../styling/authentication/authentication.css";
 
 class Login extends Component {
   constructor(props) {
@@ -16,7 +15,7 @@ class Login extends Component {
   }
 
   handleChange = event => {
-    this.setState({ [event.target.id]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleSubmit = event => {
@@ -31,44 +30,40 @@ class Login extends Component {
   render() {
     const { email, password } = this.state;
     return (
-      <div
-        style={{
-          border: "1px solid",
-          margin: "5px",
-          padding: "15px",
-          maxWidth: "400px"
-        }}
-      >
-        <form onSubmit={this.handleSubmit} noValidate>
-          <FormGroup controlId="email">
-            <ControlLabel>E-mail</ControlLabel>
-            <FormControl
-              type="email"
-              value={email}
-              placeholder="adresa@mail.com"
-              onChange={this.handleChange}
-            />
-            <FormControl.Feedback />
-          </FormGroup>
-
-          <FormGroup controlId="password">
-            <ControlLabel>Password</ControlLabel>
-            <FormControl
-              type="password"
-              value={password}
-              placeholder="Lozinka"
-              onChange={this.handleChange}
-            />
-            <FormControl.Feedback />
-          </FormGroup>
-
-          <Button bsStyle="success" type="submit">
-            Prijavi se
-          </Button>
-        </form>
-        <LinkContainer to="/authentication/registration">
-          <Button>Nemaš račun? Registriraj se!</Button>
-        </LinkContainer>
+      <div className="authentication">
+        <div className="authentication__container">
+          <h1 className="authentication__header">
+            <span>Ljepota servis</span>
+          </h1>
+          <form className="authentication__form" onSubmit={this.handleSubmit} noValidate>
+              <label>E-mail</label>
+              <input
+                name="email"
+                type="email"
+                value={email}
+                placeholder="adresa@mail.com"
+                onChange={this.handleChange}
+                required
+              />
+              <label>Password</label>
+              <input
+                name="password"
+                type="password"
+                value={password}
+                placeholder="Lozinka"
+                onChange={this.handleChange}
+                required
+              />
+              <div className="authentication__submit">
+                <input type="submit" value="Prijavi se"/>
+              </div>
+          </form>
+          <div className="authentication__navigate">
+            <span>Nemaš račun?</span>             
+            <a href="/authentication/registration">Registriraj se!
+            </a>
+          </div>
+        </div>
       </div>
     );
   }
