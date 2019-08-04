@@ -59,7 +59,6 @@ class Store extends Component {
     this.setState(state => ({
       reservation: { ...state.reservation, services: selectedServices }
     }));
-    console.log(selectedServices);
   };
 
   render() {
