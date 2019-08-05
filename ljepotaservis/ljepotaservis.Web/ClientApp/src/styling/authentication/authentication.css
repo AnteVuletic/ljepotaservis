@@ -108,3 +108,7 @@
 .authentication__header--register {
   padding: 15px !important;
 }
+
+.authentication__input--fail {
+  color: red;
+}
