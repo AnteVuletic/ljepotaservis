@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ServicePicker from "./ServicePicker";
 import EmployeePicker from "./EmployeePicker";
 import DatePicker from "./DatePicker";
+import ReservatiomSummary from "./ReservationSummary";
 
 class Store extends Component {
   constructor(props) {
@@ -45,11 +46,13 @@ class Store extends Component {
         {
           id: 1,
           name: "Brijanje",
+          price: 120,
           duration: 15
         },
         {
           id: 2,
           name: "Sisanje",
+          price: 150,
           duration: 60
         }
       ]
@@ -98,8 +101,10 @@ class Store extends Component {
         this.setState({ currentStep: "Date pick" });
         break;
       case "Date pick":
-        alert("reserved");
-        console.log(this.state.reservation);
+        this.setState({ currentStep: "Summary" });
+        break;
+      case "Summary":
+        console.log("the end");
         break;
     }
   };
@@ -131,6 +136,12 @@ class Store extends Component {
             date={this.state.reservation.date}
             employee={this.state.reservation.employee}
             onChange={this.handleDateChange}
+          />
+        )}
+        {currentStep === "Summary" && (
+          <ReservatiomSummary
+            reservation={this.state.reservation}
+            store={this.state.store}
           />
         )}
         <button onClick={this.handleNextStep}>Sljedeći korak</button>
