@@ -26,6 +26,7 @@ class ServicePicker extends Component {
   render() {
     return (
       <form>
+        <h5>Odaberite usluge:</h5>
         {this.props.services.map(service => (
           <div key={service.id}>
             <input

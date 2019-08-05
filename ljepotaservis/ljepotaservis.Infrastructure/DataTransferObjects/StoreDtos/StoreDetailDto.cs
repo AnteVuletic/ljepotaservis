@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Data.Enums;
 using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
+using ljepotaservis.Infrastructure.Helpers;
 
 namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
 {
@@ -31,7 +32,7 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
                 Id = store.Id,
                 Name = store.Name,
                 Address = store.Address,
-                OpenCloseTime = $"{store.OpenDateTime.Hour} -  {store.ClosingDateTime.Hour}",
+                OpenCloseTime = $"{store.OpenDateTime.FormatOpenClose()} -  {store.ClosingDateTime.FormatOpenClose()}",
                 OpenTime = store.OpenDateTime,
                 CloseTime = store.ClosingDateTime,
                 Score = rating,

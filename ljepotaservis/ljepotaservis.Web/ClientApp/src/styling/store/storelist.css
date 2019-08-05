@@ -1,17 +1,29 @@
 .store__wrapper{
     display: flex;
     flex-wrap: wrap;
-    width: 90%;
+    width: 95%;
     margin: 0 auto;
+    justify-content: space-between;
 }
-
-.store__tile img {
-    display: block;
-    border-radius: 5px;
-    width: 50%;
+.store__tile {
+    width: 48%;
+    margin-bottom: 30px;
+    cursor: pointer;
 }
 
 .store__tile h1 {
+    font-size: 14px;
+    margin: 5px 0;
+    font-weight: bolder;
+    color: #707070;
+}
+
+.store__tile span{
+    display: block;
     font-size: 12px;
-    margin: 9px 0;
+    color: #707070;
+}
+
+.store__tile img {
+    border-radius: 15px;
 }

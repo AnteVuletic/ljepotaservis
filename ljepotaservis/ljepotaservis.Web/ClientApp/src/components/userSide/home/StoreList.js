@@ -1,22 +1,22 @@
 import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import "../../../styling/store/storelist.css";
+import Rating from "../../utilComponents/Rating";
 
 const StoreList = props => {
   return (
     <div className="store__wrapper">
       {props.stores
-        .filter(store =>
-          store.name.toUpperCase().includes(props.filter.toUpperCase())
-        )
-        .map(store => (
-          <LinkContainer key={store.id} to={`/stores/${store.id}`}>
-            <div className="store__tile">
-              <img src={`https://localhost:44349/images/${store.imageName}`} />
+        .map((store, index) => (
+          <LinkContainer key={index} to={`/stores/${store.id}`}>
+            <div key={store.id} className="store__tile">
+              <div className="aspect__ratio">
+                <img src={`https://localhost:44349/images/${store.imageName}`} />
+              </div>
               <h1>{store.name}</h1>
-              <div>Ocijena</div>
-              <h5>Radno vrijem: {store.workingHours}</h5>
-                <button>Više...</button>
+              <span>{store.address}</span>
+              <span>Radno vrijem: {store.openCloseTime}</span>
+            <Rating score={store.score} colorClass={"star-pink"} />
             </div>
           </LinkContainer>
         ))}

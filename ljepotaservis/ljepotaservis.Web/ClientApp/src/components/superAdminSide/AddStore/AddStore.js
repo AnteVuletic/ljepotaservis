@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
-import ImageUploader from "../../imageUploader/ImageUploader";
+import ImageUploader from "../../utilComponents/ImageUploader";
 
 class AddStore extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class AddStore extends Component {
   handleImageName = imageName => {
     this.setState({ imageName });
     this.props.onChange({ store: { ...this.state } });
-  }
+  };
 
   handleOpeningTimeChange = async openingTime => {
     await this.setState({ openingTime });
@@ -81,7 +81,7 @@ class AddStore extends Component {
           minTime={openingTime}
           maxTime={new Date().setHours(23)}
         />
-        <ImageUploader onImageUploaded={this.handleImageName}></ImageUploader>
+        <ImageUploader onImageUploaded={this.handleImageName} />
       </div>
     );
   }

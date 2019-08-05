@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import StoreList from "./StoreList";
 import ServiceTypePicker from "./ServiceTypePicker";
-import Calendar from "./Calendar";
+import Calendar from "../../utilComponents/Calendar";
 import { userService } from "../../../services/userServices";
+import "../../../styling/filter/main.css";
 
 class Home extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Home extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.loadFilteredStores();
   }
 
@@ -43,14 +44,13 @@ class Home extends Component {
     this.loadFilteredStores(filter);
   };
 
-  loadFilteredStores = (filters) => {
-    userService.searchStores(filters)
-      .then(stores => {
-        this.setState({
-          stores
-        });
+  loadFilteredStores = filters => {
+    userService.searchStores(filters).then(stores => {
+      this.setState({
+        stores
       });
-  }
+    });
+  };
 
   render() {
     const {
@@ -68,17 +68,25 @@ class Home extends Component {
     }
 
     return (
-      <div>
+      <React.Fragment>
         <input
           type="text"
           name="searchBar"
           value={searchBar}
           onChange={this.handleChange}
           placeholder="Pretraži"
+          className="filter__input"
         />
-        <div>
+        <header className="filter__group">
+          <button 
+            onClick={() => {this.setState({ selectedServiceType: false})}} 
+            className={ selectedServiceType ? "btn-base btn-has-value" : "btn-base"}
+          >
+            Usluge
+          </button>
           <button
             onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
+            className={ this.state.dateTime === new Date() ? "btn-base btn-has-value" : "btn-base"}
           >
             Datum
           </button>
@@ -89,9 +97,9 @@ class Home extends Component {
               onSave={this.handleFilter}
             />
           ) : null}
-        </div>
-        <StoreList stores={stores} filter={this.state.searchBar} />
-      </div>
+        </header>
+        <StoreList stores={stores}/>
+      </React.Fragment>
     );
   }
 }

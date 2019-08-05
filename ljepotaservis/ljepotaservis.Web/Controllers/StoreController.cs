@@ -52,9 +52,16 @@ namespace ljepotaservis.Web.Controllers
         [Authorize(Roles = RoleHelper.SuperAdmin)]
         [HttpPost]
         public async Task<IActionResult> CreateStoreAndOwner([FromBody] JObject storeAndOwner )
-        {
+        { 
+            var openDateTime = storeAndOwner["store"]["openingTime"].ToObject<DateTime>();
+            var closingDateTime = storeAndOwner["store"]["closingTime"].ToObject<DateTime>();
+            var openDateFormatted = openDateTime.ParseAndAdjustDateTime();
+            var closingDateFormatted = closingDateTime.ParseAndAdjustDateTime();
             var store = storeAndOwner["store"].ToObject<Store>();
             var owner = storeAndOwner["owner"].ToObject<UserDto>();
+
+            store.ClosingDateTime = closingDateFormatted;
+            store.OpenDateTime = openDateFormatted;
 
             await _storeRepository.CreateStoreAndOwner(store, owner);
             return Ok();
@@ -102,9 +109,10 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("/{storeId}")]
-        public async Task<IActionResult> GetAllStoreInfoById([FromRoute] int storeId)
+        [HttpPost]
+        public async Task<IActionResult> GetAllStoreInfoById([FromBody] JObject storeIdObject)
         {
+            var storeId = int.Parse(storeIdObject["storeId"].ToString());
             var storeDetailDtos = await _storeRepository.GetAllStoreDetailsById(storeId);
             return Ok(storeDetailDtos);
         }

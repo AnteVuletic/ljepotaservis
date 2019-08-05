@@ -100,7 +100,9 @@ class Calendar extends Component {
             })}
           </div>
         ))}
-        <button onClick={this.props.onSave}>Spremi</button>
+        {this.props.onSave ? (
+          <button onClick={this.props.onSave}>Spremi</button>
+        ) : null}
       </div>
     );
   }
