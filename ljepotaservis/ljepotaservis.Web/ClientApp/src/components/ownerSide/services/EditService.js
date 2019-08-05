@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ImageUploader from "../../utilComponents/ImageUploader";
 
 export default class EditService extends Component {
   constructor(props) {
@@ -18,6 +19,17 @@ export default class EditService extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleDurationChange = event => {
+    if (event.target.value % 15 !== 0) {
+      return;
+    }
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  handleImageName = imageName => {
+    this.setState({ imageName });
+  };
+
   render() {
     const { name, price, duration } = this.state;
     return (
@@ -30,19 +42,23 @@ export default class EditService extends Component {
           placeholder="ime"
           onChange={this.handleChange}
         />
+        <ImageUploader onImageUploaded={this.handleImageName} />
         <input
           type="number"
           name="price"
           value={price}
           placeholder="Cijena"
           onChange={this.handleChange}
+          min="0"
         />
         <input
           type="number"
           name="duration"
           value={duration}
           placeholder="Trajanje"
-          onChange={this.handleChange}
+          onChange={this.handleDurationChange}
+          step="15"
+          min="0"
         />
         <button type="submit">Potvrdi</button>
         <button onClick={this.props.onEditClose}>Odustani</button>
