@@ -101,6 +101,14 @@ namespace ljepotaservis.Web.Controllers
             return Ok(storeWorkingHoursDto);
         }
 
+        [AllowAnonymous]
+        [HttpGet("/{storeId}")]
+        public async Task<IActionResult> GetAllStoreInfoById([FromRoute] int storeId)
+        {
+            var storeDetailDtos = await _storeRepository.GetAllStoreDetailsById(storeId);
+            return Ok(storeDetailDtos);
+        }
+
         private async Task<Store> ResolveStore()
         {
             var ownerClaims = HttpContext.User.Claims.Single(claim => claim.Type == "Store");

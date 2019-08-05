@@ -14,6 +14,7 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
         Task CreateStoreAndOwner(Store store, UserDto owner);
         Task<ICollection<Service>> GetStoreServices(int storeId);
         Task<StoreWorkingHoursDto> GetStoreWorkingHours(int storeId);
+        Task<StoreDetailDto> GetAllStoreDetailsById(int storeId);
         Task UpdateStoreDetails(int storeId, Store store);
     }
 }

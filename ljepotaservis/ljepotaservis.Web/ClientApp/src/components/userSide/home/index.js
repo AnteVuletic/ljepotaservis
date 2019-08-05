@@ -9,7 +9,7 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      stores: [{ id: 1, name: "Linea", score: 4, workingHours: "08-21" }],
+      stores: [],
       searchBar: "",
       selectedServiceType: null,
       dateTime: new Date(),
@@ -34,8 +34,13 @@ class Home extends Component {
   };
 
   handleFilter = () => {
-    const { dateTime, selectedServiceType } = this.state;
-    this.loadFilteredStores();
+    const { dateTime, selectedServiceType, searchBar } = this.state;
+    const filter = {
+      dateOfReservation: dateTime,
+      storeType: selectedServiceType,
+      name: searchBar
+    }
+    this.loadFilteredStores(filter);
   };
 
   loadFilteredStores = (filters) => {

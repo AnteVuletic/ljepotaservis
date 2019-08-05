@@ -33,3 +33,7 @@ export const FILTER = {
 export const UPLOAD = {
   POST_IMAGE: `${UPLOAD_BASE}/PostImage`
 }
+
+export const STORE = {
+  GET_STORE_DETAILS_BY_ID: `${STORE_BASE}/GetAllStoreInfoById`
+}

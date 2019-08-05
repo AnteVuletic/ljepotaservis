@@ -10,15 +10,15 @@ const StoreList = props => {
           store.name.toUpperCase().includes(props.filter.toUpperCase())
         )
         .map(store => (
-          <div key={store.id} className="store__tile">
-            <img src={`https://localhost:44349/images/${store.imageName}`} />
-            <h1>{store.name}</h1>
-            <div>Ocijena</div>
-            <h5>Radno vrijem: {store.workingHours}</h5>
-            <LinkContainer to={`/stores/${store.id}`}>
-              <button>Više...</button>
-            </LinkContainer>
-          </div>
+          <LinkContainer key={store.id} to={`/stores/${store.id}`}>
+            <div className="store__tile">
+              <img src={`https://localhost:44349/images/${store.imageName}`} />
+              <h1>{store.name}</h1>
+              <div>Ocijena</div>
+              <h5>Radno vrijem: {store.workingHours}</h5>
+                <button>Više...</button>
+            </div>
+          </LinkContainer>
         ))}
     </div>
   );

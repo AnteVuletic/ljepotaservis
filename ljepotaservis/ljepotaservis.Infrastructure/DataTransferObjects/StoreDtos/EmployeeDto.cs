@@ -16,7 +16,7 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
         public DateTime StartOfShift { get; set; }
         public DateTime EndOfShift { get; set; }
         public string ImageName { get; set; }
-        public ICollection<ReservationServiceDto> Reservations { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 
     public static partial class QueryableExtensions
