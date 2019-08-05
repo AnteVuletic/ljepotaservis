@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import StoreList from "./StoreList";
 import ServiceTypePicker from "./ServiceTypePicker";
-import Calendar from "./Calendar";
+import Calendar from "../../utilComponents/Calendar";
 import { userService } from "../../../services/userServices";
 
 class Home extends Component {
@@ -17,7 +17,7 @@ class Home extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.loadFilteredStores();
   }
 
@@ -38,14 +38,13 @@ class Home extends Component {
     this.loadFilteredStores();
   };
 
-  loadFilteredStores = (filters) => {
-    userService.searchStores(filters)
-      .then(stores => {
-        this.setState({
-          stores
-        });
+  loadFilteredStores = filters => {
+    userService.searchStores(filters).then(stores => {
+      this.setState({
+        stores
       });
-  }
+    });
+  };
 
   render() {
     const {

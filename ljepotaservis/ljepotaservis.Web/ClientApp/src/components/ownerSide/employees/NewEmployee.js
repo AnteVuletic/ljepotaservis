@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ImageUploader from "../../utilComponents/ImageUploader";
 
 export default class NewEmployee extends Component {
   constructor(props) {
@@ -9,7 +10,8 @@ export default class NewEmployee extends Component {
       lastName: "",
       username: "",
       email: "",
-      password: ""
+      password: "",
+      imageName: ""
     };
   }
 
@@ -21,12 +23,17 @@ export default class NewEmployee extends Component {
       lastName: "",
       username: "",
       email: "",
-      password: ""
+      password: "",
+      imageName: ""
     });
   };
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+  };
+
+  handleImageName = imageName => {
+    this.setState({ imageName });
   };
 
   render() {
@@ -61,6 +68,7 @@ export default class NewEmployee extends Component {
           placeholder="E-mail"
           onChange={this.handleChange}
         />
+        <ImageUploader onImageUploaded={this.handleImageName} />
         <input
           type="password"
           name="password"

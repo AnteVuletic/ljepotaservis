@@ -1,6 +1,7 @@
 import React from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import "../../../styling/store/storelist.css";
+import Rating from "../../utilComponents/Rating";
 
 const StoreList = props => {
   return (
@@ -13,7 +14,7 @@ const StoreList = props => {
           <div key={store.id} className="store__tile">
             <img src={`https://localhost:44349/images/${store.imageName}`} />
             <h1>{store.name}</h1>
-            <h5>Ocijena {store.score}/5</h5>
+            <Rating score={store.score} />
             <h5>Radno vrijem: {store.workingHours}</h5>
             <LinkContainer to={`/stores/${store.id}`}>
               <button>Više...</button>

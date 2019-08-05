@@ -3,7 +3,7 @@ import { regexEmail, validatePassword } from "../../utils/ValidationHelper";
 import { LinkContainer } from "react-router-bootstrap";
 import { authentication } from "../../services/authentication";
 import { userService } from "../../services/userServices";
-import "../../styling/authentication/authentication.css"; 
+import "../../styling/authentication/authentication.css";
 
 class Registration extends Component {
   constructor(props) {
@@ -16,10 +16,10 @@ class Registration extends Component {
       email: "",
       password: "",
       passwordConfirmation: "",
-      usernameValidationState: null,
-      emailValidationState: null,
-      passwordValidationState: null,
-      passwordConfirmationValidationState: null,
+      isUsernameValid: null,
+      isEmailValid: null,
+      isPasswordValid: null,
+      isPasswordConfirmationValid: null,
       isRegistrationSubmited: false
     };
   }
@@ -30,20 +30,23 @@ class Registration extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-
     const {
       firstName,
       lastName,
       username,
       email,
       password,
-      passwordConfirmation
+      isUsernameValid,
+      isEmailValid,
+      isPasswordValid,
+      isPasswordConfirmationValid
     } = this.state;
 
     if (
-      regexEmail(email) &&
-      validatePassword(password) &&
-      password === passwordConfirmation
+      isUsernameValid &&
+      isEmailValid &&
+      isPasswordValid &&
+      isPasswordConfirmationValid
     ) {
       const userToRegister = {
         firstName,
@@ -57,42 +60,34 @@ class Registration extends Component {
     }
   };
 
-  handleUsernameBlur = () => {
-    userService.checkUsernameTaken(this.state.username).then(isTaken => {
-      isTaken
-        ? this.setState({ usernameValidationState: "success" })
-        : this.setState({ usernameValidationState: "error" });
+  handleUsernameBlur = event => {
+    userService.checkUsernameTaken(event.target.value).then(isTaken => {
+      this.setState({ isUsernameValid: isTaken });
     });
   };
 
-  handleEmailBlur = () => {
-    let isValidEmail = regexEmail(this.state.email);
+  handleEmailChange = event => {
+    let isValidEmail = regexEmail(event.target.value);
     if (!isValidEmail) {
-      this.setState({ emailValidationState: "error" });
+      this.setState({ isEmailValid: false });
       return;
     }
 
-    userService.checkEmailTaken(this.state.email).then(isTaken => {
+    userService.checkEmailTaken(event.target.value).then(isTaken => {
       isTaken
-        ? this.setState({ emailValidationState: "success" })
-        : this.setState({ emailValidationState: "error" });
+        ? this.setState({ isEmailValid: true })
+        : this.setState({ isEmailValid: false });
     });
   };
 
-  handlePasswordBlur = () => {
-    if (validatePassword(this.state.password)) {
-      this.setState({ passwordValidationState: "success" });
-    } else {
-      this.setState({ passwordValidationState: "error" });
-    }
+  handlePasswordChange = event => {
+    this.setState({ isPasswordValid: validatePassword(event.target.value) });
   };
 
-  handlePasswordConfirmationBlur = () => {
-    if (this.state.password === this.state.passwordConfirmation) {
-      this.setState({ passwordConfirmationValidationState: "success" });
-    } else {
-      this.setState({ passwordConfirmationValidationState: "error" });
-    }
+  handlePasswordConfirmationChange = event => {
+    this.setState({
+      isPasswordConfirmationValid: this.state.password === event.target.value
+    });
   };
 
   render() {
@@ -103,10 +98,10 @@ class Registration extends Component {
       email,
       password,
       passwordConfirmation,
-      emailValidationState,
-      usernameValidationState,
-      passwordValidationState,
-      passwordConfirmationValidationState,
+      isEmailValid,
+      isUsernameValid,
+      isPasswordValid,
+      isPasswordConfirmationValid,
       isRegistrationSubmited
     } = this.state;
 
@@ -120,7 +115,11 @@ class Registration extends Component {
           <h1 className="authentication__header authentication__header--register">
             <span>Ljepota servis</span>
           </h1>
-          <form className="authentication__form" onSubmit={this.handleSubmit} noValidate>
+          <form
+            className="authentication__form"
+            onSubmit={this.handleSubmit}
+            noValidate
+          >
             <label>Ime</label>
             <input
               name="firstName"
@@ -143,7 +142,12 @@ class Registration extends Component {
               type="text"
               value={username}
               placeholder="Korisničko ime"
-              onChange={this.handleChange}
+              onChange={event => this.handleChange(event)}
+              onBlur={event => this.handleUsernameBlur(event)}
+              className={"authentication__input" + isUsernameValid && "--fail"}
+              className={
+                isUsernameValid === false ? "authentication__input--fail" : null
+              }
             />
             <label>E-mail</label>
             <input
@@ -151,7 +155,13 @@ class Registration extends Component {
               type="email"
               value={email}
               placeholder="adresa@mail.com"
-              onChange={this.handleChange}
+              onChange={event => {
+                this.handleChange(event);
+                this.handleEmailChange(event);
+              }}
+              className={
+                isEmailValid === false ? "authentication__input--fail" : null
+              }
             />
             <label>Password</label>
             <input
@@ -159,23 +169,39 @@ class Registration extends Component {
               type="password"
               value={password}
               placeholder="Lozinka"
-              onChange={this.handleChange}
+              onChange={event => {
+                this.handleChange(event);
+                this.handlePasswordChange(event);
+              }}
+              className={
+                isPasswordValid === false ? "authentication__input--fail" : null
+              }
             />
             <input
-              name="passwordConfirm"
+              name="passwordConfirmation"
               type="password"
               value={passwordConfirmation}
               placeholder="Potvrdi lozinku"
-              onChange={this.handleChange}
+              onChange={event => {
+                this.handleChange(event);
+                this.handlePasswordConfirmationChange(event);
+              }}
+              className={
+                isPasswordConfirmationValid === false
+                  ? "authentication__input--fail"
+                  : null
+              }
             />
             <div className="authentication__submit">
-              <input type="submit" value="Registriraj se!"/>
+              <input type="submit" value="Registriraj se!" />
             </div>
           </form>
           <div className="authentication__navigate">
-            <span>Već imaš račun?</span>             
+            <span>Već imaš račun?</span>
             <LinkContainer to="/authentication/login">
-              <span className="authentication__navigate__link">Prijavi se!</span>
+              <span className="authentication__navigate__link">
+                Prijavi se!
+              </span>
             </LinkContainer>
           </div>
         </div>
