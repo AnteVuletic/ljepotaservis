@@ -83,6 +83,14 @@ class Store extends Component {
     }));
   };
 
+  getServiceListTotalDuration = services => {
+    let totalDuration = 0;
+    services.forEach(service => {
+      totalDuration += service.duration;
+    });
+    return totalDuration;
+  };
+
   handleNextStep = () => {
     const { currentStep, reservation } = this.state;
     switch (currentStep) {
@@ -133,6 +141,9 @@ class Store extends Component {
         )}
         {currentStep === "Date pick" && (
           <DatePicker
+            duration={this.getServiceListTotalDuration(
+              this.state.reservation.services
+            )}
             date={this.state.reservation.date}
             employee={this.state.reservation.employee}
             onChange={this.handleDateChange}
