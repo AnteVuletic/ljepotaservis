@@ -23,7 +23,8 @@ export const OWNER = {
   ADD_EDIT_SERVICES: `${STORE_BASE}/AddEditServicesToStore`,
   ADD_EDIT_EMPLOYEES: `${STORE_BASE}/AddEditEmployeesToStore`,
   GET_STORE_SERVICES: `${STORE_BASE}/GetStoreServices`,
-  GET_STORE_EMPLOYEES: `${STORE_BASE}/GetStoreEmployees`
+  GET_STORE_EMPLOYEES: `${STORE_BASE}/GetStoreEmployees`,
+  GET_STORE_WORKING_HOURS: `${STORE_BASE}/GetStoreWorkingHours`
 };
 
 export const FILTER = {

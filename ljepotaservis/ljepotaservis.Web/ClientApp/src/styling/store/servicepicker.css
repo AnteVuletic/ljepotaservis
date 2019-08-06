@@ -1,0 +1,59 @@
+.servicepicker {
+    display: block;
+    height: 96vw;
+    overflow-y: scroll;
+}
+
+.servicepicker td {
+    font-size: 15px;
+    color: #808080;
+}
+
+.servicepicker th {
+    padding: 0 5px 5px 5px;
+    font-size: 16px;
+    color: #E36592;
+    font-weight: bolder;    
+}
+
+.servicepicker__header {
+    font-size: 16px;
+    color: #808080;
+    display: block;
+    margin: 0 auto;
+    padding: 10px 0 17px 0;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.servicepicker__service__container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.servicepicker__service__container span {
+    display: block;
+}
+
+.servicepicker__service__duration {
+    font-size: 13px;
+    color: #707070;
+}
+
+.servicepicker__service__name {
+    font-size: 15px;
+    color: #808080;
+}
+
+.service__item{
+    background-color: rgba(0, 0, 0, 0.11);
+    align-self: center;
+}
+
+.service__item td {
+    padding: 5px;
+}
+
+.service__item--selected {
+    background-color: rgba(233, 134, 170, 0.5);
+}

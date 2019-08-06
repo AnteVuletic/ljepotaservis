@@ -31,9 +31,10 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.Owner)]
-        public async Task<IActionResult> AddEditServicesToStore([FromBody] ServicesDto servicesDto)
+        public async Task<IActionResult> AddEditServicesToStore([FromBody] JObject servicesJObject)
         {
             var store = await ResolveStore();
+            var servicesDto = new ServicesDto(servicesJObject);
             var services = servicesDto.Services.Select(service => service.ProjectServiceDtoToService()).ToList();
             await _storeRepository.AddEditServicesToStore(store, services);
             return Ok();
@@ -41,8 +42,9 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.Owner)]
-        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] EmployeesDto employees)
+        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] JObject employeesObject)
         {
+            var employees = new EmployeesDto(employeesObject);
             var store = await ResolveStore();
             await _userRepository.AddEditEmployeesToStore(store, employees.Employees);
             return Ok();
@@ -100,6 +102,7 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [Authorize(Roles = RoleHelper.Owner)]
+        [HttpGet]
         public async Task<IActionResult> GetStoreWorkingHours()
         {
             var store = await ResolveStore();

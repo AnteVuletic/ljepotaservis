@@ -50,29 +50,29 @@ namespace ljepotaservis.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "bfdfa84a-180a-4174-a84e-e2f353617625",
-                            ConcurrencyStamp = "bf5c79a3-d99e-4197-8a73-3e1b06c0322b",
+                            Id = "95ea0e56-0623-4169-a183-45cf92379c13",
+                            ConcurrencyStamp = "7ece4289-f751-45d9-8ff9-0bf3f35de361",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "4c869e9f-6daa-440e-b943-b032cac7f8cf",
-                            ConcurrencyStamp = "fa683cc9-923f-4da1-8aa8-e99a03a27bfb",
+                            Id = "bbce1886-9b35-4b2c-83ae-a4d8df67d3f8",
+                            ConcurrencyStamp = "90afa753-9c99-4e54-8899-5aa3c86695ee",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = "91febb14-a18d-4cbd-8e96-5ad86ed00d91",
-                            ConcurrencyStamp = "53d327be-1f19-4e35-90e8-9c24870897dd",
+                            Id = "e02986d1-a6cd-4e3e-9556-32e9e06b12ff",
+                            ConcurrencyStamp = "c7ed9280-d657-4a71-b451-34ee6936955a",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "f721bcab-5d43-4ab3-a6f7-77f77cc01a3d",
-                            ConcurrencyStamp = "af133680-6be7-4d1a-9539-afcd47c0bdde",
+                            Id = "2cac7c17-ce4d-4331-9915-9f5a21145f96",
+                            ConcurrencyStamp = "ca9c2a08-01ce-46e6-83b2-99c7674e94cb",
                             Name = "User",
                             NormalizedName = "USER"
                         });

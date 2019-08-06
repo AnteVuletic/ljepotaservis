@@ -43,3 +43,13 @@ export const getStoreEmployees = () => {
     return fetch(`${OWNER.GET_STORE_EMPLOYEES}`, requestOptions)
     .then(handleResponse);
 };
+
+export const getStoreWorkingHours = () => {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json", ...authHeader() },
+  };
+  
+  return fetch(`${OWNER.GET_STORE_WORKING_HOURS}`, requestOptions)
+  .then(handleResponse);
+};

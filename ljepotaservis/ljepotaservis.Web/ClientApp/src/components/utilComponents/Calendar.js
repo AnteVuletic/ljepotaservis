@@ -4,7 +4,6 @@ import calendar from "calendar-js";
 class Calendar extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       year: this.props.selected.getFullYear(),
       month: this.props.selected.getMonth()

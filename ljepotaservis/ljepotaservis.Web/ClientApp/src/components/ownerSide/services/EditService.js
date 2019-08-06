@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import ImageUploader from "../../utilComponents/ImageUploader";
+import "../../../styling/owner/forms.css";
+import DatePicker from "react-datepicker";
 
 export default class EditService extends Component {
   constructor(props) {
@@ -19,21 +20,14 @@ export default class EditService extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleDurationChange = event => {
-    if (event.target.value % 15 !== 0) {
-      return;
-    }
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleImageName = imageName => {
-    this.setState({ imageName });
+  handleDurationChange = duration => {
+    this.setState({ duration });
   };
 
   render() {
     const { name, price, duration } = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="form" onSubmit={this.handleSubmit}>
         <h3>Uredi {name}</h3>
         <input
           type="text"
@@ -42,7 +36,6 @@ export default class EditService extends Component {
           placeholder="ime"
           onChange={this.handleChange}
         />
-        <ImageUploader onImageUploaded={this.handleImageName} />
         <input
           type="number"
           name="price"
@@ -51,14 +44,17 @@ export default class EditService extends Component {
           onChange={this.handleChange}
           min="0"
         />
-        <input
-          type="number"
-          name="duration"
-          value={duration}
-          placeholder="Trajanje"
+        <DatePicker
+          selected={new Date(0,0,0,0,15)}
           onChange={this.handleDurationChange}
-          step="15"
-          min="0"
+          showTimeSelect
+          showTimeSelectOnly
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          dateFormat="HH:mm"
+          timeCaption="Do"
+          minTime={new Date(0, 0, 0, 0, 15)}
+          maxTime={new Date(0, 0 , 0, 5, 0)}
         />
         <button type="submit">Potvrdi</button>
         <button onClick={this.props.onEditClose}>Odustani</button>

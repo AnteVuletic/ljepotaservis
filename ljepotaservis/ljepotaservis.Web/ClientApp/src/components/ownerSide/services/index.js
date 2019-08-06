@@ -5,6 +5,7 @@ import {
   getStoreServices,
   addEditServices
 } from "../../../services/ownerServices";
+import "../../../styling/owner/services.css";
 
 export default class Services extends Component {
   constructor(props) {
@@ -72,20 +73,53 @@ export default class Services extends Component {
 
   render() {
     return (
-      <div>
-        <h3>Usluge</h3>
+      <React.Fragment>
+        <h3 className="header">Usluge</h3>
+        <table className="service__overview">
+          <thead>
+            <tr>
+              <th>
+                Ime
+              </th>
+              <th>
+                Cijena
+              </th>
+              <th>
+                Trajanje
+              </th>
+              <th>
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.services.map(service => (
+              <tr key={service.name}>
+                <td>
+                  {service.name} 
+                </td>
+                <td>
+                  {service.price}
+                </td>
+                <td>
+                  {service.duration} min's
+                </td>
+                <td>
+                  <button onClick={() => this.handleRemoveService(service)}>
+                    <i className="fas fa-trash" aria-hidden="true"></i>
+                  </button>
+                </td>
+                <td>
+                  <button onClick={() => this.handleEdit(service)}>
+                    <i className="fas fa-edit" aria-hidden="true"></i>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <ul>
-          {this.state.services.map(service => (
-            <li key={service.name}>
-              Ime: {service.name} Cijena: {service.price}
-              <button onClick={() => this.handleRemoveService(service)}>
-                Obriši uslugu
-              </button>
-              <button onClick={() => this.handleEdit(service)}>
-                Uredi uslugu
-              </button>
-            </li>
-          ))}
         </ul>
         <NewService onAddService={this.handleAddService} />
         {this.state.serviceBeingEdited ? (
@@ -95,7 +129,7 @@ export default class Services extends Component {
             onEditClose={this.handleEditClose}
           />
         ) : null}
-      </div>
+      </React.Fragment>
     );
   }
 }

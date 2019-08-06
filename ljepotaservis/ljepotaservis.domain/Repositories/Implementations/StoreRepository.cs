@@ -80,7 +80,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
             foreach (var dbService in dbServices)
             {
-                var isEdit = services.All(srv => srv.Id != dbService.Id);
+                var isEdit = services.All(srv => srv.Id != dbService.Id) && services.Count != 0;
                 if (!isEdit)
                 {
                     _dbLjepotaServisContext.Services.Remove(dbService);
@@ -155,9 +155,14 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             var employeeDtos = userEmployeeJoinedReservation.Select(userEmpRes => new EmployeeDto
             {
                 Id = userEmpRes.userStore.UserId,
-                EndOfShift = userEmpRes.userStore.EndOfShift.GetValueOrDefault(),
-                StartOfShift = userEmpRes.userStore.StartOfShift.GetValueOrDefault(),
-                Reservations = userEmpRes.reservation.ToList()
+                EndOfShift = userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
+                StartOfShift = userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
+                Reservations = userEmpRes.reservation.ToList(),
+                StartEndShift = $"{userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()} - " +
+                                $"{userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()}",
+                Rating = (!userEmpRes.reservation.Any()
+                    ? 0
+                    : (userEmpRes.reservation.Sum(res => res.Rating) / userEmpRes.reservation.Count())).GetValueOrDefault(0)
             }).ToList();
 
             foreach (var employeeDto in employeeDtos)
@@ -169,7 +174,11 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 employeeDto.ImageName = employee.ImageName;
             }
 
-            var rating = employeeDtos.Sum(emp => emp.Reservations.Sum(res => res.Rating) / emp.Reservations.Count);
+            int? rating;
+            rating = employeeDtos.Sum(emp =>
+            {
+                return emp.Reservations.Count == 0 ? 0 : ( emp.Reservations.Sum(res => res.Rating) / emp.Reservations.Count);
+            });
 
             var storeDetail = store.ProjectStoreToStoreDetailDto(rating.GetValueOrDefault(0), employeeDtos, storeServicesDtos );
 
