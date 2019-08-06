@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import ImageUploader from "../../utilComponents/ImageUploader";
+import "../../../styling/owner/forms.css";
+import DatePicker from "react-datepicker";
 
 export default class NewService extends Component {
   constructor(props) {
@@ -8,8 +9,7 @@ export default class NewService extends Component {
     this.state = {
       name: "",
       price: 0,
-      duration: 0,
-      imageName: ""
+      duration: 0
     };
   }
 
@@ -27,25 +27,24 @@ export default class NewService extends Component {
     this.setState({ imageName });
   };
 
-  handleDurationChange = event => {
-    if (event.target.value % 15 !== 0) {
-      return;
-    }
-    this.setState({ [event.target.name]: event.target.value });
+  handleDurationChange = duration => {
+    this.setState({ duration });
   };
 
   render() {
     const { name, price, duration } = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="form" onSubmit={this.handleSubmit}>
         <input
           type="text"
           name="name"
           value={name}
-          placeholder="ime"
+          placeholder="Ime usluge"
           onChange={this.handleChange}
         />
-        <ImageUploader onImageUploaded={this.handleImageName} />
+        <label>
+          Cijena
+        </label>
         <input
           type="number"
           name="price"
@@ -54,14 +53,20 @@ export default class NewService extends Component {
           onChange={this.handleChange}
           min="0"
         />
-        <input
-          type="number"
-          name="duration"
-          value={duration}
-          placeholder="Trajanje"
+        <label>
+          Trajanje
+        </label>
+        <DatePicker
+          selected={duration}
           onChange={this.handleDurationChange}
-          step="15"
-          min="0"
+          showTimeSelect
+          showTimeSelectOnly
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          dateFormat="HH:mm"
+          timeCaption="Do"
+          minTime={new Date(0, 0, 0, 0, 15)}
+          maxTime={new Date(0, 0 , 0, 5, 0)}
         />
         <button type="submit">Dodaj uslugu</button>
       </form>

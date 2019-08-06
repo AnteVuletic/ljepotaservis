@@ -31,9 +31,10 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.Owner)]
-        public async Task<IActionResult> AddEditServicesToStore([FromBody] ServicesDto servicesDto)
+        public async Task<IActionResult> AddEditServicesToStore([FromBody] JObject servicesJObject)
         {
             var store = await ResolveStore();
+            var servicesDto = new ServicesDto(servicesJObject);
             var services = servicesDto.Services.Select(service => service.ProjectServiceDtoToService()).ToList();
             await _storeRepository.AddEditServicesToStore(store, services);
             return Ok();
@@ -41,8 +42,9 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.Owner)]
-        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] EmployeesDto employees)
+        public async Task<IActionResult> AddEditEmployeesToStore([FromBody] JObject employeesObject)
         {
+            var employees = new EmployeesDto(employeesObject);
             var store = await ResolveStore();
             await _userRepository.AddEditEmployeesToStore(store, employees.Employees);
             return Ok();
@@ -52,9 +54,16 @@ namespace ljepotaservis.Web.Controllers
         [Authorize(Roles = RoleHelper.SuperAdmin)]
         [HttpPost]
         public async Task<IActionResult> CreateStoreAndOwner([FromBody] JObject storeAndOwner )
-        {
+        { 
+            var openDateTime = storeAndOwner["store"]["openingTime"].ToObject<DateTime>();
+            var closingDateTime = storeAndOwner["store"]["closingTime"].ToObject<DateTime>();
+            var openDateFormatted = openDateTime.ParseAndAdjustDateTime();
+            var closingDateFormatted = closingDateTime.ParseAndAdjustDateTime();
             var store = storeAndOwner["store"].ToObject<Store>();
             var owner = storeAndOwner["owner"].ToObject<UserDto>();
+
+            store.ClosingDateTime = closingDateFormatted;
+            store.OpenDateTime = openDateFormatted;
 
             await _storeRepository.CreateStoreAndOwner(store, owner);
             return Ok();
@@ -93,12 +102,22 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [Authorize(Roles = RoleHelper.Owner)]
+        [HttpGet]
         public async Task<IActionResult> GetStoreWorkingHours()
         {
             var store = await ResolveStore();
             var storeWorkingHoursDto = _storeRepository.GetStoreWorkingHours(store.Id);
 
             return Ok(storeWorkingHoursDto);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> GetAllStoreInfoById([FromBody] JObject storeIdObject)
+        {
+            var storeId = int.Parse(storeIdObject["storeId"].ToString());
+            var storeDetailDtos = await _storeRepository.GetAllStoreDetailsById(storeId);
+            return Ok(storeDetailDtos);
         }
 
         private async Task<Store> ResolveStore()

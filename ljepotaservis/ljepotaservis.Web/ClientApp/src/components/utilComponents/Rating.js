@@ -2,15 +2,15 @@ import React from "react";
 
 const Rating = props => {
   const getScore = score => {
-    let scoreElement = "";
-    for (let i = 0; i < 5; i++) {
-      parseInt(score) <= i
-        ? (scoreElement += "\u2606")
-        : (scoreElement += "\u2605");
+    let scoreElement = [];
+    for (let itterator = 0; itterator < 5; itterator++) {
+      parseInt(score) <= itterator
+        ? (scoreElement.push(<i className={`fa fa-star empty ${props.colorClass}`}></i>))
+        : (scoreElement.push(<i className={`fa fa-star ${props.colorClass}`}></i>));
     }
     return scoreElement;
   };
-  return <label>{getScore(props.score)}</label>;
+  return <div>{getScore(props.score)}</div>;
 };
 
 export default Rating;

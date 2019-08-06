@@ -1,0 +1,33 @@
+.employee__overview {
+    width: 90%;
+    margin: 10px auto 20px auto;
+    border-spacing: 1px;
+}
+
+.employee__overview td {
+    width: 14%;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.employee__overview th{
+    width: 14%;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.employee__overview button{
+    padding: 4px 6px;
+}
+
+.employee__overview img {
+    border-radius: 5px;
+}
+
+.header {
+    text-align: center;
+    display: block;
+    margin: 5px;
+}

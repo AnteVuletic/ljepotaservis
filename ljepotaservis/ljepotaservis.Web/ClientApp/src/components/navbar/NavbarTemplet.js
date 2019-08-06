@@ -50,29 +50,29 @@ class NavbarTemplet extends Component {
             className="navigation__content"
             onClick={this.preventPropagation}
           >
-            <LinkContainer to={navigation.homePath}>
+            <a href={navigation.homePath}>
               <span>Ljepota servis logo</span>
-            </LinkContainer>
+            </a>
             {navigation.items.map((item, index) => (
-              <LinkContainer to={item.path} key={index}>
+              <a href={item.path} key={index}>
                 <span className="navigation__item">{item.text}</span>
-              </LinkContainer>
+              </a>
             ))}
             {role === Role.Guest ? (
               <React.Fragment>
-                <LinkContainer to="/authentication/login">
+                <a href="/authentication/login">
                   <span className="navigation__item">Prijavi se</span>
-                </LinkContainer>
-                <LinkContainer to="/authentication/registration">
+                </a>
+                <a href="/authentication/registration">
                   <span className="navigation__item">Registracija</span>
-                </LinkContainer>
+                </a>
               </React.Fragment>
             ) : (
-              <LinkContainer to="/">
+              <a href="/">
                 <button className="navigation__logout" onClick={logout}>
                   Odjavi se
                 </button>
-              </LinkContainer>
+              </a>
             )}
           </div>
         </nav>

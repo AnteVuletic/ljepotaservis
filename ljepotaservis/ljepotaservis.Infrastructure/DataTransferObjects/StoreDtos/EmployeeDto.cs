@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using ljepotaservis.Data.Entities.Models;
-using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
+using ljepotaservis.Infrastructure.Helpers;
+using Newtonsoft.Json.Linq;
 
 namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
 {
     public class EmployeeDto
     {
+        public EmployeeDto()
+        {}
+
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -15,8 +19,10 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
         public string Password { get; set; }
         public DateTime StartOfShift { get; set; }
         public DateTime EndOfShift { get; set; }
+        public string StartEndShift { get; set; }
         public string ImageName { get; set; }
-        public ICollection<ReservationServiceDto> Reservations { get; set; }
+        public int Rating { get; set; }
+        public ICollection<Reservation> Reservations { get; set; }
     }
 
     public static partial class QueryableExtensions
@@ -44,8 +50,8 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
                 LastName = user.Lastname,
                 Username = user.UserName,
                 ImageName = user.ImageName,
-                StartOfShift = userStore.StartOfShift ?? DateTime.MinValue,
-                EndOfShift = userStore.EndOfShift ?? DateTime.MinValue
+                StartOfShift = userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
+                EndOfShift = userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2)
             };
         }
     }

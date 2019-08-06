@@ -7,8 +7,10 @@ using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Abstractions;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
+using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
+using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -78,7 +80,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
             foreach (var dbService in dbServices)
             {
-                var isEdit = services.All(srv => srv.Id != dbService.Id);
+                var isEdit = services.All(srv => srv.Id != dbService.Id) && services.Count != 0;
                 if (!isEdit)
                 {
                     _dbLjepotaServisContext.Services.Remove(dbService);
@@ -128,6 +130,59 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             };
 
             return storeWorkingHoursDto;
+        }
+
+        public async Task<StoreDetailDto> GetAllStoreDetailsById(int storeId)
+        {
+            var store = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
+            if(store == null) throw new Exception("No store with id");
+
+            var storeServices = _dbLjepotaServisContext.Services.Where(service => service.StoreId == storeId);
+            var storeServicesDtos = storeServices.Select(service => service.ProjectServiceToServiceDto()).ToList();
+            var usersWithStoreClaims =
+                await _userManager.GetUsersForClaimAsync(new Claim("Store", store.Id.ToString()));
+            var owner = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, RoleHelper.Owner));
+            var employees = usersWithStoreClaims.Except(owner).ToList();
+
+            var userEmployeeJoinedReservation = _dbLjepotaServisContext
+                .UserStores.Where(userStore => employees.Any(employee => employee.Id == userStore.UserId) &&
+                                               userStore.StartOfShift.HasValue)
+                .GroupJoin(_dbLjepotaServisContext.Reservations,
+                    userStore => userStore.Id,
+                    reservation => reservation.UserStoreEmployeeId,
+                    (userStore, reservation) => new {userStore, reservation}).ToList();
+
+            var employeeDtos = userEmployeeJoinedReservation.Select(userEmpRes => new EmployeeDto
+            {
+                Id = userEmpRes.userStore.UserId,
+                EndOfShift = userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
+                StartOfShift = userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
+                Reservations = userEmpRes.reservation.ToList(),
+                StartEndShift = $"{userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()} - " +
+                                $"{userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()}",
+                Rating = (!userEmpRes.reservation.Any()
+                    ? 0
+                    : (userEmpRes.reservation.Sum(res => res.Rating) / userEmpRes.reservation.Count())).GetValueOrDefault(0)
+            }).ToList();
+
+            foreach (var employeeDto in employeeDtos)
+            {
+                var employee = employees.Single(emp => emp.Id == employeeDto.Id);
+                employeeDto.Email = employee.Email;
+                employeeDto.FirstName = employee.Firstname;
+                employeeDto.LastName = employee.Lastname;
+                employeeDto.ImageName = employee.ImageName;
+            }
+
+            int? rating;
+            rating = employeeDtos.Sum(emp =>
+            {
+                return emp.Reservations.Count == 0 ? 0 : ( emp.Reservations.Sum(res => res.Rating) / emp.Reservations.Count);
+            });
+
+            var storeDetail = store.ProjectStoreToStoreDetailDto(rating.GetValueOrDefault(0), employeeDtos, storeServicesDtos );
+
+            return storeDetail;
         }
 
         public async Task UpdateStoreDetails(int storeId, Store store)

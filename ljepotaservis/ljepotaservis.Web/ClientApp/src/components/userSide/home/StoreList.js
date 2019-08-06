@@ -7,19 +7,18 @@ const StoreList = props => {
   return (
     <div className="store__wrapper">
       {props.stores
-        .filter(store =>
-          store.name.toUpperCase().includes(props.filter.toUpperCase())
-        )
-        .map(store => (
-          <div key={store.id} className="store__tile">
-            <img src={`https://localhost:44349/images/${store.imageName}`} />
-            <h1>{store.name}</h1>
-            <Rating score={store.score} />
-            <h5>Radno vrijem: {store.workingHours}</h5>
-            <LinkContainer to={`/stores/${store.id}`}>
-              <button>Više...</button>
-            </LinkContainer>
-          </div>
+        .map((store, index) => (
+          <LinkContainer key={index} to={`/stores/${store.id}`}>
+            <div key={store.id} className="store__tile">
+              <div className="aspect__ratio">
+                <img src={`https://localhost:44349/images/${store.imageName}`} />
+              </div>
+              <h1>{store.name}</h1>
+              <span>{store.address}</span>
+              <span>Radno vrijem: {store.openCloseTime}</span>
+            <Rating score={store.score} colorClass={"star-pink"} />
+            </div>
+          </LinkContainer>
         ))}
     </div>
   );

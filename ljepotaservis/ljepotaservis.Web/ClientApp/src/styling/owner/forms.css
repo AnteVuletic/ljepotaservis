@@ -1,0 +1,49 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    background-color: rgba(245, 109, 176, 0.65);
+    padding: 10%;
+    margin: 5px auto;
+}
+
+.form input {
+    background: transparent;
+    margin: 5px;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.form button {
+    display: block;
+    width: 80%;
+    margin: 5px auto;
+}
+
+.form label {
+    margin: 5px 0 2px 0;
+    color: #ffffff;
+}
+
+.form ul {
+    font-size: 16px;
+}
+
+.form .react-datepicker__header {
+    background-color: rgba(245, 109, 176, 0.65);
+    color: white;
+}
+
+.form .react-datepicker__time-box ul li {
+    border: 0.5px solid rgba(245, 109, 176, 0.65);
+}
+
+.form .react-datepicker__header div {
+    color: #ffffff;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.form .react-datepicker__time-list-item--disabled {
+    display: none;
+}
