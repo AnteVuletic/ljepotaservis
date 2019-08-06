@@ -73,7 +73,7 @@ class AddStoreAndOwner extends Component {
       alert("store name and address longer than 3");
       return;
     }
-  
+
     createStoreAndOwner(store, owner);
   };
 
@@ -88,9 +88,7 @@ class AddStoreAndOwner extends Component {
   render() {
     return (
       <form className="form__superadmin">
-        <AddStore
-          onChange={this.handleChange}
-        />
+        <AddStore onChange={this.handleChange} />
         <AddOwner onChange={this.handleChange} />
         <button type="submit" onClick={this.handleSubmit}>
           Dodaj
