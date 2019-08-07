@@ -11,7 +11,9 @@ class AddStore extends Component {
       address: "",
       openingTime: new Date(),
       closingTime: new Date(),
-      imageName: ""
+      imageName: "",
+      storeType: "",
+      storeLocation: ""
     };
   }
 
@@ -23,6 +25,18 @@ class AddStore extends Component {
   handleImageName = imageName => {
     this.setState({ imageName });
     this.props.onChange({ store: { ...this.state } });
+  };
+
+  getStoreTypes = () => {
+    // request types
+
+    return ["Frizerski", "Neki drugi"];
+  };
+
+  getStoreLocations = () => {
+    // request types
+
+    return ["Gripe", "ST3", "Manuš"];
   };
 
   handleOpeningTimeChange = async openingTime => {
@@ -81,6 +95,16 @@ class AddStore extends Component {
           minTime={openingTime}
           maxTime={new Date().setHours(23)}
         />
+        <select name="storeType" onChange={this.handleChange}>
+          {this.getStoreTypes().map(type => (
+            <option key={type}>{type}</option>
+          ))}
+        </select>
+        <select name="storeLocation" onChange={this.handleChange}>
+          {this.getStoreLocations().map(location => (
+            <option key={location}>{location}</option>
+          ))}
+        </select>
         <ImageUploader onImageUploaded={this.handleImageName} />
       </div>
     );
