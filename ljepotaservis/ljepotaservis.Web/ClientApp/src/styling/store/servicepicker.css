@@ -18,7 +18,7 @@
 
 .servicepicker__header {
     font-size: 16px;
-    color: #808080;
+    color: #E36592;
     display: block;
     margin: 0 auto;
     padding: 10px 0 17px 0;
@@ -45,15 +45,14 @@
     color: #808080;
 }
 
-.service__item{
-    background-color: rgba(0, 0, 0, 0.11);
-    align-self: center;
-}
-
 .service__item td {
     padding: 5px;
 }
 
-.service__item--selected {
-    background-color: rgba(233, 134, 170, 0.5);
+.service__item--selected td{
+    font-weight: 600;
+}
+
+.service__item--selected span {
+    font-weight: 600;
 }

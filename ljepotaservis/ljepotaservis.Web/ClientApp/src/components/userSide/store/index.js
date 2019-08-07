@@ -103,7 +103,7 @@ class Store extends Component {
     return (
       <main className="storedetail">
         <Popout read={read} message={message} closePopout={() => {this.setState({ read: true})}}></Popout>
-        <header className="storedetail__header">
+        <header className={currentStep === "Date pick" ? "storedetail__header--inivsible" : "storedetail__header"}>
           <div className="aspect__ratio">
             <div className="storedetail__header__content">
               <h1>Beauty salon {name}</h1>
@@ -141,7 +141,12 @@ class Store extends Component {
             store={this.state.store}
           />
         )}
-        <button className="storedetail__next" onClick={this.handleNextStep}>Sljedeći korak <i className="fas fa-arrow-right"></i></button>
+        <button className="storedetail__next" onClick={this.handleNextStep}>
+          {currentStep === "Summary" ? 
+            "Spremi" : 
+            <span>Rezerviraj <i className="fas fa-arrow-right"></i></span>
+            }
+        </button>
       </main>
     );
   }

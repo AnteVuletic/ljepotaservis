@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import calendar from "calendar-js";
+import "../../styling/calendar/calendar.css";
 
 class Calendar extends Component {
   constructor(props) {
@@ -55,53 +56,65 @@ class Calendar extends Component {
     const today = new Date();
 
     return (
-      <div>
-        <h3>
-          {date.month} {date.year}.
-        </h3>
-        {this.state.month === today.getMonth() ? null : (
-          <button onClick={this.handlePreviousMonth}>{"<"}</button>
-        )}
-        <button onClick={this.handleNextMonth}>{">"}</button>
-        {date.weekdaysAbbr.map((day, index) => (
-          <span key={index}>{day}</span>
-        ))}
-        {date.calendar.map((week, weekIndex) => (
-          <div key={weekIndex}>
-            {week.map((day, dayIndex) => {
-              if (day === 0) {
-                return <button key={dayIndex} />;
-              }
-
-              if (
-                day < today.getDate() &&
-                this.state.month === today.getMonth()
-              ) {
-                return (
-                  <button disabled key={dayIndex}>
-                    {day}
-                  </button>
-                );
-              }
-
-              return (
-                <button
-                  onClick={() =>
-                    this.props.onChange(
-                      new Date(this.state.year, this.state.month, day)
-                    )
+      <div className="calendar__wrapper">
+        <div className="calendar__header">
+          {this.state.month === today.getMonth() ? <span></span> : (
+            <button onClick={this.handlePreviousMonth}><i class="fas fa-chevron-left"></i></button>
+          )}
+          <h3>
+            {date.month} {date.year}.
+          </h3>
+          <button onClick={this.handleNextMonth}><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <table className="calendar__main">
+          <thead>
+            <tr>
+              {date.weekdaysAbbr.map((day, index) => (
+                <th key={index}>{day}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {date.calendar.map((week, weekIndex) => (
+              <tr key={weekIndex}>
+                {week.map((day, dayIndex) => {
+                  if (day === 0) {
+                    return <td key={dayIndex} />;
                   }
-                  key={dayIndex}
-                >
-                  {day}
-                </button>
-              );
-            })}
-          </div>
-        ))}
-        {this.props.onSave ? (
-          <button onClick={this.props.onSave}>Spremi</button>
-        ) : null}
+
+                  if (
+                    day < today.getDate() &&
+                    this.state.month === today.getMonth()
+                  ) {
+                    return (
+                      <td disabled key={dayIndex} className="calendar__disabled__cell">
+                        {day}
+                      </td>
+                    );
+                  }
+
+                  return (
+                    <td
+                      onClick={() =>
+                        this.props.onChange(
+                          new Date(this.state.year, this.state.month, day)
+                        )
+                      }
+                      key={dayIndex}
+                    >
+                      {day}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="calendar__footer">
+          {this.props.onSave ? (
+            <button onClick={this.props.onSave}>Spremi</button>
+          ) : null}
+        </div>
       </div>
     );
   }
