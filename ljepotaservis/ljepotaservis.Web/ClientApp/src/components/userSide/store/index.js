@@ -80,6 +80,15 @@ class Store extends Component {
 
   handleNextStep = () => {
     const { currentStep, reservation } = this.state;
+
+    if (!this.props.user.loggedIn) {
+      this.setState({
+        read: false,
+        message: "Za rezerviranje treba biti prijavljen"
+      });
+      return;
+    }
+
     switch (currentStep) {
       case "Service pick":
         if (reservation.services.length < 1) {
@@ -195,9 +204,7 @@ class Store extends Component {
             store={this.state.store}
           />
         )}
-        {currentStep === "Date pick" ? (
-          ""
-        ) : (
+        {currentStep === "Date pick" || currentStep === "Portfolios" ? null : (
           <button className="storedetail__next" onClick={this.handleNextStep}>
             {currentStep === "Summary" ? (
               "Rezerviraj"

@@ -8,7 +8,7 @@ class PortfolioView extends Component {
   }
 
   componentDidMount() {
-    // portfolio get here
+    // portfolio get request here
     this.setState({
       portfolios: [
         { id: 1, description: "Frizura" },
