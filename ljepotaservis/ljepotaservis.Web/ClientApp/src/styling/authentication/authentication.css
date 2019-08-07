@@ -1,0 +1,114 @@
+.authentication {
+  background-image: url("../../assets/images/authentication__background.png");
+  background-size: cover;
+  display: block;
+  position: relative;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.authentication__container {
+  background-color:rgba(221, 91, 133, 0.85);
+  width: 100%;
+  height: 100%;
+}
+
+.authentication__header {
+  font-size: 32px;
+  text-transform: uppercase;
+  color: #ffffff;
+  display: block;
+  width: 100%;
+  padding: 75px 0;
+  margin: 0;
+}
+
+.authentication__header span {
+  margin: 0 auto;
+  width: fit-content;
+  display: block;
+}
+
+.authentication__form {
+  display: flex;
+  color: #ffffff;
+  flex-direction: column;
+  width: 70%;
+  margin: 0 auto;
+  font-size: 18px;
+}
+
+.authentication__form label {
+  font-weight: 500;
+  font-size: 14px;
+  margin: 15px 0 0 0;
+  text-transform: uppercase;
+}
+.authentication__form input {
+  background-color: transparent;
+  font-size: 15px;
+  padding: 5px 0;
+}
+
+.authentication__form input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.authentication__submit {
+  margin: 50px auto 10px auto;
+  padding: 0 20px !important;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  z-index: 1;
+}
+.authentication__submit::before {
+  content: "";
+  position: absolute;
+  background: inherit;
+  display: block;
+  box-shadow: inset 0 0 0 3000px rgba(255, 255, 255, 0.3);
+  filter: blur(1px);
+  top: -15%;
+  left: -15%;
+  width: 115%;
+  height: 115%;
+  z-index: -1;
+}
+.authentication__submit input {
+  border: none;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 5px 10px;
+  z-index: 2;
+}
+
+.authentication__navigate {
+  width: fit-content;
+  display: block;
+  margin: 15px auto;
+  color: #ffffff;
+}
+
+.authentication__navigate span {
+  margin-right: 3px;
+  font-size: 12px;
+}
+
+.authentication__navigate__link {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.authentication__header--register {
+  padding: 15px !important;
+}
+
+.authentication__input--fail {
+  color: red;
+}

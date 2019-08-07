@@ -1,50 +1,85 @@
-import React from "react";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
-import { LinkContainer, IndexLinkContainer } from "react-router-bootstrap";
+import React, { Component } from "react";
+import { LinkContainer } from "react-router-bootstrap";
 import { logout } from "../../store/actions/authActions";
 import { connect } from "react-redux";
+import Role from "../../utils/role";
+import NavbarConstants from "./roleNavbarConstants";
+import "../../styling/navbar/navbar.css";
 
-const NavbarTemplet = props => {
-  const { role, navigation } = props;
-  return (
-    <Navbar collapseOnSelect fixedTop={true} fluid={true}>
-      <Navbar.Header>
-        <Navbar.Brand>
-          <LinkContainer to={navigation.homePath}>
-            <a>Ljepota servis logo</a>
-          </LinkContainer>
-        </Navbar.Brand>
-        <Navbar.Toggle />
-      </Navbar.Header>
-      <Navbar.Collapse>
-        {navigation.items.map((item, index) => (
-          <Nav key={index}>
-            <IndexLinkContainer to={item.path}>
-              <NavItem eventKey={index}>{item.text}</NavItem>
-            </IndexLinkContainer>
-          </Nav>
-        ))}
+class NavbarTemplet extends Component {
+  constructor(props) {
+    super(props);
 
-        {role === "Guest" ? (
-          <Nav pullRight>
-            <LinkContainer to="/authentication/registration">
-              <NavItem eventKey={1}>Registracija</NavItem>
-            </LinkContainer>
-            <LinkContainer to="/authentication/login">
-              <NavItem eventKey={2}>Prijava</NavItem>
-            </LinkContainer>
-          </Nav>
-        ) : (
-          <Nav pullRight>
-            <LinkContainer to="/" onClick={props.logout}>
-              <NavItem eventKey={1}>Odjavi se</NavItem>
-            </LinkContainer>
-          </Nav>
-        )}
-      </Navbar.Collapse>
-    </Navbar>
-  );
-};
+    this.state = {
+      isClosed: true
+    };
+  }
+
+  handleToggle = event => {
+    event.preventDefault();
+    this.setState(prevState => {
+      return { isClosed: !prevState.isClosed };
+    });
+  };
+
+  preventPropagation = event => {
+    event.stopPropagation();
+  };
+
+  render() {
+    const { isClosed } = this.state;
+    const { role, logout } = this.props;
+    const navigation = NavbarConstants[role];
+
+    return (
+      <React.Fragment>
+        <div className="navigation__wrapper">
+          <button className="navigation__toggle" onClick={this.handleToggle}>
+            <span />
+          </button>
+        </div>
+        <nav
+          className={
+            isClosed
+              ? "navigation__wrapper--closed"
+              : "navigation__wrapper--open"
+          }
+          onClick={this.handleToggle}
+        >
+          <div
+            className="navigation__content"
+            onClick={this.preventPropagation}
+          >
+            <a href={navigation.homePath}>
+              <span>Ljepota servis logo</span>
+            </a>
+            {navigation.items.map((item, index) => (
+              <a href={item.path} key={index}>
+                <span className="navigation__item">{item.text}</span>
+              </a>
+            ))}
+            {role === Role.Guest ? (
+              <React.Fragment>
+                <a href="/authentication/login">
+                  <span className="navigation__item">Prijavi se</span>
+                </a>
+                <a href="/authentication/registration">
+                  <span className="navigation__item">Registracija</span>
+                </a>
+              </React.Fragment>
+            ) : (
+              <a href="/">
+                <button className="navigation__logout" onClick={logout}>
+                  Odjavi se
+                </button>
+              </a>
+            )}
+          </div>
+        </nav>
+      </React.Fragment>
+    );
+  }
+}
 
 const mapStateToProps = state => ({});
 

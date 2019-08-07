@@ -4,7 +4,7 @@ import { Route, Switch, Redirect } from "react-router";
 import RoleNavbar from "../navbar";
 import PrivateRoute from "../routeHelpers/PrivateRoute";
 import Home from "./home";
-import Store from "./Store";
+import Store from "./store";
 import Authentication from "../authentication";
 import Role from "../../utils/role";
 
@@ -12,7 +12,7 @@ const UserSide = props => {
   const { path } = props.match;
 
   return (
-    <div>
+    <React.Fragment>
       <RoleNavbar role={props.user.role} />
       <Switch>
         <Route exact path={path} component={Home} />
@@ -25,7 +25,7 @@ const UserSide = props => {
         />
         <Redirect to="/" />
       </Switch>
-    </div>
+    </React.Fragment>
   );
 };
 

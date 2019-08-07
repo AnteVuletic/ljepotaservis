@@ -8,12 +8,13 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
 {
     public interface IStoreRepository
     {
-        Task<StoreDto> Create(Store store, Resource resourceProfilePicture = null);
+        Task<StoreDto> Create(Store store);
         Task<Store> GetStoreById(int id);
         Task AddEditServicesToStore(Store store, ICollection<Service> services);
         Task CreateStoreAndOwner(Store store, UserDto owner);
         Task<ICollection<Service>> GetStoreServices(int storeId);
-        Task UpdateStoreDetails(int storeId, Store store, Resource resource = null);
-        Task<StoreDto> UpdateStoreEmployees(Store store, ICollection<UserDto> employees);
+        Task<StoreWorkingHoursDto> GetStoreWorkingHours(int storeId);
+        Task<StoreDetailDto> GetAllStoreDetailsById(int storeId);
+        Task UpdateStoreDetails(int storeId, Store store);
     }
 }

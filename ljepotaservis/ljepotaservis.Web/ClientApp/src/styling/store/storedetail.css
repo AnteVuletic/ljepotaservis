@@ -1,0 +1,55 @@
+.storedetail__header {
+    position: relative;
+}
+
+.storedetail__header .aspect__ratio{
+    padding-top: 200px;
+}
+.storedetail__header::before{
+    content: "";
+    display: table;
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    z-index: 3;
+    background-color: rgba(233, 134, 170, 0.75);
+}
+
+.storedetail__header__content {
+    position: absolute;
+    bottom: 0;
+    z-index: 5;
+    color: #FFFFFF;
+    margin: 10px;
+}
+
+.storedetail__header__content h1{
+    font-size: 24px;
+    font-weight: bolder;
+    margin: 0 0 10px 0;
+}
+
+.storedetail__header__content h3{
+    font-size: 13px;
+    margin: 0 0 5px 0;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.storedetail__next {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 0;
+    display: block;
+    width: 100%;
+    color: #FFFFFF;
+    background-color: #E36592;
+    font-size: 16px;
+    border-radius: 0 !important;
+}
+
+.storedetail__header--inivsible {
+    display: none;
+}

@@ -1,0 +1,28 @@
+﻿using System.Threading.Tasks;
+using ljepotaservis.Domain.Repositories.Interfaces;
+using ljepotaservis.Infrastructure.DataTransferObjects.FilterDtos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ljepotaservis.Web.Controllers
+{
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class FilterController : ControllerBase
+    {
+        private readonly IFilterRepository _filterRepository;
+
+        public FilterController(IFilterRepository filterRepository)
+        {
+            _filterRepository = filterRepository;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetFilteredStores([FromBody] SearchFilterDto searchFilterDto)
+        {
+            var stores = await _filterRepository.GetFilteredStores(searchFilterDto);
+            return Ok(stores);
+        }
+    }
+}

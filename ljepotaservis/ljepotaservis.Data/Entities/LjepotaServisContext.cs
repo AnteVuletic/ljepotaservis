@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using ljepotaservis.Data.Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,10 +14,10 @@ namespace ljepotaservis.Entities.Data
 
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationService> ReservationServices { get; set; }
-        public DbSet<Resource> Resources { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<UserStore> UserStores { get; set; }
+        public DbSet<Portfolio> Portfolios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

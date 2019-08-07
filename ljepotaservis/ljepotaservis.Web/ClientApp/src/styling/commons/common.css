@@ -1,0 +1,196 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: 'Work sans';
+    font-weight: normal;
+}
+*::before, *::after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html, #root, body{
+    position: relative;
+    display: block;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+input {
+    outline: 0;
+    border: 0;
+    box-shadow: none;
+    border-bottom: 1px solid #FFFFFF;
+}
+
+button {
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+a {
+    color: #FFFFFF;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover{
+    color: #FFFFFF;
+    outline: none;
+}
+
+@font-face {
+    font-family: 'Modern Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Modern Sans'), url('../../assets/fonts/ModernSans-Light.otf') format('woff');
+}
+
+.react-datepicker__input-container {
+    position: unset;
+}
+
+.empty {
+    font-weight: 200;
+}
+
+.star-pink {
+    color: #E36592;
+    font-size: 15px;
+}
+
+.star-white{
+    color: #FFFFFF;
+    font-size: 15px;
+}
+
+.btn-base{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.aspect__ratio {
+    display: block;
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+}
+
+.aspect__ratio img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+
+.custom-file-input::before {
+    content: 'Select image';
+    display: inline-block;
+    background: rgba(245, 109, 176, 1);;
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 10pt;
+    color: #FFFFFF;
+    border: none;
+}
+
+.custom-file-input:hover::before {
+    border-color: black;
+}
+.custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-Regular.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-ExtraBold.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-Medium.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-SemiBold.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-Bold.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-Black.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-ExtraLight.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-Thin.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Work Sans';
+    src: url('../../assets/fonts/WorkSans-Light.woff2') format('woff2'),
+        url('../../assets/fonts/WorkSans-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}

@@ -1,0 +1,118 @@
+.navigation__toggle {
+    display: inline-block;
+    padding: 15px;
+    background-color: transparent;
+    cursor: pointer;
+    outline: none;
+}
+
+.navigation__wrapper {
+    display: block;
+}
+
+.navigation__toggle span::before {
+    content: '';
+    display: block;
+    position: relative;
+    background-color: #fff;
+    border: 0.5px solid rgb(0, 0, 0, 0.3);
+    height: 3px;
+    width: 20px;
+    left: -1px;
+    top: -7px;
+}
+
+.navigation__toggle span {
+    display: block;
+    position: relative;
+    background-color: #fff;
+    border: 0.5px solid rgb(0, 0, 0, 0.3);
+    height: 3px;
+    width: 10px;
+    margin: 7px 0;
+    transition: width 0.5s;
+}
+
+.navigation__toggle:hover span {
+    width: 20px;
+}
+
+.navigation__toggle span::after {
+    content: '';
+    position: relative;
+    display: block;
+    background-color: #fff;
+    border: 0.5px solid rgb(0, 0, 0, 0.3);
+    height: 3px;
+    width: 15px;
+    margin: 2px 0;
+    left: -1px;
+    transition: width 0.5s;
+}
+
+.navigation__toggle:hover span::after {
+    width: 20px;
+}
+
+.navigation__wrapper--closed {
+    visibility: hidden;
+    background-color: rgba(112, 112, 112, 0.1);
+    transition: all 1s;
+    overflow: hidden;
+}
+
+.navigation__wrapper--open {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(112, 112, 112, 0.1);
+    z-index: 15;
+}
+.navigation__content {
+    position: absolute;
+    height: 100%;
+    background-color: #FFFFFF;
+    overflow: hidden;
+    display: block;
+    z-index: 999999999999999999;
+}
+
+.navigation__wrapper--closed .navigation__content {
+    width: 0%;
+    transition: width 1s;
+}
+
+.navigation__wrapper--open .navigation__content {
+    width: 70%;
+    transition: width 1s;
+}
+
+.navigation__item {
+    display: block;
+    padding: 10px 0;
+    color: #707070;
+    margin: 0 20px;
+    border-bottom: 2px solid #CACACA;
+    font-weight: bold;
+}
+
+.navigation__item:hover {
+    color: #5c5c5c;
+    font-weight: bold;
+    text-decoration: none;
+    border-bottom: 2px solid #5c5c5c;
+}
+
+.navigation__logout {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    padding: 15px;
+    background-color: #8AABB2;
+    text-transform: uppercase;
+}

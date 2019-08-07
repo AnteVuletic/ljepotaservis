@@ -1,0 +1,33 @@
+.service__overview {
+    width: 90%;
+    margin: 10px auto 20px auto;
+    border-spacing: 1px;
+}
+
+.service__overview td {
+    width: 33%;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.service__overview th{
+    width: 33%;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.service__overview button{
+    padding: 4px 6px;
+}
+
+.service__overview img {
+    border-radius: 5px;
+}
+
+.header {
+    text-align: center;
+    display: block;
+    margin: 5px;
+}

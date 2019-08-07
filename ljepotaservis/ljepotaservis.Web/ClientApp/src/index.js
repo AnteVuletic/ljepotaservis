@@ -7,6 +7,7 @@ import { createBrowserHistory } from "history";
 import store from "./store";
 import App from "./App";
 import "react-datepicker/dist/react-datepicker.css";
+import "./styling/commons/common.css"
 
 const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const history = createBrowserHistory({ basename: baseUrl });

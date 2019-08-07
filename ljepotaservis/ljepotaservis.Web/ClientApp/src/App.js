@@ -13,37 +13,35 @@ class App extends Component {
   render() {
     const { currentUser } = this.props;
     return (
-      <div>
-        <div style={{ marginTop: "60px" }}>
-          <Switch>
-            <PrivateRoute
-              path="/employee"
-              user={currentUser}
-              roles={[Role.Employee]}
-              component={EmployeeSide}
-            />
-            <PrivateRoute
-              path="/owner"
-              user={currentUser}
-              roles={[Role.Owner]}
-              component={OwnerSide}
-            />
-            <PrivateRoute
-              path="/super-admin"
-              user={currentUser}
-              roles={[Role.SuperAdmin]}
-              component={SuperAdminSide}
-            />
-            <PrivateRoute
-              path="/"
-              user={currentUser}
-              roles={[Role.Guest, Role.User]}
-              component={UserSide}
-            />
-            <RedirectHelper role={currentUser.role} />
-          </Switch>
-        </div>
-      </div>
+      <React.Fragment>
+        <Switch>
+          <PrivateRoute
+            path="/employee"
+            user={currentUser}
+            roles={[Role.Employee]}
+            component={EmployeeSide}
+          />
+          <PrivateRoute
+            path="/owner"
+            user={currentUser}
+            roles={[Role.Owner]}
+            component={OwnerSide}
+          />
+          <PrivateRoute
+            path="/super-admin"
+            user={currentUser}
+            roles={[Role.SuperAdmin]}
+            component={SuperAdminSide}
+          />
+          <PrivateRoute
+            path="/"
+            user={currentUser}
+            roles={[Role.Guest, Role.User]}
+            component={UserSide}
+          />
+          <RedirectHelper role={currentUser.role} />
+        </Switch>
+      </React.Fragment>
     );
   }
 }

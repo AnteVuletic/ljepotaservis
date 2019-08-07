@@ -7,6 +7,7 @@ using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Abstractions;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
+using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using ljepotaservis.Infrastructure.Helpers;
@@ -30,8 +31,8 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             _roleManager = roleManager;
         }
 
-        public async Task<StoreDto> Create(Store store, Resource resourceProfilePicture = null)
-        {
+        public async Task<StoreDto> Create(Store store)
+        { 
             var storeOrDefault = _dbLjepotaServisContext.Stores.FirstOrDefault(str => str.Name == store.Name);
             if (storeOrDefault != null) throw new Exception("Store with name already exists");
 
@@ -40,16 +41,16 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 Address = store.Address,
                 Name = store.Name,
                 ClosingDateTime = store.ClosingDateTime,
-                OpenDateTime = store.OpenDateTime
+                OpenDateTime = store.OpenDateTime,
+                ImageName = store.ImageName,
+                Neighborhood = store.Neighborhood,
+                Type = store.Type
             };
 
             await _dbLjepotaServisContext.Stores.AddAsync(newStore);
             await _dbLjepotaServisContext.SaveChangesAsync();
 
-            return new StoreDto
-            {
-                Store = newStore
-            };
+            return newStore.ProjectStoreToStoreDto(0);
         }
 
         public async Task<Store> GetStoreById(int id)
@@ -79,7 +80,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
             foreach (var dbService in dbServices)
             {
-                var isEdit = services.All(srv => srv.Id != dbService.Id);
+                var isEdit = services.All(srv => srv.Id != dbService.Id) && services.Count != 0;
                 if (!isEdit)
                 {
                     _dbLjepotaServisContext.Services.Remove(dbService);
@@ -101,14 +102,14 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             var userOwner = owner.ProjectUserDtoToUser(true);
 
             await _userManager.CreateAsync(userOwner, owner.Password);
-            var result = _userManager.AddToRoleAsync(userOwner, ownerRole.Name);
-            if (!result.Result.Succeeded)
+            var result = await _userManager.AddToRoleAsync(userOwner, ownerRole.Name);
+            if (!result.Succeeded)
                 throw new Exception("Unable to create user");
 
             await _userManager.AddClaimAsync(userOwner, new Claim(ClaimTypes.Role, ownerRole.Name));
             var storeCreated = await Create(store);
 
-            await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Store.Id.ToString()));
+            await _userManager.AddClaimAsync(userOwner, new Claim("Store", storeCreated.Id.ToString()));
         }
 
         public async Task<ICollection<Service>> GetStoreServices(int storeId)
@@ -119,7 +120,77 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             return await _dbLjepotaServisContext.Services.Where(service => service.StoreId == storeId).ToListAsync();
         }
 
-        public async Task UpdateStoreDetails(int storeId, Store store, Resource resource = null)
+        public async Task<StoreWorkingHoursDto> GetStoreWorkingHours(int storeId)
+        {
+            var store = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
+            var storeWorkingHoursDto = new StoreWorkingHoursDto
+            {
+                CloseTime = store.ClosingDateTime,
+                OpenTime = store.OpenDateTime
+            };
+
+            return storeWorkingHoursDto;
+        }
+
+        public async Task<StoreDetailDto> GetAllStoreDetailsById(int storeId)
+        {
+            var store = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
+            if(store == null) throw new Exception("No store with id");
+
+            var storeServices = _dbLjepotaServisContext.Services.Where(service => service.StoreId == storeId);
+            var storeServicesDtos = storeServices.Select(service => service.ProjectServiceToServiceDto()).ToList();
+            var usersWithStoreClaims =
+                await _userManager.GetUsersForClaimAsync(new Claim("Store", store.Id.ToString()));
+            var owner = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, RoleHelper.Owner));
+            var employees = usersWithStoreClaims.Except(owner).ToList();
+
+            var userEmployeeJoinedReservation = _dbLjepotaServisContext
+                .UserStores.Where(userStore => employees.Any(employee => employee.Id == userStore.UserId) &&
+                                               userStore.StartOfShift.HasValue)
+                .GroupJoin(_dbLjepotaServisContext.Reservations,
+                    userStore => userStore.Id,
+                    reservation => reservation.UserStoreEmployeeId,
+                    (userStore, reservations) => new {userStore, reservations = reservations.Select(res => new Reservation
+                    {
+                        Id =  res.Id,
+                        EndOfReservation = res.EndOfReservation,
+                        TimeOfReservation = res.TimeOfReservation
+                    })}).ToList();
+
+            var employeeDtos = userEmployeeJoinedReservation.Select(userEmpRes => new EmployeeDto
+            {
+                Id = userEmpRes.userStore.UserId,
+                EndOfShift = userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
+                StartOfShift = userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
+                Reservations = userEmpRes.reservations.ToList(),
+                StartEndShift = $"{userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()} - " +
+                                $"{userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()}",
+                Rating = (!userEmpRes.reservations.Any()
+                    ? 0
+                    : (userEmpRes.reservations.Sum(res => res.Rating) / userEmpRes.reservations.Count())).GetValueOrDefault(0)
+            }).ToList();
+
+            foreach (var employeeDto in employeeDtos)
+            {
+                var employee = employees.Single(emp => emp.Id == employeeDto.Id);
+                employeeDto.Email = employee.Email;
+                employeeDto.FirstName = employee.Firstname;
+                employeeDto.LastName = employee.Lastname;
+                employeeDto.ImageName = employee.ImageName;
+            }
+
+            int? rating;
+            rating = employeeDtos.Sum(emp =>
+            {
+                return emp.Reservations.Count == 0 ? 0 : ( emp.Reservations.Sum(res => res.Rating) / emp.Reservations.Count);
+            });
+
+            var storeDetail = store.ProjectStoreToStoreDetailDto(rating.GetValueOrDefault(0), employeeDtos, storeServicesDtos );
+
+            return storeDetail;
+        }
+
+        public async Task UpdateStoreDetails(int storeId, Store store)
         {
             var storeDb = await _dbLjepotaServisContext.Stores.FindAsync(storeId);
 
@@ -128,11 +199,6 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             storeDb.OpenDateTime = store.OpenDateTime;
             storeDb.Name = store.Name;
             await _dbLjepotaServisContext.SaveChangesAsync();
-        }
-
-        public Task<StoreDto> UpdateStoreEmployees(Store store, ICollection<UserDto> employees)
-        {
-            throw new NotImplementedException();
         }
     }
 }
