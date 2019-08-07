@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import ServicePicker from "./ServicePicker";
-import { getStoreDetailById } from "../../../services/storeService";
+import { getStoreDetailById, makeReservation } from "../../../services/storeService";
 import EmployeePicker from "./EmployeePicker";
 import DatePicker from "./DatePicker";
 import ReservatiomSummary from "./ReservationSummary";
 import "../../../styling/store/storedetail.css";
 import Rating from "../../utilComponents/Rating";
 import Popout from "../../popout/Popout";
+import { connect } from "react-redux";
 
 class Store extends Component {
   constructor(props) {
@@ -27,7 +28,8 @@ class Store extends Component {
       reservation: {
         services: [],
         employee: null,
-        date: new Date()
+        date: new Date(),
+        user: this.props.user.user
       },
       currentStep: "Service pick",
       message: "",
@@ -61,16 +63,15 @@ class Store extends Component {
 
   handleDateChange = selectedDate => {
     this.setState(state => ({
-      reservation: { ...state.reservation, date: selectedDate }
+      reservation: { ...state.reservation, date: new Date(selectedDate) }
     }));
   };
 
-  getServiceListTotalDuration = services => {
-    let totalDuration = 0;
-    services.forEach(service => {
-      totalDuration += service.duration;
+  getServiceDurations = services => {
+    const durations = services.map(service => {
+      return service.duration;
     });
-    return totalDuration;
+    return durations;
   };
 
   handleNextStep = () => {
@@ -100,10 +101,14 @@ class Store extends Component {
         this.setState({ currentStep: "Summary" });
         break;
       case "Summary":
-        console.log("the end");
+        makeReservation({ ...this.state.reservation, storeId: this.state.id });
         break;
     }
   };
+
+  handleAppoitmentPick = () => {
+    this.setState({ currentStep: "Summary" });
+  }
 
   render() {
     const { name, openCloseTime, services, address, employeeDetails, currentStep, imageName, score, message, read } = this.state;
@@ -111,7 +116,7 @@ class Store extends Component {
     return (
       <main className="storedetail">
         <Popout read={read} message={message} closePopout={() => {this.setState({ read: true})}}></Popout>
-        <header className="storedetail__header">
+        <header className={currentStep === "Date pick" ? "storedetail__header--inivsible" : "storedetail__header"}>
           <div className="aspect__ratio">
             <div className="storedetail__header__content">
               <h1>Beauty salon {name}</h1>
@@ -138,12 +143,13 @@ class Store extends Component {
         )}
         {currentStep === "Date pick" && (
           <DatePicker
-            duration={this.getServiceListTotalDuration(
+            durations={this.getServiceDurations(
               this.state.reservation.services
             )}
             date={this.state.reservation.date}
             employee={this.state.reservation.employee}
             onChange={this.handleDateChange}
+            onAppoitmentPicked={this.handleAppoitmentPick}
           />
         )}
         {currentStep === "Summary" && (
@@ -152,10 +158,24 @@ class Store extends Component {
             store={this.state.store}
           />
         )}
-        <button className="storedetail__next" onClick={this.handleNextStep}>Sljedeći korak <i className="fas fa-arrow-right"></i></button>
+        {
+          currentStep === "Date pick" ? "" :
+          <button className="storedetail__next" onClick={this.handleNextStep}>
+            { currentStep === "Summary" ? 
+              "Rezerviraj" : 
+              <span>Rezerviraj <i className="fas fa-arrow-right"></i></span>
+              }
+          </button>
+        }
       </main>
     );
   }
 }
 
-export default Store;
+const mapStateToProps = state => ({
+  user: state.authentication
+});
+
+export default connect(
+  mapStateToProps
+)(Store);

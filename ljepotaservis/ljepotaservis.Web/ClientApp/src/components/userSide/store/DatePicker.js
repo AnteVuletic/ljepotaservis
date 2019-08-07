@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Calendar from "../../utilComponents/Calendar";
+import "../../../styling/calendar/calendar.css";
 import availableAppointmentCalculator from "../../../utils/availableAppointmentCalculator";
 
 class DatePicker extends Component {
@@ -7,22 +8,22 @@ class DatePicker extends Component {
     super(props);
 
     this.state = {
-      date: this.props.date,
+      date: new Date(this.props.date),
       availabeAppointments: availableAppointmentCalculator(
-        this.props.date,
+        new Date(this.props.date),
         this.props.employee,
-        this.props.duration
+        this.props.durations
       )
     };
   }
 
   onDateChange = selectedDate => {
     this.setState({
-      date: selectedDate,
+      date: new Date(selectedDate),
       selectedDate: availableAppointmentCalculator(
-        selectedDate,
+        new Date(selectedDate),
         this.props.employee,
-        this.props.duration
+        this.props.durations
       )
     });
   };
@@ -30,18 +31,25 @@ class DatePicker extends Component {
   render() {
     return (
       <React.Fragment>
+      <header className="header__calendar">Odaberi datum</header>
         <Calendar selected={this.state.date} onChange={this.onDateChange} />
-        {this.state.availabeAppointments.map(appointment => {
-          const appointmentToDate = new Date(appointment);
-          return (
-            <button
-              key={appointment}
-              onClick={() => this.props.onChange(appointmentToDate)}
-            >
-              {appointmentToDate.getHours()}:{appointmentToDate.getMinutes()}
-            </button>
-          );
-        })}
+        <div className="appoitment__bottuns__wrapper">
+          {this.state.availabeAppointments.map(appointment => {
+            const appointmentToDate = new Date(appointment);
+            return (
+              <button
+                className="btn-base"
+                key={appointment}
+                onClick={() => {
+                  this.props.onChange(appointmentToDate);
+                  this.props.onAppoitmentPicked();
+                }}
+              >
+                {appointmentToDate.getHours()}:{appointmentToDate.getMinutes()}
+              </button>
+            );
+          })}
+        </div>
       </React.Fragment>
     );
   }

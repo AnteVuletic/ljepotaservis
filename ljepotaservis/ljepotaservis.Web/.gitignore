@@ -65,10 +65,7 @@ dlldata.c
 *.pidb
 *.svclog
 *.scc
-*.png
-*.jpg
-*.jpeg
-*.gif
+
 
 # Chutzpah Test files
 _Chutzpah*

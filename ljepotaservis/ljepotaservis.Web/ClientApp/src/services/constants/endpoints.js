@@ -3,6 +3,7 @@ const LOGIN_BASE = `${BASE_URL}/Login`;
 const STORE_BASE = `${BASE_URL}/Store`;
 const FILTER_BASE = `${BASE_URL}/Filter`;
 const UPLOAD_BASE = `${BASE_URL}/Upload`;
+const RESERVATION_BASE = `${BASE_URL}/Reservation`;
 
 export const AUTHENTICATION = {
   LOGIN: `${LOGIN_BASE}/Login`,
@@ -36,5 +37,6 @@ export const UPLOAD = {
 }
 
 export const STORE = {
-  GET_STORE_DETAILS_BY_ID: `${STORE_BASE}/GetAllStoreInfoById`
+  GET_STORE_DETAILS_BY_ID: `${STORE_BASE}/GetAllStoreInfoById`,
+  CREATE_RESERVATION: `${RESERVATION_BASE}/Create`
 }

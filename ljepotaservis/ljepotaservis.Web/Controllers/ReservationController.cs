@@ -7,6 +7,7 @@ using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace ljepotaservis.Web.Controllers
 {
@@ -26,11 +27,11 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleHelper.OwnerUserEmployee)]
-        public async Task<IActionResult> Create([FromBody] CreateReservationDto createReservationDto)
+        [Authorize(Roles = RoleHelper.User)]
+        public async Task<IActionResult> Create([FromBody] JObject createReservationDtoJObject)
         {
-            await _reservationRepository.Create(createReservationDto.Client, createReservationDto.Employee,
-                createReservationDto.ReservationServiceDto);
+            var createReservationDto = new CreateReservationDto(createReservationDtoJObject);
+            await _reservationRepository.Create(createReservationDto);
 
             return Ok();
         }

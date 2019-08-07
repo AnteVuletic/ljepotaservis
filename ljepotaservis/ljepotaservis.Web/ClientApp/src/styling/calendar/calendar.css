@@ -1,0 +1,112 @@
+.header__calendar::before {
+    content: "";
+    background: linear-gradient(#D75881, #F36EB0 );
+    display: block;
+    height: 50vw;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    z-index: -2;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.header__calendar {
+    margin: -41px auto 50px auto;
+    text-align: center;
+    font-family: "Work Sans";
+    font-weight: 300 !important;
+    font-size: 24px;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.calendar__wrapper {
+    width: 90%;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    border-radius: 18px;
+    box-shadow: 0px 4px 6px 4px rgba(0,0,0,0.3);
+}
+
+.calendar__disabled__cell {
+    color: rgba(0,0,0,0.2);
+    font-weight: 100;
+}
+
+.calendar__main {
+    width: 98%;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 15px 30px;
+}
+
+.calendar__main td, .calendar__main th{
+    width: 14.3%;
+    text-align: center;
+    font-family: "Work Sans";
+}
+
+.calendar__main td {
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.calendar__main th {
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.calendar__header {
+    display: flex;
+    justify-content: space-around;
+}
+
+.calendar__header h3 {
+    color: #707070;
+    font-size: 20px;
+    font-family: "Work Sans";
+    font-weight: 400;
+}
+
+.calendar__header button {
+    margin-top: 13px;
+    background-color: transparent;
+}
+
+.calendar__selected__cell {
+    position: relative;
+    z-index: 5;
+    color: #FFFFFF;
+}
+
+.calendar__selected__cell::before {
+    content: '';
+    display: block;
+    background-color: #E36592;
+    border-radius: 100%;
+    position: absolute;
+    height: 35px;
+    width: 35px;
+    left: -3px;
+    top: -7px;
+    z-index: -1;
+}
+
+.appoitment__bottuns__wrapper {
+    display: flex;
+    width: 90%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 15px auto;
+}
+
+.appoitment__bottuns__wrapper button{
+    width: 30%;
+    background-color: #FFFFFF;
+    margin-top: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    color: #000;
+}
