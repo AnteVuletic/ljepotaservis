@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import ServicePicker from "./ServicePicker";
-import { getStoreDetailById } from "../../../services/storeService";
+import { getStoreDetailById, makeReservation } from "../../../services/storeService";
 import EmployeePicker from "./EmployeePicker";
 import DatePicker from "./DatePicker";
 import ReservatiomSummary from "./ReservationSummary";
 import "../../../styling/store/storedetail.css";
 import Rating from "../../utilComponents/Rating";
 import Popout from "../../popout/Popout";
+import { connect } from "react-redux";
 
 class Store extends Component {
   constructor(props) {
@@ -27,7 +28,8 @@ class Store extends Component {
       reservation: {
         services: [],
         employee: null,
-        date: new Date()
+        date: new Date(),
+        user: this.props.user.user
       },
       currentStep: "Service pick",
       message: "",
@@ -61,8 +63,15 @@ class Store extends Component {
 
   handleDateChange = selectedDate => {
     this.setState(state => ({
-      reservation: { ...state.reservation, date: selectedDate }
+      reservation: { ...state.reservation, date: new Date(selectedDate) }
     }));
+  };
+
+  getServiceDurations = services => {
+    const durations = services.map(service => {
+      return service.duration;
+    });
+    return durations;
   };
 
   handleNextStep = () => {
@@ -92,10 +101,14 @@ class Store extends Component {
         this.setState({ currentStep: "Summary" });
         break;
       case "Summary":
-        console.log("the end");
+        makeReservation({ ...this.state.reservation, storeId: this.state.id });
         break;
     }
   };
+
+  handleAppoitmentPick = () => {
+    this.setState({ currentStep: "Summary" });
+  }
 
   render() {
     const { name, openCloseTime, services, address, employeeDetails, currentStep, imageName, score, message, read } = this.state;
@@ -130,9 +143,13 @@ class Store extends Component {
         )}
         {currentStep === "Date pick" && (
           <DatePicker
+            durations={this.getServiceDurations(
+              this.state.reservation.services
+            )}
             date={this.state.reservation.date}
             employee={this.state.reservation.employee}
             onChange={this.handleDateChange}
+            onAppoitmentPicked={this.handleAppoitmentPick}
           />
         )}
         {currentStep === "Summary" && (
@@ -141,15 +158,24 @@ class Store extends Component {
             store={this.state.store}
           />
         )}
-        <button className="storedetail__next" onClick={this.handleNextStep}>
-          {currentStep === "Summary" ? 
-            "Spremi" : 
-            <span>Rezerviraj <i className="fas fa-arrow-right"></i></span>
-            }
-        </button>
+        {
+          currentStep === "Date pick" ? "" :
+          <button className="storedetail__next" onClick={this.handleNextStep}>
+            { currentStep === "Summary" ? 
+              "Rezerviraj" : 
+              <span>Rezerviraj <i className="fas fa-arrow-right"></i></span>
+              }
+          </button>
+        }
       </main>
     );
   }
 }
 
-export default Store;
+const mapStateToProps = state => ({
+  user: state.authentication
+});
+
+export default connect(
+  mapStateToProps
+)(Store);

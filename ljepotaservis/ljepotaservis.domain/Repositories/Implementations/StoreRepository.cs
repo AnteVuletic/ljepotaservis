@@ -150,19 +150,24 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 .GroupJoin(_dbLjepotaServisContext.Reservations,
                     userStore => userStore.Id,
                     reservation => reservation.UserStoreEmployeeId,
-                    (userStore, reservation) => new {userStore, reservation}).ToList();
+                    (userStore, reservations) => new {userStore, reservations = reservations.Select(res => new Reservation
+                    {
+                        Id =  res.Id,
+                        EndOfReservation = res.EndOfReservation,
+                        TimeOfReservation = res.TimeOfReservation
+                    })}).ToList();
 
             var employeeDtos = userEmployeeJoinedReservation.Select(userEmpRes => new EmployeeDto
             {
                 Id = userEmpRes.userStore.UserId,
                 EndOfShift = userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
                 StartOfShift = userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2),
-                Reservations = userEmpRes.reservation.ToList(),
+                Reservations = userEmpRes.reservations.ToList(),
                 StartEndShift = $"{userEmpRes.userStore.StartOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()} - " +
                                 $"{userEmpRes.userStore.EndOfShift.GetValueOrDefault(DateTime.Now).AddHours(2).FormatOpenClose()}",
-                Rating = (!userEmpRes.reservation.Any()
+                Rating = (!userEmpRes.reservations.Any()
                     ? 0
-                    : (userEmpRes.reservation.Sum(res => res.Rating) / userEmpRes.reservation.Count())).GetValueOrDefault(0)
+                    : (userEmpRes.reservations.Sum(res => res.Rating) / userEmpRes.reservations.Count())).GetValueOrDefault(0)
             }).ToList();
 
             foreach (var employeeDto in employeeDtos)

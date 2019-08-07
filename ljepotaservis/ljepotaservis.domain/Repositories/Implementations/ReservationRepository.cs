@@ -8,6 +8,7 @@ using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
 using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
+using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,18 +20,18 @@ namespace ljepotaservis.Domain.Repositories.Implementations
         {
         }
 
-        public async Task Create(UserDto client, UserDto employee, ReservationServiceDto reservationServiceDto)
+        public async Task Create(CreateReservationDto createReservationDto)
         {
             var employeeDb = await _dbLjepotaServisContext
                 .UserStores
                 .Include(userStore => userStore.Store)
-                .SingleAsync(userStore => userStore.UserId == employee.Id);
+                .SingleAsync(userStore => userStore.UserId == createReservationDto.Employee.Id);
             var store = employeeDb.Store;
-            var clientStoreOrDefault = await _dbLjepotaServisContext.UserStores.SingleOrDefaultAsync(userStore => userStore.UserId == client.Id && userStore.StoreId == store.Id);
+            var clientStoreOrDefault = await _dbLjepotaServisContext.UserStores.SingleOrDefaultAsync(userStore => userStore.UserId == createReservationDto.Client.Id && userStore.StoreId == store.Id);
 
             if (clientStoreOrDefault == null)
             {
-                var clientDb = await _dbLjepotaServisContext.Users.FindAsync(client.Id);
+                var clientDb = await _dbLjepotaServisContext.Users.FindAsync(createReservationDto.Client.Id);
 
                 clientStoreOrDefault = new UserStore
                 {
@@ -49,20 +50,23 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 UserStoreEmployee = employeeDb,
                 UserStoreEmployeeId = employeeDb.Id,
                 UserStore = clientStoreOrDefault,
-                UserStoreId = clientStoreOrDefault.Id
+                UserStoreId = clientStoreOrDefault.Id,
+                TimeOfReservation = createReservationDto.DateTimeOfReservation
             };
             await _dbLjepotaServisContext.Reservations.AddAsync(reservation);
             await _dbLjepotaServisContext.SaveChangesAsync();
             
-
-            var reservationServiceList = reservationServiceDto
-                .Services
-                .Select(service => new ReservationService
+            var reservationServiceList = createReservationDto.Services
+                .Select(service =>
                 {
-                    Reservation = reservation,
-                    ReservationId = reservation.Id,
-                    Service = service.ProjectServiceDtoToService(),
-                    ServiceId = service.Id
+                    var serviceDb = _dbLjepotaServisContext.Services.Find(service.Id);
+                    return new ReservationService
+                    {
+                        Reservation = reservation,
+                        ReservationId = reservation.Id,
+                        Service = serviceDb,
+                        ServiceId = serviceDb.Id
+                    };
                 }).ToList();
 
             var totalTimeOfReservation = new TimeSpan();

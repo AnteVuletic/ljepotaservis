@@ -5,10 +5,25 @@ import "../../styling/calendar/calendar.css";
 class Calendar extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       year: this.props.selected.getFullYear(),
-      month: this.props.selected.getMonth()
+      month: this.props.selected.getMonth(),
+      daySelected: this.props.selected.getDate()
     };
+  }
+
+  componentDidUpdate(previousProps) {
+    if(
+      previousProps.selected.getFullYear() !== this.props.selected.getFullYear() ||
+      previousProps.selected.getMonth() !== this.props.selected.getMonth() ||
+      previousProps.selected.getDate() !== this.props.selected.getDate()
+    )
+      this.setState({
+        year: this.props.selected.getFullYear(),
+        month: this.props.selected.getMonth(),
+        daySelected: this.props.selected.getDate()
+      });
   }
 
   handleNextMonth = () => {
@@ -28,6 +43,7 @@ class Calendar extends Component {
   };
 
   render() {
+    const { year, month, daySelected } = this.state;
     const date = calendar({
       months: [
         "Siječanj",
@@ -52,19 +68,19 @@ class Calendar extends Component {
         "Subota",
         "Nedjelja"
       ]
-    }).of(this.state.year, this.state.month);
+    }).of(year, month);
     const today = new Date();
 
     return (
       <div className="calendar__wrapper">
         <div className="calendar__header">
           {this.state.month === today.getMonth() ? <span></span> : (
-            <button onClick={this.handlePreviousMonth}><i class="fas fa-chevron-left"></i></button>
+            <button onClick={this.handlePreviousMonth}><i className="fas fa-chevron-left"></i></button>
           )}
           <h3>
             {date.month} {date.year}.
           </h3>
-          <button onClick={this.handleNextMonth}><i class="fas fa-chevron-right"></i></button>
+          <button onClick={this.handleNextMonth}><i className="fas fa-chevron-right"></i></button>
         </div>
         <table className="calendar__main">
           <thead>
@@ -81,7 +97,6 @@ class Calendar extends Component {
                   if (day === 0) {
                     return <td key={dayIndex} />;
                   }
-
                   if (
                     day < today.getDate() &&
                     this.state.month === today.getMonth()
@@ -92,12 +107,12 @@ class Calendar extends Component {
                       </td>
                     );
                   }
-
                   return (
                     <td
+                      className={day === daySelected ? "calendar__selected__cell" : ""}
                       onClick={() =>
                         this.props.onChange(
-                          new Date(this.state.year, this.state.month, day)
+                          new Date(year, month, day)
                         )
                       }
                       key={dayIndex}
