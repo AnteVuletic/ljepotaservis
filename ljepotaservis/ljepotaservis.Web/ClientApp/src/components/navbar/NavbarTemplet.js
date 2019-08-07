@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { LinkContainer } from "react-router-bootstrap";
 import { logout } from "../../store/actions/authActions";
 import { connect } from "react-redux";
 import Role from "../../utils/role";

@@ -29,7 +29,7 @@ class Portfolios extends Component {
         <ul>
           {this.state.portfolios.map(portfolio => (
             <li key={portfolio.id}>
-              <img src={portfolio.imageName} />
+              <img src={portfolio.imageName} alt="Portfolio" />
               <p>Opis: {portfolio.description}</p>
               <button onClick={() => this.handleRemove(portfolio)}>
                 Obriši portfolio
