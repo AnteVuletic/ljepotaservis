@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Rating from "../../utilComponents/Rating";
+import Review from "./Review";
 
 class Reservations extends Component {
   constructor(props) {
@@ -22,6 +24,11 @@ class Reservations extends Component {
         {this.state.reservations.map(reservation => (
           <li key={reservation.id}>
             <h3>{reservation.date.toString()}</h3>
+            {reservation.rating ? (
+              <Rating colorClass={"star-pink"} score={reservation.rating} />
+            ) : (
+              <Review defaultScore="1" reservation={reservation} />
+            )}
           </li>
         ))}
       </ul>
