@@ -144,9 +144,8 @@ class Registration extends Component {
               placeholder="Korisničko ime"
               onChange={event => this.handleChange(event)}
               onBlur={event => this.handleUsernameBlur(event)}
-              className={"authentication__input" + isUsernameValid && "--fail"}
               className={
-                isUsernameValid === false ? "authentication__input--fail" : null
+                !isUsernameValid ? "authentication__input--fail" : null
               }
             />
             <label>E-mail</label>

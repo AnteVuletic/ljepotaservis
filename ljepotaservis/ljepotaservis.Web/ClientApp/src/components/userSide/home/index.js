@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import AwesomeDebouncePromise from "awesome-debounce-promise";
 import StoreList from "./StoreList";
 import ServiceTypePicker from "./ServiceTypePicker";
 import Calendar from "../../utilComponents/Calendar";
@@ -13,8 +14,9 @@ class Home extends Component {
       stores: [],
       searchBar: "",
       selectedServiceType: null,
-      dateTime: new Date(),
-      filtersAreOpen: false
+      dateTime: null,
+      calendarIsOpen: false,
+      storeLocation: "Sve"
     };
   }
 
@@ -22,16 +24,30 @@ class Home extends Component {
     this.loadFilteredStores();
   }
 
-  handleChange = e => {
-    this.setState({ [e.target.name]: [e.target.value] });
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+    this.handleFilter();
+  };
+
+  handleTextChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+
+    const debouncedFilterRequest = AwesomeDebouncePromise(
+      this.handleFilter,
+      1000
+    );
+    debouncedFilterRequest();
   };
 
   handleDateChange = dateTime => {
     this.setState({ dateTime });
+    this.handleFilter();
   };
 
   handleServiceTypeChange = selectedServiceType => {
     this.setState({ selectedServiceType });
+
+    this.handleFilter();
   };
 
   handleFilter = () => {
@@ -40,7 +56,7 @@ class Home extends Component {
       dateOfReservation: dateTime,
       storeType: selectedServiceType,
       name: searchBar
-    }
+    };
     this.loadFilteredStores(filter);
   };
 
@@ -52,12 +68,18 @@ class Home extends Component {
     });
   };
 
+  getStoreLocations = () => {
+    // request types
+    // na promjenu lokacije se okida get po filterima samo sta u filtere jos nisam dodava lokaciju tako da ne filtrira ovo po lokaciji jos, trebamo se i dogovorit kako cemo handelat lokaciju "Sve" to bi trebalo bit isto ko da nema filter po lokaciji
+    return ["Sve", "Gripe", "ST3", "Manuš"];
+  };
+
   render() {
     const {
       searchBar,
       dateTime,
       stores,
-      filtersAreOpen,
+      calendarIsOpen,
       selectedServiceType
     } = this.state;
 
@@ -73,32 +95,51 @@ class Home extends Component {
           type="text"
           name="searchBar"
           value={searchBar}
-          onChange={this.handleChange}
+          onChange={this.handleTextChange}
           placeholder="Pretraži"
           className="filter__input"
         />
         <header className="filter__group">
-          <button 
-            onClick={() => {this.setState({ selectedServiceType: false})}} 
-            className={ selectedServiceType ? "btn-base btn-has-value" : "btn-base"}
+          <button
+            onClick={() => {
+              this.setState({ selectedServiceType: false });
+            }}
+            className={
+              selectedServiceType ? "btn-base btn-has-value" : "btn-base"
+            }
           >
             Usluge
           </button>
           <button
-            onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
-            className={ this.state.dateTime === new Date() ? "btn-base btn-has-value" : "btn-base"}
+            onClick={() => this.setState({ calendarIsOpen: !calendarIsOpen })}
+            className={
+              this.state.dateTime ? "btn-base btn-has-value" : "btn-base"
+            }
           >
             Datum
           </button>
-          {filtersAreOpen ? (
-            <Calendar
-              selected={dateTime}
-              onChange={this.handleDateChange}
-              onSave={this.handleFilter}
-            />
-          ) : null}
+          <select
+            name="storeLocation"
+            value={this.state.storeLocation}
+            onChange={this.handleChange}
+            className={
+              this.state.storeLocation !== "Sve"
+                ? "btn-base btn-has-value"
+                : "btn-base"
+            }
+          >
+            {this.getStoreLocations().map(location => (
+              <option key={location}>{location}</option>
+            ))}
+          </select>
         </header>
-        <StoreList stores={stores}/>
+        {calendarIsOpen ? (
+          <Calendar
+            selected={dateTime ? dateTime : new Date()}
+            onChange={this.handleDateChange}
+          />
+        ) : null}
+        <StoreList stores={stores} />
       </React.Fragment>
     );
   }

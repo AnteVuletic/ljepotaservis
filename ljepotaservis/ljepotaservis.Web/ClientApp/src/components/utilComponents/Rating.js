@@ -4,9 +4,16 @@ const Rating = props => {
   const getScore = score => {
     let scoreElement = [];
     for (let itterator = 0; itterator < 5; itterator++) {
-      parseInt(score) <= itterator
-        ? (scoreElement.push(<i key={itterator} className={`fa fa-star empty ${props.colorClass}`}></i>))
-        : (scoreElement.push(<i key={itterator} className={`fa fa-star ${props.colorClass}`}></i>));
+      parseInt(score, 10) <= itterator
+        ? scoreElement.push(
+            <i
+              key={itterator}
+              className={`fa fa-star empty ${props.colorClass}`}
+            />
+          )
+        : scoreElement.push(
+            <i key={itterator} className={`fa fa-star ${props.colorClass}`} />
+          );
     }
     return scoreElement;
   };

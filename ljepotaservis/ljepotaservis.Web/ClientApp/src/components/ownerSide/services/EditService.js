@@ -25,7 +25,7 @@ export default class EditService extends Component {
   };
 
   render() {
-    const { name, price, duration } = this.state;
+    const { name, price } = this.state;
     return (
       <form className="form" onSubmit={this.handleSubmit}>
         <h3>Uredi {name}</h3>
@@ -45,7 +45,7 @@ export default class EditService extends Component {
           min="0"
         />
         <DatePicker
-          selected={new Date(0,0,0,0,15)}
+          selected={new Date(0, 0, 0, 0, 15)}
           onChange={this.handleDurationChange}
           showTimeSelect
           showTimeSelectOnly
@@ -54,7 +54,7 @@ export default class EditService extends Component {
           dateFormat="HH:mm"
           timeCaption="Do"
           minTime={new Date(0, 0, 0, 0, 15)}
-          maxTime={new Date(0, 0 , 0, 5, 0)}
+          maxTime={new Date(0, 0, 0, 5, 0)}
         />
         <button type="submit">Potvrdi</button>
         <button onClick={this.props.onEditClose}>Odustani</button>
