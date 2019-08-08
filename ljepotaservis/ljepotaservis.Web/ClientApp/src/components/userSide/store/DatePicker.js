@@ -9,18 +9,18 @@ class DatePicker extends Component {
 
     this.state = {
       date: new Date(this.props.date),
-      availabeAppointments: availableAppointmentCalculator(
+      availabeAppointments: [...availableAppointmentCalculator(
         new Date(this.props.date),
         this.props.employee,
         this.props.durations
-      )
+      )]
     };
   }
 
   onDateChange = selectedDate => {
     this.setState({
       date: new Date(selectedDate),
-      selectedDate: availableAppointmentCalculator(
+      availabeAppointments: availableAppointmentCalculator(
         new Date(selectedDate),
         this.props.employee,
         this.props.durations

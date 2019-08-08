@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DatePicker from "react-datepicker";
 import ImageUploader from "../../utilComponents/ImageUploader";
+import { getStoreTypes } from "../../../services/superAdmin";
 
 class AddStore extends Component {
   constructor(props) {
@@ -13,8 +14,13 @@ class AddStore extends Component {
       closingTime: new Date(),
       imageName: "",
       storeType: "",
-      storeLocation: ""
+      neighborhood: "",
+      storeTypes: []
     };
+  }
+
+  componentDidMount() {
+    this.getStoreTypes();
   }
 
   handleChange = async event => {
@@ -28,15 +34,11 @@ class AddStore extends Component {
   };
 
   getStoreTypes = () => {
-    // request types
-
-    return ["Frizerski", "Neki drugi"];
-  };
-
-  getStoreLocations = () => {
-    // request types
-
-    return ["Gripe", "ST3", "Manuš"];
+    getStoreTypes().then(types => {
+      this.setState({
+        storeTypes: types
+      })
+    });
   };
 
   handleOpeningTimeChange = async openingTime => {
@@ -50,7 +52,7 @@ class AddStore extends Component {
   };
 
   render() {
-    const { name, address, openingTime, closingTime } = this.state;
+    const { name, address, openingTime, closingTime, neighborhood } = this.state;
 
     return (
       <div>
@@ -68,6 +70,13 @@ class AddStore extends Component {
           value={address}
           onChange={this.handleChange}
           placeholder="Adresa"
+        />
+        <input
+          name="neighborhood"
+          type="text"
+          value={neighborhood}
+          onChange={this.handleChange}
+          placeholder="Kvart"
         />
         <label>Opening time</label>
         <DatePicker
@@ -95,14 +104,10 @@ class AddStore extends Component {
           minTime={openingTime}
           maxTime={new Date().setHours(23)}
         />
+        <label>Store types:</label>
         <select name="storeType" onChange={this.handleChange}>
-          {this.getStoreTypes().map(type => (
+          {this.state.storeTypes.map(type => (
             <option key={type}>{type}</option>
-          ))}
-        </select>
-        <select name="storeLocation" onChange={this.handleChange}>
-          {this.getStoreLocations().map(location => (
-            <option key={location}>{location}</option>
           ))}
         </select>
         <ImageUploader onImageUploaded={this.handleImageName} />

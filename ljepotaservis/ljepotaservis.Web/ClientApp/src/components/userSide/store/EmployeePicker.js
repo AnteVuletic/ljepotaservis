@@ -9,7 +9,7 @@ const EmployeePicker = props => {
       <main className="employee__wrapper">
         {props.employees.map(employee => (
           <article
-            className="employee__tile"
+            className={props.currentEmployee && props.currentEmployee.Id === employee.Id ? "employee__tile employee__tile--selected" : "employee__tile"}
             key={employee.id}
             onClick={() => props.onClick(employee)}
           >

@@ -17,7 +17,8 @@ export const CHECK = {
 };
 
 export const SUPER_ADMIN = {
-  CREATE_STORE_OWNER: `${STORE_BASE}/CreateStoreAndOwner`
+  CREATE_STORE_OWNER: `${STORE_BASE}/CreateStoreAndOwner`,
+  GET_STORE_TYPES: `${STORE_BASE}/GetStoreTypes`
 };
 
 export const OWNER = {
@@ -29,7 +30,8 @@ export const OWNER = {
 };
 
 export const FILTER = {
-  GET_FILTERED_STORES: `${FILTER_BASE}/GetFilteredStores`
+  GET_FILTERED_STORES: `${FILTER_BASE}/GetFilteredStores`,
+  GET_STORE_NEIGHBORHOODS: `${FILTER_BASE}/GetStoreNeighborhoods`
 }
 
 export const UPLOAD = {

@@ -20,7 +20,7 @@ export const validateName = name => {
     /\d/.test(trimmedName) ||
     /\s/.test(trimmedName.trim()) ||
     trimmedName.length < 3 ||
-    trimmedName.length > 10
+    trimmedName.length > 15
   ) {
     return false;
   }

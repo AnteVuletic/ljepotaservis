@@ -1,0 +1,91 @@
+.servicepicker__container__summary {
+    height: fit-content !important;
+}
+
+.summary__container {
+    display: block;
+    height: 96vw;
+    overflow-y: scroll;
+    padding-bottom: 50px;
+}
+
+.summary__calendar {
+    position: relative;
+}
+
+.summary__calendar .header__calendar::before {
+    display: none;
+}
+
+.summary__appoitments {
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.summary__appoitments span{
+    background-color: #FFFFFF;
+    font-weight: 500;
+    font-size: 15px;
+    color: #000;
+    padding: 1px 5px;
+}
+
+.summary__total {
+    display: block;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.summary__total h5 {
+    margin-left: auto;
+    width: fit-content;
+    margin-right: 30px;
+}
+
+.summary__employees {
+    display: flex;
+    width: 90%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 15px auto;
+}
+
+.summary__employees article {
+    width: 29%;
+    padding: 10px 5px;
+    border-radius: 10px;
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.16);
+}
+
+.summary__employees .aspect__ratio {
+    padding-top: 75px;
+}
+
+.summary__employees img {
+    border-radius: 15px;
+}
+
+.emplyoee__description__name {
+    color: #707070;
+    font-size: 12px;
+    font-weight: 500;
+    display: block;
+    text-align: center;
+}
+
+.emplyoee__description__name > div {
+    display: flex;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.emplyoee__description__name i {
+    font-size: 10px;
+}
+
+.employee__picked {
+    border: 1px solid rgba(223, 94, 142, 0.5);
+}

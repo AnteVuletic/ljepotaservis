@@ -41,7 +41,7 @@ class ServicePicker extends Component {
               <tr
                 key={service.id}
                 className={
-                  this.state.checkedItems.find(srv => srv.id == service.id) !=
+                  this.state.checkedItems.find(srv => srv.id === service.id) !==
                   undefined
                     ? "service__item service__item--selected"
                     : "service__item"

@@ -12,3 +12,13 @@ export const createStoreAndOwner = (store, owner) => {
   return fetch(SUPER_ADMIN.CREATE_STORE_OWNER, requestOptions)
   .then(handleResponse);
 };
+
+export const getStoreTypes = () => {
+  const requestOptions = {
+    method: "GET",
+    headers: { "Content-Type": "application/json", ...authHeader()},
+  };
+
+  return fetch(SUPER_ADMIN.GET_STORE_TYPES, requestOptions)
+  .then(handleResponse);
+}
