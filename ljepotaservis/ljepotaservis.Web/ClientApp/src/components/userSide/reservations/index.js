@@ -20,7 +20,9 @@ class Reservations extends Component {
     return (
       <ul>
         {this.state.reservations.map(reservation => (
-          <li key={reservation.id}>{reservation.date.toString()}</li>
+          <li key={reservation.id}>
+            <h3>{reservation.date.toString()}</h3>
+          </li>
         ))}
       </ul>
     );
