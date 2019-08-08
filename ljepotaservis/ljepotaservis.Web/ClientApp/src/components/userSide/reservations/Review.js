@@ -20,7 +20,7 @@ class Review extends Component {
       <React.Fragment>
         <Rating
           colorClass={"star-pink"}
-          score={reservation.rating}
+          score={this.state.rating}
           onChange={rating => this.setState({ rating })}
         />
         <button onClick={this.handleLeaveReview}>Objavi recenziju</button>
