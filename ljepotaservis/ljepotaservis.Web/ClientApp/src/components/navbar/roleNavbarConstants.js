@@ -26,7 +26,8 @@ const roleNavbarConstants = {
     homePath: "/",
     items: [
       { text: "Naslovnica", path: "/" },
-      { text: "Profile (not implemented)", path: "/user/profile" }
+      { text: "Profile (not implemented)", path: "/user/profile" },
+      { text: "Moje rezervacije", path: "/reservations" }
     ]
   },
   Guest: {
