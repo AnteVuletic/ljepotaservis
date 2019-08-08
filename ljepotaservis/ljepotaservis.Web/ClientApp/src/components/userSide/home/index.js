@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import AwesomeDebouncePromise from "awesome-debounce-promise";
 import StoreList from "./StoreList";
 import ServiceTypePicker from "./ServiceTypePicker";
 import Calendar from "../../utilComponents/Calendar";
@@ -24,6 +25,12 @@ class Home extends Component {
 
   handleChange = e => {
     this.setState({ [e.target.name]: [e.target.value] });
+
+    const debouncedFilterRequest = AwesomeDebouncePromise(
+      this.handleFilter,
+      1000
+    );
+    debouncedFilterRequest();
   };
 
   handleDateChange = dateTime => {
@@ -40,7 +47,7 @@ class Home extends Component {
       dateOfReservation: dateTime,
       storeType: selectedServiceType,
       name: searchBar
-    }
+    };
     this.loadFilteredStores(filter);
   };
 
@@ -78,15 +85,23 @@ class Home extends Component {
           className="filter__input"
         />
         <header className="filter__group">
-          <button 
-            onClick={() => {this.setState({ selectedServiceType: false})}} 
-            className={ selectedServiceType ? "btn-base btn-has-value" : "btn-base"}
+          <button
+            onClick={() => {
+              this.setState({ selectedServiceType: false });
+            }}
+            className={
+              selectedServiceType ? "btn-base btn-has-value" : "btn-base"
+            }
           >
             Usluge
           </button>
           <button
             onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
-            className={ this.state.dateTime === new Date() ? "btn-base btn-has-value" : "btn-base"}
+            className={
+              this.state.dateTime === new Date()
+                ? "btn-base btn-has-value"
+                : "btn-base"
+            }
           >
             Datum
           </button>
@@ -98,7 +113,7 @@ class Home extends Component {
             />
           ) : null}
         </header>
-        <StoreList stores={stores}/>
+        <StoreList stores={stores} />
       </React.Fragment>
     );
   }
