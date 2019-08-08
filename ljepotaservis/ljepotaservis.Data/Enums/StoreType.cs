@@ -2,6 +2,7 @@
 {
     public enum StoreType
     {
+        All,
         Barber,
         Cosmetic
     }

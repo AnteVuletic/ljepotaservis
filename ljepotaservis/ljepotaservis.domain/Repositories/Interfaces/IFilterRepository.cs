@@ -8,5 +8,6 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
     public interface IFilterRepository
     {
         Task<ICollection<StoreDto>> GetFilteredStores(SearchFilterDto searchFilters);
+        ICollection<string> GetDistinctStoreNeighborhoods();
     }
 }

@@ -19,7 +19,9 @@ class AddStoreAndOwner extends Component {
         address: "",
         openingTime: new Date(),
         closingTime: new Date(),
-        imageName: ""
+        imageName: "",
+        storeType: "",
+        neighborhood: ""
       },
       owner: {
         firstName: "",

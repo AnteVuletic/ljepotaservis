@@ -10,7 +10,7 @@ const ServiceTypePicker = props => (
     </header>
     <main className="filter__main">
       <article
-        onClick={() => props.onServiceTypeChange("Hairdressing")}
+        onClick={() => props.onServiceTypeChange("Barber")}
         className="filter__main__barber"
       >
         <img src={BarberImage} alt="Frizerske" className="btn-base" />
@@ -27,7 +27,7 @@ const ServiceTypePicker = props => (
         className="filter__main__all btn-base"
         onClick={() => props.onServiceTypeChange("All")}
       >
-        Pretraži sve salone
+        Pretraži sve salon
       </button>
     </main>
   </div>

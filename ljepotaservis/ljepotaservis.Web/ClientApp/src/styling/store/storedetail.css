@@ -53,3 +53,27 @@
 .storedetail__header--inivsible {
     display: none;
 }
+
+.storedetail__navigation {
+    display: block;
+}
+
+.storedetail__navigation--invisible {
+    display: none;
+}
+
+.storedetail__navigation button {
+    width: 50%;
+    background-color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 15px 0;
+    color: #707070;
+    border-radius: 0;
+    outline: 0;
+}
+
+.storedetail__navigation--active {
+    color: #E36592 !important;
+    border-bottom: 1px solid #E36592;
+}

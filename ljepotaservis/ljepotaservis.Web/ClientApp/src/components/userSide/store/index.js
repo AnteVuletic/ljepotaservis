@@ -168,12 +168,16 @@ class Store extends Component {
             />
           </div>
         </header>
-        <button onClick={() => this.setState({ currentStep: "Service pick" })}>
-          Rezerviranje
-        </button>
-        <button onClick={() => this.setState({ currentStep: "Portfolios" })}>
-          Galerija
-        </button>
+        <div className={currentStep === "Service pick" ? 'storedetail__navigation' : 'storedetail__navigation storedetail__navigation--invisible'}>
+          <button className={currentStep === "Service pick" ? "storedetail__navigation--active" : ""} 
+                  onClick={() => this.setState({ currentStep: "Service pick" })}>
+            Rezerviranje
+          </button>
+          <button className={currentStep === "Portfolios" ? "storedetail__navigation--active" : ""}  
+                  onClick={() => this.setState({ currentStep: "Portfolios" })}>
+            Galerija
+          </button>
+        </div>
         {currentStep === "Portfolios" && <PortfolioView />}
         {currentStep === "Service pick" && (
           <ServicePicker
@@ -184,6 +188,7 @@ class Store extends Component {
         {currentStep === "Employee pick" && (
           <EmployeePicker
             employees={employeeDetails}
+            currentEmployee={this.state.reservation.employee}
             onClick={this.handleEmployeeChange}
           />
         )}
@@ -201,6 +206,7 @@ class Store extends Component {
         {currentStep === "Summary" && (
           <ReservatiomSummary
             reservation={this.state.reservation}
+            employees={this.state.employeeDetails}
             store={this.state.store}
           />
         )}

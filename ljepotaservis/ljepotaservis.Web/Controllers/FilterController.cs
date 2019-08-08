@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using ljepotaservis.Data.Enums;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Infrastructure.DataTransferObjects.FilterDtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace ljepotaservis.Web.Controllers
 {
@@ -19,10 +22,21 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> GetFilteredStores([FromBody] SearchFilterDto searchFilterDto)
+        public async Task<IActionResult> GetFilteredStores([FromBody] JObject searchFilterDtoJObject)
         {
+            var searchFilterDto = new SearchFilterDto(searchFilterDtoJObject);
+
             var stores = await _filterRepository.GetFilteredStores(searchFilterDto);
             return Ok(stores);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult GetStoreNeighborhoods()
+        {
+            var neighborhoods = _filterRepository.GetDistinctStoreNeighborhoods();
+
+            return Ok(neighborhoods);
         }
     }
 }

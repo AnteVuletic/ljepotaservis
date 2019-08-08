@@ -60,6 +60,8 @@ namespace ljepotaservis.Web.Controllers
             var openDateFormatted = openDateTime.ParseAndAdjustDateTime();
             var closingDateFormatted = closingDateTime.ParseAndAdjustDateTime();
             var store = storeAndOwner["store"].ToObject<Store>();
+            Enum.TryParse<StoreType>(storeAndOwner["store"]["storeType"].ToString(), out var storeType);
+            store.Type = storeType;
             var owner = storeAndOwner["owner"].ToObject<UserDto>();
 
             store.ClosingDateTime = closingDateFormatted;

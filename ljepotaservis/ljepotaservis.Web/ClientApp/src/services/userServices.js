@@ -4,7 +4,8 @@ import { CHECK, FILTER } from "./constants/endpoints";
 export const userService = {
   checkEmailTaken,
   checkUsernameTaken,
-  searchStores
+  searchStores,
+  getStoreNeighborhoods
 };
 
 function checkEmailTaken(email) {
@@ -41,4 +42,13 @@ function searchStores(filters){
   return fetch(FILTER.GET_FILTERED_STORES, requestOptions)
     .then(handleResponse)
     .then(filteredStores => filteredStores);
+}
+
+function getStoreNeighborhoods() {
+  const requestOptions = {
+    method: "GET"
+  }
+
+  return fetch(FILTER.GET_STORE_NEIGHBORHOODS)
+  .then(handleResponse);
 }
