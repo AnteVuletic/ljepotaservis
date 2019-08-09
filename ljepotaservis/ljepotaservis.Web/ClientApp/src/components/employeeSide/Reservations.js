@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { getReservationByDate } from "../../services/employeeService";
+import "../../styling/employee/reservations.css";
 
 class Reservations extends Component {
   constructor(props) {
@@ -9,34 +11,47 @@ class Reservations extends Component {
       date: new Date()
     };
   }
-  // triba samo spojit servis getEmployeeReservationsByDate na ovo i render malo lipse raspisat
+
   componentDidMount() {
-    /*getReservationByDate(this.state.date).then(reservations => {
+    getReservationByDate(this.state.date).then(reservations => {
       this.setState({ reservations });
-    });*/
+    });
   }
 
   handlePreviousDay = () => {
-    /*getReservationByDate(
-      this.state.date.setDate(this.state.date.getDate() - 1)
+    getReservationByDate(
+      new Date(this.state.date.setDate(this.state.date.getDate() - 1))
     ).then(reservations => {
       this.setState(state => ({
         reservations,
         date: new Date(state.date.setDate(state.date.getDate() - 1))
       }));
-    });*/
+    });
   };
 
   handleNextDay = () => {
-    /*getReservationByDate(
-      this.state.date.setDate(this.state.date.getDate() + 1)
+    getReservationByDate(
+      new Date(this.state.date.setDate(this.state.date.getDate() + 1))
     ).then(reservations => {
       this.setState(state => ({
         reservations,
         date: new Date(state.date.setDate(state.date.getDate() + 1))
       }));
-    });*/
+    });
   };
+
+  formatDate = (date) => {
+    const dateInQuestion = new Date(date);
+    return `${dateInQuestion.getHours()}:${dateInQuestion.getMinutes()}`
+  }
+
+  durationBlocks = (duration) => {
+    const duraitonMinutes = duration.slice(3,5);
+    const durationHours = duration.slice(0,2);
+    let durationHoursBlocks = Number(durationHours) * 4;
+    let durationMinutesBlocks = Number(duraitonMinutes) / 15;
+    return (durationHoursBlocks + durationMinutesBlocks) * 70;
+  }
 
   render() {
     const today = new Date();
@@ -44,23 +59,48 @@ class Reservations extends Component {
 
     return (
       <React.Fragment>
-        {today.getFullYear() === date.getFullYear() &&
-        today.getMonth() === date.getMonth() &&
-        today.getDate() === date.getDate() ? null : (
-          <button onClick={this.handlePreviousDay}>{"<"}</button>
-        )}
-        <h2>{date.toDateString()}</h2>
-        <button onClick={this.handleNextDay}>{">"}</button>
-        <ul>
+        <header className="reservations__header">
+          {today.getFullYear() === date.getFullYear() &&
+          today.getMonth() === date.getMonth() &&
+          today.getDate() === date.getDate() ? <span></span> : (
+            <button className="" onClick={this.handlePreviousDay}>
+              <i className="fas fa-chevron-left"></i>
+            </button>
+          )}
+          <h2>{date.toDateString()}</h2>
+          <button onClick={this.handleNextDay}>
+            <i className="fas fa-chevron-right"></i>
+          </button>
+        </header>
+        <main className="reservations__wrapper">
           {reservations.map(reservation => (
-            <li key={reservation.id}>
-              {reservation.date.toDateString()}
-              Klijent:
-              {reservation.user.firstName}
-              {reservation.user.lastName}
-            </li>
+            <div key={reservation.reservation.id} style={{height: `${this.durationBlocks(reservation.durationOfReservation)}px`}}>
+              <div className="reservation__time">
+                <div>
+                  {reservation.client.firstName} {reservation.client.lastName}
+                </div>
+                <div>
+                  {this.formatDate(reservation.reservation.timeOfReservation)} - {this.formatDate(reservation.reservation.endOfReservation)}
+                </div>
+              </div>
+              <div className="reservation__email">
+                {reservation.client.email}
+              </div>
+              {
+                reservation.services.map(service => 
+                  <div className="reservation__service" key={service.id}>
+                    <span>
+                      {service.name}
+                    </span>
+                    <span>
+                      {service.price} kn
+                    </span>
+                  </div>
+                )
+              }
+            </div>
           ))}
-        </ul>
+        </main>
       </React.Fragment>
     );
   }

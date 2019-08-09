@@ -113,6 +113,24 @@ namespace ljepotaservis.Web.Controllers
             return Ok(storeWorkingHoursDto);
         }
 
+        [Authorize(Roles = RoleHelper.Owner)]
+        [HttpPost]
+        public async Task<IActionResult> UploadPortfolioPost([FromBody] JObject portfolioJObject)
+        {
+            var portfolios = portfolioJObject["portfolios"].Select(port => port.ToObject<Portfolio>()).ToList();
+            var store = await ResolveStore();
+            await _storeRepository.AddEditPortfoliosToStore(store, portfolios);
+            return Ok();
+        }
+
+        [Authorize(Roles = RoleHelper.Owner)]
+        public async Task<IActionResult> GetAllPortfolio()
+        {
+            var store = await ResolveStore();
+            var portfolios = await _storeRepository.GetAllStorePortfolios(store);
+            return Ok(portfolios);
+        }
+
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> GetAllStoreInfoById([FromBody] JObject storeIdObject)

@@ -1,0 +1,39 @@
+.reservations__header {
+    display: flex;
+    justify-content: space-around;
+}
+
+.reservations__header button {
+    background: transparent;
+    margin-top: 10px;
+}
+
+.reservations__header {
+    color: #707070;
+    font-size: 16px;
+}
+
+.reservations__wrapper > div {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    background-color: #8AABB2;
+    border-radius: 8px;
+    color: #ffffff;
+}
+
+.reservation__time {
+    display: flex;
+    justify-content: space-around;
+}
+
+.reservation__email {
+    text-align: center;
+    font-size: 11px;
+}
+
+.reservation__service {
+    display: flex;
+    width: 90%;
+    justify-content: space-around;
+}

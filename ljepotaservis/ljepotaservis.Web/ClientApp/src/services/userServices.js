@@ -1,5 +1,6 @@
 import { handleResponse } from "../utils/handleResponse";
-import { CHECK, FILTER } from "./constants/endpoints";
+import { CHECK, FILTER, USER } from "./constants/endpoints";
+import { authHeader } from "../utils/authHeader";
 
 export const userService = {
   checkEmailTaken,
@@ -45,10 +46,25 @@ function searchStores(filters){
 }
 
 function getStoreNeighborhoods() {
-  const requestOptions = {
-    method: "GET"
-  }
-
   return fetch(FILTER.GET_STORE_NEIGHBORHOODS)
   .then(handleResponse);
+}
+
+export const getReservationByUser = () => {
+  const requestOptions = {
+    headers: { ...authHeader() }
+  };
+  
+  return fetch(USER.GET_RESERVATION_BY_USER, requestOptions)
+    .then(handleResponse);
+}
+
+export const setReservationRating = (reservationRating) => {
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...authHeader() },
+    body: JSON.stringify({ reservationRating })
+  };
+
+  return fetch(USER.SET_RESERVATION_RATING, requestOptions);
 }

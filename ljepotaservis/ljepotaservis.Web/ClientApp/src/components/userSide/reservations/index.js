@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Rating from "../../utilComponents/Rating";
 import Review from "./Review";
+import { getReservationByUser } from "../../../services/userServices";
+import "../../../styling/reservations/reservations.css"
 
 class Reservations extends Component {
   constructor(props) {
@@ -12,7 +14,15 @@ class Reservations extends Component {
   }
 
   componentDidMount() {
-    // user reservations get here
+    getReservationByUser()
+    .then(reservations => this.setState({
+      reservations
+    }));
+  }
+
+  formatDate = (date) => {
+    const dateInQuestion = new Date(date);
+    return `${dateInQuestion.getHours()}:${dateInQuestion.getMinutes()}/${dateInQuestion.getDate()}/${dateInQuestion.getMonth()}/${dateInQuestion.getFullYear()}`
   }
 
   render() {
@@ -20,18 +30,36 @@ class Reservations extends Component {
       return <h1>Nemate niti jednu rezervaciju!</h1>;
     }
     return (
-      <ul>
-        {this.state.reservations.map(reservation => (
-          <li key={reservation.id}>
-            <h3>{reservation.date.toString()}</h3>
-            {reservation.rating ? (
-              <Rating colorClass={"star-pink"} score={reservation.rating} />
-            ) : (
-              <Review defaultScore="1" reservation={reservation} />
-            )}
-          </li>
-        ))}
-      </ul>
+      <main className="reservations__wrapper">
+        {
+          this.state.reservations.map(reservation => (
+            <article key={reservation.reservation.id} className="reservations__article">
+                <div className="aspect__ratio">
+                  <img src={`https://localhost:44349/images/${reservation.store.imageName}`} alt="Reservation"/>
+                </div>
+                <div className="reservations__article__store__description">
+                  <span>{reservation.store.name}</span>
+                  <span className="reservaiton__duration">Trajanje: {reservation.durationOfReservation.slice(0,5)} hh:mm</span>
+                  <span className="reservation__address">{reservation.store.address} {reservation.store.neighborhood}</span>
+                  <span className="reservation__date">{this.formatDate(reservation.reservation.timeOfReservation)} - {this.formatDate(reservation.reservation.endOfReservation)}</span>
+                  {
+                    reservation.reservation.rating === undefined ? 
+                    <Review reservation={reservation.reservation} defaultScore={0} /> :
+                    <Rating colorClass={"star-pink"} score={reservation.reservation.rating} />
+                  }
+                </div>
+                <div>
+                    {reservation.services.map(service => (
+                      <div className="reservation__article__store__services" key={reservation.reservation.id * service.id}>
+                        <span>{service.name}</span>
+                        <span>{service.price}kn</span>
+                      </div>
+                    ))}
+                  </div>
+            </article>
+          ))
+        }
+      </main>
     );
   }
 }

@@ -21,11 +21,12 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
         public StoreType Type { get; set; }
         public ICollection<EmployeeDto> EmployeeDetails { get; set; }
         public ICollection<ServiceDto> Services { get; set; }
+        public ICollection<Portfolio> Portfolios { get; set; }
     }
 
     public static partial class QueryableExtensions
     {
-        public static StoreDetailDto ProjectStoreToStoreDetailDto(this Store store, int rating, ICollection<EmployeeDto> employeeDetails, ICollection<ServiceDto> services)
+        public static StoreDetailDto ProjectStoreToStoreDetailDto(this Store store, int rating, ICollection<EmployeeDto> employeeDetails, ICollection<ServiceDto> services, ICollection<Portfolio> portfolios)
         {
             return new StoreDetailDto
             {
@@ -40,7 +41,8 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos
                 Neighborhood = store.Neighborhood,
                 Type = store.Type,
                 EmployeeDetails = employeeDetails,
-                Services = services
+                Services = services,
+                Portfolios = portfolios
             };
         }
     }

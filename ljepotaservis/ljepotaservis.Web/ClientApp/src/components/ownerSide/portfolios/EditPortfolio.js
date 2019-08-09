@@ -2,23 +2,18 @@ import React, { Component } from "react";
 import ImageUploader from "../../utilComponents/ImageUploader";
 import "../../../styling/owner/forms.css";
 
-export default class NewPortfolio extends Component {
+export default class EditPortfolio extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      description: "",
-      imageName: ""
+      ...this.props.portfolio
     };
   }
 
   handleSubmit = event => {
     event.preventDefault();
     this.props.onAddPortfolio({ ...this.state });
-    this.setState({
-      description: "",
-      imageName: ""
-    });
   };
 
   handleChange = event => {
@@ -28,6 +23,7 @@ export default class NewPortfolio extends Component {
   handleImageName = imageName => {
     this.setState({ imageName });
   };
+
 
   render() {
     return (

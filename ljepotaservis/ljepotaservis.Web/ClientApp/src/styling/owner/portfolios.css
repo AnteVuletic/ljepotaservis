@@ -1,0 +1,47 @@
+.portfolio__overview {
+    width: 90%;
+    margin: 10px auto 20px auto;
+}
+
+.portfolio__overview td {
+    width: 10%;
+    padding: 2px;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.portfolio__overview th {
+    width: 25%;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.portfolio__image {
+    width: 25% !important;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.portfolio__description {
+    width: 55% !important;
+    align-content: center;
+    align-self: auto;
+    text-align: center;
+}
+
+.portfolio__overview button {
+    padding: 4px 6px;
+}
+
+.portfolio__overview img {
+    border-radius: 5px;
+}
+
+.header {
+    text-align: center;
+    display: block;
+    margin: 5px;
+}

@@ -26,7 +26,9 @@ export const OWNER = {
   ADD_EDIT_EMPLOYEES: `${STORE_BASE}/AddEditEmployeesToStore`,
   GET_STORE_SERVICES: `${STORE_BASE}/GetStoreServices`,
   GET_STORE_EMPLOYEES: `${STORE_BASE}/GetStoreEmployees`,
-  GET_STORE_WORKING_HOURS: `${STORE_BASE}/GetStoreWorkingHours`
+  GET_STORE_WORKING_HOURS: `${STORE_BASE}/GetStoreWorkingHours`,
+  ADD_EDIT_PORTFOLIOS: `${STORE_BASE}/UploadPortfolioPost`,
+  GET_STORE_PORTFOLIOS: `${STORE_BASE}/GetAllPortfolio`
 };
 
 export const FILTER = {
@@ -41,4 +43,13 @@ export const UPLOAD = {
 export const STORE = {
   GET_STORE_DETAILS_BY_ID: `${STORE_BASE}/GetAllStoreInfoById`,
   CREATE_RESERVATION: `${RESERVATION_BASE}/Create`
+}
+
+export const USER = {
+  GET_RESERVATION_BY_USER: `${RESERVATION_BASE}/GetByUser`,
+  SET_RESERVATION_RATING: `${RESERVATION_BASE}/SetRatingByReservation`
+}
+
+export const EMPLOYEE = {
+  GET_BY_DATE_RESERVATIONS: `${RESERVATION_BASE}/GetByDate`
 }

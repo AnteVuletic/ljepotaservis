@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Domain.Repositories.Interfaces;
@@ -6,6 +7,8 @@ using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using ljepotaservis.Infrastructure.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -17,13 +20,16 @@ namespace ljepotaservis.Web.Controllers
     {
         private readonly IReservationRepository _reservationRepository;
         private readonly IStoreRepository _storeRepository;
+        private readonly UserManager<User> _userManager;
 
         public ReservationController(
             IReservationRepository reservationRepository,
-            IStoreRepository storeRepository)
+            IStoreRepository storeRepository,
+            UserManager<User> userManager)
         {
             _reservationRepository = reservationRepository;
             _storeRepository = storeRepository;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -37,10 +43,12 @@ namespace ljepotaservis.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = RoleHelper.OwnerEmployee)]
-        public async Task<IActionResult> GetByEmployee([FromBody] UserDto userEmployee)
+        [Authorize(Roles = RoleHelper.Employee)]
+        public async Task<IActionResult> GetByDate([FromBody] JObject dateJObject)
         {
-            var reservations = await _reservationRepository.GetCurrentReservationsByEmployee(userEmployee);
+            var employee = await _userManager.GetUserAsync(HttpContext.User);
+            var dateObject = dateJObject["date"].ToObject<DateTime>().AddHours(2);
+            var reservations = await _reservationRepository.GetReservationsForEmployeeByDate(employee, dateObject);
 
             return Ok(reservations);
         }
@@ -57,8 +65,21 @@ namespace ljepotaservis.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleHelper.User)]
-        public async Task<IActionResult> GetByUser([FromBody] UserDto client)
+        public async Task<IActionResult> SetRatingByReservation([FromBody] JObject reservationRatingJObject)
         {
+            var reservation = reservationRatingJObject["reservationRating"]["reservation"].ToObject<Reservation>();
+            var rating = int.Parse(reservationRatingJObject["reservationRating"]["rating"].ToString());
+
+            await _reservationRepository.SetRatingByReservation(reservation, rating);
+            return Ok();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = RoleHelper.User)]
+        public async Task<IActionResult> GetByUser()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var client = user.ProjectUserToDtoUser();
             var reservations = await _reservationRepository.GetReservationsByUser(client);
 
             return Ok(reservations);

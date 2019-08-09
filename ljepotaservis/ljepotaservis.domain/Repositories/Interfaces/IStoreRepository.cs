@@ -15,6 +15,8 @@ namespace ljepotaservis.Domain.Repositories.Interfaces
         Task<ICollection<Service>> GetStoreServices(int storeId);
         Task<StoreWorkingHoursDto> GetStoreWorkingHours(int storeId);
         Task<StoreDetailDto> GetAllStoreDetailsById(int storeId);
+        Task AddEditPortfoliosToStore(Store store, ICollection<Portfolio> portfolios);
+        Task<ICollection<Portfolio>> GetAllStorePortfolios(Store store);
         Task UpdateStoreDetails(int storeId, Store store);
     }
 }

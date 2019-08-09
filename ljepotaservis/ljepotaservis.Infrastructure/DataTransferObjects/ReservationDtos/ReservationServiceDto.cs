@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ljepotaservis.Data.Entities.Models;
 using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
+using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 
 namespace ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos
 {
@@ -11,6 +12,9 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos
         public Reservation Reservation { get; set; }
         public ICollection<ServiceDto> Services { get; set; }
         public TimeSpan DurationOfReservation { get; set; }
+        public UserDto Client { get; set; }
+        public Store Store { get; set; }
+        public int Price { get; set; }
     }
 
     public static partial class QueryableExtensions
@@ -21,8 +25,20 @@ namespace ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos
                 .GroupJoin(reservationServices, reservation => reservation.Id, reservationService => reservationService.ReservationId,
                     (reservation, reservationService) => new ReservationServiceDto
                     {
-                        Reservation = reservation,
-                        Services = reservationService.Select(rs => rs.Service.ProjectServiceToServiceDto()).ToList()
+                        Reservation = new Reservation
+                        {
+                            Id = reservation.Id,
+                            EndOfReservation = reservation.EndOfReservation,
+                            TimeOfReservation = reservation.TimeOfReservation
+                        },
+                        Client = new UserDto
+                        {
+                            FirstName = reservation.UserStore.User.Firstname,
+                            LastName = reservation.UserStore.User.Lastname,
+                            Email = reservation.UserStore.User.Email
+                        },
+                        Services = reservationService.Select(rs => rs.Service.ProjectServiceToServiceDto()).ToList(),
+                        Store = reservationService.Select(rs => rs.Service.Store).First()
                     });
         }
     }
