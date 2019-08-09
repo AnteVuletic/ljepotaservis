@@ -35,6 +35,7 @@ class Store extends Component {
         date: new Date(),
         user: this.props.user.user
       },
+      portfolios: [],
       currentStep: "Service pick",
       message: "",
       read: true
@@ -114,10 +115,36 @@ class Store extends Component {
         this.setState({ currentStep: "Summary" });
         break;
       case "Summary":
-        makeReservation({ ...this.state.reservation, storeId: this.state.id });
+        makeReservation({ ...this.state.reservation, storeId: this.state.id })
+          .then(response => {
+            response.ok ? 
+            this.setState({
+              currentStep: "Reservation complete",
+              read: false,
+              message: "Rezervacija završena"
+            }) :
+            this.setState({
+              currentStep: "Reservation complete",
+              read: false,
+              message: "Problem prilikom rezervacije pokušajte ponovno kasnije"
+            });
+          }
+          );
+        break;
+      case "Reservation complete":
+        this.setState({
+          currentStep: "Service pick" ,
+          reservation: {
+            services: [],
+            employee: null,
+            date: new Date(),
+            user: this.props.user.user
+          },
+          read: false
+        });
         break;
       default:
-        return;
+        break;
     }
   };
 
@@ -145,6 +172,8 @@ class Store extends Component {
           read={read}
           message={message}
           closePopout={() => {
+            currentStep === "Reservation complete" ? 
+            this.handleNextStep():
             this.setState({ read: true });
           }}
         />
@@ -168,7 +197,7 @@ class Store extends Component {
             />
           </div>
         </header>
-        <div className={currentStep === "Service pick" ? 'storedetail__navigation' : 'storedetail__navigation storedetail__navigation--invisible'}>
+        <div className={currentStep === "Service pick" || currentStep === "Portfolios" ? 'storedetail__navigation' : 'storedetail__navigation storedetail__navigation--invisible'}>
           <button className={currentStep === "Service pick" ? "storedetail__navigation--active" : ""} 
                   onClick={() => this.setState({ currentStep: "Service pick" })}>
             Rezerviranje
@@ -178,7 +207,7 @@ class Store extends Component {
             Galerija
           </button>
         </div>
-        {currentStep === "Portfolios" && <PortfolioView />}
+        {currentStep === "Portfolios" && <PortfolioView portfolios={this.state.portfolios} />}
         {currentStep === "Service pick" && (
           <ServicePicker
             services={services}

@@ -7,8 +7,6 @@ using ljepotaservis.Domain.Abstractions;
 using ljepotaservis.Domain.Repositories.Interfaces;
 using ljepotaservis.Entities.Data;
 using ljepotaservis.Infrastructure.DataTransferObjects.ReservationDtos;
-using ljepotaservis.Infrastructure.DataTransferObjects.ServicesDtos;
-using ljepotaservis.Infrastructure.DataTransferObjects.StoreDtos;
 using ljepotaservis.Infrastructure.DataTransferObjects.UserDtos;
 using Microsoft.EntityFrameworkCore;
 
@@ -115,6 +113,31 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 .ToListAsync();
             reservationsByClient = ReservationDurations(reservationsByClient);
             return reservationsByClient;
+        }
+
+        public async Task<ICollection<ReservationServiceDto>> GetReservationsForEmployeeByDate(User employeeUser, DateTime date)
+        {
+            var userStoreEmployee =
+               await _dbLjepotaServisContext.UserStores.SingleAsync(userStore => userStore.UserId == employeeUser.Id);
+
+            var reservationsByEmployee = await _dbLjepotaServisContext
+                .Reservations
+                .Where(reservation => reservation.UserStoreEmployeeId == userStoreEmployee.Id &&
+                                      reservation.TimeOfReservation.Year == date.Year &&
+                                      reservation.TimeOfReservation.Month == date.Month &&
+                                      reservation.TimeOfReservation.Day == date.Day)
+                .ResolveReservationToDto(_dbLjepotaServisContext.ReservationServices)
+                .ToListAsync();
+            reservationsByEmployee = ReservationDurations(reservationsByEmployee);
+            return reservationsByEmployee;
+        }
+
+        public async Task SetRatingByReservation(Reservation reservation, int rating)
+        {
+            var reservationDb = await _dbLjepotaServisContext.Reservations.FindAsync(reservation.Id);
+
+            reservationDb.Rating = rating;
+            await _dbLjepotaServisContext.SaveChangesAsync();
         }
 
         private List<ReservationServiceDto> ReservationDurations(List<ReservationServiceDto> reservationServices)

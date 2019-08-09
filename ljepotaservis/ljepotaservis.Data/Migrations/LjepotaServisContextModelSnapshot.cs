@@ -50,29 +50,29 @@ namespace ljepotaservis.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "95ea0e56-0623-4169-a183-45cf92379c13",
-                            ConcurrencyStamp = "7ece4289-f751-45d9-8ff9-0bf3f35de361",
+                            Id = "0f9b7286-09d0-4eab-bea4-edd03cdc23e7",
+                            ConcurrencyStamp = "3f4f9327-1e22-49c3-b022-c905d37584f7",
                             Name = "SuperAdmin",
                             NormalizedName = "SUPERADMIN"
                         },
                         new
                         {
-                            Id = "bbce1886-9b35-4b2c-83ae-a4d8df67d3f8",
-                            ConcurrencyStamp = "90afa753-9c99-4e54-8899-5aa3c86695ee",
+                            Id = "0e326fec-35ef-44cf-9fa7-3145243f829c",
+                            ConcurrencyStamp = "e86ea951-d52e-4255-9401-46e22fc4a099",
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = "e02986d1-a6cd-4e3e-9556-32e9e06b12ff",
-                            ConcurrencyStamp = "c7ed9280-d657-4a71-b451-34ee6936955a",
+                            Id = "dc51f5e5-d694-492a-991b-dcb4f72daa37",
+                            ConcurrencyStamp = "00d2b057-ee06-4b30-93d3-74e8ee7df9a3",
                             Name = "Employee",
                             NormalizedName = "EMPLOYEE"
                         },
                         new
                         {
-                            Id = "2cac7c17-ce4d-4331-9915-9f5a21145f96",
-                            ConcurrencyStamp = "ca9c2a08-01ce-46e6-83b2-99c7674e94cb",
+                            Id = "3df2ae3a-69a3-4d4f-9ef8-d7be81be4561",
+                            ConcurrencyStamp = "2df9f993-1ff8-41b9-b0f3-087cadfac60a",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -179,8 +179,9 @@ namespace ljepotaservis.Data.Migrations
 
             modelBuilder.Entity("ljepotaservis.Data.Entities.Models.Portfolio", b =>
                 {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description");
 

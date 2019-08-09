@@ -1,29 +1,55 @@
 import React, { Component } from "react";
+import PortfolioModal from "./PortfolioModal";
+import "../../../styling/store/portfolio.css";
 
 class PortfolioView extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { portfolios: [] };
+    this.state = { 
+      portfolios: this.props.portfolios,
+      currentPortfolio: null,
+      isModalView: false
+    };
   }
 
-  componentDidMount() {
-    // portfolio get request here
+  closeModal = () => {
     this.setState({
-      portfolios: [
-        { id: 1, description: "Frizura" },
-        { id: 2, description: "Jos jedna rizura" }
-      ]
+      isModalView: false
     });
+  }
+
+  openModal = (portfolio) => {
+    this.setState({
+      currentPortfolio: portfolio,
+      isModalView: true
+    });
+    
   }
 
   render() {
     return (
-      <ul>
-        {this.state.portfolios.map(portfolio => (
-          <li key={portfolio.id}>{portfolio.description}</li>
-        ))}
-      </ul>
+      <main className="portfolios__wrapper">
+        {
+          this.state.currentPortfolio ? 
+          <PortfolioModal 
+            portfolio={this.state.currentPortfolio} 
+            isVisible={this.state.isModalView} 
+            onChange={this.closeModal}
+            portfolios={this.state.portfolios}
+          /> : null
+        }
+        {
+          this.state.portfolios.map(portfolio => 
+            <div
+              key={portfolio.id}
+              onClick={() => this.openModal(portfolio)}
+              className="aspect__ratio">
+              <img src={`https://localhost:44349/images/${portfolio.imageName}`} alt="Slika alt" />
+            </div>
+          )
+        }
+      </main>
     );
   }
 }

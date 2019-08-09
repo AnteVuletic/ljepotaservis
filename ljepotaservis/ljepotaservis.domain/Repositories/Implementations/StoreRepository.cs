@@ -154,7 +154,8 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                     {
                         Id =  res.Id,
                         EndOfReservation = res.EndOfReservation,
-                        TimeOfReservation = res.TimeOfReservation
+                        TimeOfReservation = res.TimeOfReservation,
+                        Rating = res.Rating
                     })}).ToList();
 
             var employeeDtos = userEmployeeJoinedReservation.Select(userEmpRes => new EmployeeDto
@@ -179,15 +180,64 @@ namespace ljepotaservis.Domain.Repositories.Implementations
                 employeeDto.ImageName = employee.ImageName;
             }
 
-            int? rating;
-            rating = employeeDtos.Sum(emp =>
+            var rating = employeeDtos.Sum(emp =>
             {
-                return emp.Reservations.Count == 0 ? 0 : ( emp.Reservations.Sum(res => res.Rating) / emp.Reservations.Count);
+                return emp.Reservations.Count == 0 ? 0 : ( emp.Reservations.Sum(res => res.Rating.GetValueOrDefault()) / emp.Reservations.Count);
             });
 
-            var storeDetail = store.ProjectStoreToStoreDetailDto(rating.GetValueOrDefault(0), employeeDtos, storeServicesDtos );
+            var storePortfolios = await _dbLjepotaServisContext.Portfolios.Where(port => port.StoreId == store.Id).Select(port => new Portfolio
+            {
+                Id = port.Id,
+                Description = port.Description,
+                ImageName = port.ImageName
+            }).ToListAsync();
+
+            var storeDetail = store.ProjectStoreToStoreDetailDto(rating, employeeDtos, storeServicesDtos, storePortfolios);
 
             return storeDetail;
+        }
+
+        public async Task AddEditPortfoliosToStore(Store store, ICollection<Portfolio> portfolios)
+        {
+            var storeDb = await _dbLjepotaServisContext.Stores.FindAsync(store.Id);
+            if (storeDb == null) throw new Exception("No store with id");
+            var newPortfolios = portfolios.Where(portfolio => portfolio.Id == null);
+            portfolios = portfolios.Except(newPortfolios).ToList();
+            var portfoliosDb = _dbLjepotaServisContext.Portfolios.Where(portfolio => portfolio.StoreId == storeDb.Id);
+
+            foreach (var newPortfolio in newPortfolios)
+            {
+                var portfolioDb = new Portfolio
+                {
+                    ImageName = newPortfolio.ImageName,
+                    Description = newPortfolio.Description,
+                    Store = storeDb,
+                    StoreId = storeDb.Id
+                };
+                await _dbLjepotaServisContext.Portfolios.AddAsync(portfolioDb);
+            }
+
+            foreach (var portfolio in portfoliosDb)
+            {
+                var isEdit = portfolios.Any(port => port.Id == portfolio.Id) && portfolios.Count != 0;
+                if (!isEdit)
+                {
+                    _dbLjepotaServisContext.Portfolios.Remove(portfolio);
+                    continue;
+                }
+
+                var portEdit = portfolios.Single(porto => porto.Id == portfolio.Id);
+                portfolio.Description = portEdit.Description;
+                portfolio.ImageName = portEdit.ImageName;
+            }
+
+            await _dbLjepotaServisContext.SaveChangesAsync();
+        }
+
+        public async Task<ICollection<Portfolio>> GetAllStorePortfolios(Store store)
+        {
+            var portfolios = await _dbLjepotaServisContext.Portfolios.Where(port => port.StoreId == store.Id).ToListAsync();
+            return portfolios;
         }
 
         public async Task UpdateStoreDetails(int storeId, Store store)

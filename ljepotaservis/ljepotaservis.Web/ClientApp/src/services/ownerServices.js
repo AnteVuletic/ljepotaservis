@@ -53,3 +53,25 @@ export const getStoreWorkingHours = () => {
   return fetch(`${OWNER.GET_STORE_WORKING_HOURS}`, requestOptions)
   .then(handleResponse);
 };
+
+export const addEditPortfolio = (portfolios) => {
+  const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeader() },
+      body: JSON.stringify({ portfolios })
+  };
+
+  return fetch(OWNER.ADD_EDIT_PORTFOLIOS, requestOptions)
+  .then(handleResponse); 
+}
+
+
+export const getAllPortfolios = () => {
+  const requestOptions = {
+    method: "GET",
+    headers: { ...authHeader() },
+  };
+
+  return fetch(OWNER.GET_STORE_PORTFOLIOS, requestOptions)
+  .then(handleResponse);
+}
