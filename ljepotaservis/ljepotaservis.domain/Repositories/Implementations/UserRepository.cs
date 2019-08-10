@@ -121,7 +121,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
             foreach (var dbEmployee in dbEmployees)
             {
-                var isEdit = employees.All(employee => employee.Id != dbEmployee.Id) && employees.Count != 0;
+                var isEdit = employees.Count > 0 && employees.All(employee => employee.Id != dbEmployee.Id);
                 var employeeStore =_dbLjepotaServisContext.UserStores.Single(userStore => userStore.UserId == dbEmployee.Id);
                 if (!isEdit)
                 {
@@ -169,11 +169,11 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             var owner = await _userManager.GetUsersForClaimAsync(new Claim(ClaimTypes.Role, RoleHelper.Owner));
             usersWithStoreClaims = usersWithStoreClaims.Except(owner).ToList();
             var employeeStores = _dbLjepotaServisContext.UserStores.Where(userStore =>
-                usersWithStoreClaims.Any(userWithStoreClaim => userStore.UserId == userWithStoreClaim.Id));
+                usersWithStoreClaims.Any(userWithStoreClaim => userStore.UserId == userWithStoreClaim.Id)).ToList();
 
-            var employeesWithStoreClaim =usersWithStoreClaims.Select(userWithStoreClaim =>
+            var employeesWithStoreClaim = usersWithStoreClaims.Select(userWithStoreClaim =>
             {
-                var employeeStore = employeeStores.Single(empStore => empStore.UserId == userWithStoreClaim.Id);
+                var employeeStore = employeeStores.First(empStore => empStore.UserId == userWithStoreClaim.Id);
                 return userWithStoreClaim.ProjectUserAndUserStoreToEmployeeDto(employeeStore);
             }).ToList();
 
