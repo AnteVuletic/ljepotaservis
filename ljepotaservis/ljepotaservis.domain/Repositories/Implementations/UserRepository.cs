@@ -121,7 +121,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
             foreach (var dbEmployee in dbEmployees)
             {
-                var isEdit = employees.All(employee => employee.Id != dbEmployee.Id) || employees.Count != 0;
+                var isEdit = employees.Count > 0 && employees.All(employee => employee.Id != dbEmployee.Id);
                 var employeeStore =_dbLjepotaServisContext.UserStores.Single(userStore => userStore.UserId == dbEmployee.Id);
                 if (!isEdit)
                 {
