@@ -35,7 +35,7 @@ class Reservations extends Component {
           this.state.reservations.map(reservation => (
             <article key={reservation.reservation.id} className="reservations__article">
                 <div className="aspect__ratio">
-                  <img src={`https://localhost:44349/images/${reservation.store.imageName}`} alt="Reservation"/>
+                  <img src={`https://ljepotaservisweb.azurewebsites.net/images/${reservation.store.imageName}`} alt="Reservation"/>
                 </div>
                 <div className="reservations__article__store__description">
                   <span>{reservation.store.name}</span>

@@ -1,4 +1,4 @@
-const BASE_URL = "https://localhost:44349/api";
+const BASE_URL = "https://ljepotaservisweb.azurewebsites.net/api";
 const LOGIN_BASE = `${BASE_URL}/Login`;
 const STORE_BASE = `${BASE_URL}/Store`;
 const FILTER_BASE = `${BASE_URL}/Filter`;

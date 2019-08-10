@@ -11,7 +11,7 @@ const StoreList = props => {
           <div key={store.id} className="store__tile">
             <div className="aspect__ratio">
               <img
-                src={`https://localhost:44349/images/${store.imageName}`}
+                src={`https://ljepotaservisweb.azurewebsites.net/images/${store.imageName}`}
                 alt="Slika salona"
               />
             </div>

@@ -16,7 +16,7 @@ const EmployeePicker = props => {
             <div className="employee__tile__image__wrapper">
               <div className="aspect__ratio">
                 <img
-                  src={`https://localhost:44349/images/${employee.imageName}`}
+                  src={`https://ljepotaservisweb.azurewebsites.net/images/${employee.imageName}`}
                   alt="Employee"
                 />
               </div>
