@@ -21,19 +21,20 @@ export default class Employees extends Component {
   }
 
   componentDidMount() {
-    Promise.all([this.initiliazeStartAndClose(), this.loadEmployees()])
-    .then(responses => {
-      this.setState({
-        openTime: new Date(Date.parse(responses[0].result.openTime)),
-        closeTime: new Date(Date.parse(responses[0].result.closeTime)),
-        employees: responses[1]
-      })
-    });
+    Promise.all([this.initiliazeStartAndClose(), this.loadEmployees()]).then(
+      responses => {
+        this.setState({
+          openTime: new Date(Date.parse(responses[0].result.openTime)),
+          closeTime: new Date(Date.parse(responses[0].result.closeTime)),
+          employees: responses[1]
+        });
+      }
+    );
   }
 
   initiliazeStartAndClose = () => {
     return getStoreWorkingHours().then(employees => employees);
-  }
+  };
 
   loadEmployees = () => {
     return getStoreEmployees().then(workingHours => workingHours);
@@ -68,7 +69,12 @@ export default class Employees extends Component {
   };
 
   handleEditEmployee = employeeToEdit => {
-    const employees = [...this.state.employees.filter(employee => employee.id !== employeeToEdit.id), employeeToEdit];
+    const employees = [
+      ...this.state.employees.filter(
+        employee => employee.id !== employeeToEdit.id
+      ),
+      employeeToEdit
+    ];
     addEditEmployees(employees).then(() => {
       this.loadEmployees().then(employees => {
         this.setState({
@@ -90,25 +96,13 @@ export default class Employees extends Component {
         <table className="employee__overview">
           <thead>
             <tr>
-              <th>
-                Profilna
-              </th>
-              <th>
-                Ime
-              </th>
-              <th>
-                Prezime
-              </th>
-              <th>
-                Start
-              </th>
-              <th>
-                End
-              </th>
-              <th>
-              </th>
-              <th>
-              </th>
+              <th>Profilna</th>
+              <th>Ime</th>
+              <th>Prezime</th>
+              <th>Start</th>
+              <th>End</th>
+              <th />
+              <th />
             </tr>
           </thead>
           <tbody>
@@ -116,38 +110,41 @@ export default class Employees extends Component {
               <tr key={employee.id}>
                 <td>
                   <div className="aspect__ratio ">
-                    <img src={`https://localhost:44349/images/${employee.imageName}`} />
+                    <img
+                      src={`https://localhost:44349/images/${
+                        employee.imageName
+                      }`}
+                      alt="Slika zaposlenika"
+                    />
                   </div>
                 </td>
+                <td>{employee.firstName}</td>
+                <td>{employee.lastName}</td>
                 <td>
-                  {employee.firstName} 
+                  {new Date(Date.parse(employee.startOfShift)).getHours() +
+                    " : " +
+                    new Date(Date.parse(employee.startOfShift)).getMinutes()}
                 </td>
                 <td>
-                  {employee.lastName}
-                </td>
-                <td>
-                  {new Date(Date.parse(employee.startOfShift)).getHours() + " : " +
-                  new Date(Date.parse(employee.startOfShift)).getMinutes()}
-                </td>
-                <td>
-                  {new Date(Date.parse(employee.endOfShift)).getHours() + " : " + 
-                  new Date(Date.parse(employee.endOfShift)).getMinutes()}
+                  {new Date(Date.parse(employee.endOfShift)).getHours() +
+                    " : " +
+                    new Date(Date.parse(employee.endOfShift)).getMinutes()}
                 </td>
                 <td>
                   <button onClick={() => this.handleRemoveEmployee(employee)}>
-                    <i className="fa fa-trash" aria-hidden="true"></i>
+                    <i className="fa fa-trash" aria-hidden="true" />
                   </button>
                 </td>
                 <td>
                   <button onClick={() => this.handleEdit(employee)}>
-                    <i className="fas fa-edit" aria-hidden="true"></i>
+                    <i className="fas fa-edit" aria-hidden="true" />
                   </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <NewEmployee 
+        <NewEmployee
           onAddEmployee={this.handleAddEmployee}
           openTime={this.state.openTime}
           closeTime={this.state.closeTime}

@@ -60,6 +60,8 @@ namespace ljepotaservis.Web.Controllers
             var openDateFormatted = openDateTime.ParseAndAdjustDateTime();
             var closingDateFormatted = closingDateTime.ParseAndAdjustDateTime();
             var store = storeAndOwner["store"].ToObject<Store>();
+            Enum.TryParse<StoreType>(storeAndOwner["store"]["storeType"].ToString(), out var storeType);
+            store.Type = storeType;
             var owner = storeAndOwner["owner"].ToObject<UserDto>();
 
             store.ClosingDateTime = closingDateFormatted;
@@ -109,6 +111,24 @@ namespace ljepotaservis.Web.Controllers
             var storeWorkingHoursDto = _storeRepository.GetStoreWorkingHours(store.Id);
 
             return Ok(storeWorkingHoursDto);
+        }
+
+        [Authorize(Roles = RoleHelper.Owner)]
+        [HttpPost]
+        public async Task<IActionResult> UploadPortfolioPost([FromBody] JObject portfolioJObject)
+        {
+            var portfolios = portfolioJObject["portfolios"].Select(port => port.ToObject<Portfolio>()).ToList();
+            var store = await ResolveStore();
+            await _storeRepository.AddEditPortfoliosToStore(store, portfolios);
+            return Ok();
+        }
+
+        [Authorize(Roles = RoleHelper.Owner)]
+        public async Task<IActionResult> GetAllPortfolio()
+        {
+            var store = await ResolveStore();
+            var portfolios = await _storeRepository.GetAllStorePortfolios(store);
+            return Ok(portfolios);
         }
 
         [AllowAnonymous]

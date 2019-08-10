@@ -23,6 +23,10 @@
     justify-content: space-between;
 }
 
+.employee__tile--selected {
+    border: 1px solid #E36592;
+}
+
 .employee__tile__image__wrapper {
     width: 40%;
     padding: 18px;

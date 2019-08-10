@@ -7,6 +7,7 @@ import Home from "./home";
 import Store from "./store";
 import Authentication from "../authentication";
 import Role from "../../utils/role";
+import Reservations from "./reservations";
 
 const UserSide = props => {
   const { path } = props.match;
@@ -22,6 +23,12 @@ const UserSide = props => {
           user={props.user}
           roles={[Role.Guest]}
           component={Authentication}
+        />
+        <PrivateRoute
+          path={path + "reservations"}
+          user={props.user}
+          roles={[Role.User]}
+          component={Reservations}
         />
         <Redirect to="/" />
       </Switch>

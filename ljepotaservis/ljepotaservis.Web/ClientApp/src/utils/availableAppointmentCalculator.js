@@ -103,7 +103,7 @@ const availableAppointmentCalculator = (
       accumulator += milisecondMinuteConverter.minsToMillis(15);
     }
   }
-
+  
   return availabeAppointments;
 };
 

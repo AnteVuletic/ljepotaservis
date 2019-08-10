@@ -4,6 +4,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { authentication } from "../../services/authentication";
 import { userService } from "../../services/userServices";
 import "../../styling/authentication/authentication.css";
+import Popout from "../popout/Popout";
 
 class Registration extends Component {
   constructor(props) {
@@ -20,7 +21,9 @@ class Registration extends Component {
       isEmailValid: null,
       isPasswordValid: null,
       isPasswordConfirmationValid: null,
-      isRegistrationSubmited: false
+      isRegistrationSubmited: false,
+      message: "",
+      read: true
     };
   }
 
@@ -56,7 +59,12 @@ class Registration extends Component {
         password
       };
 
-      authentication.register(userToRegister);
+      authentication.register(userToRegister).then(() => {
+        this.setState({
+          message: "Registracija uspješna provjeri svoj e-mail!",
+          read: false
+        });
+      });
     }
   };
 
@@ -102,7 +110,9 @@ class Registration extends Component {
       isUsernameValid,
       isPasswordValid,
       isPasswordConfirmationValid,
-      isRegistrationSubmited
+      isRegistrationSubmited,
+      read,
+      message
     } = this.state;
 
     if (isRegistrationSubmited) {
@@ -110,102 +120,111 @@ class Registration extends Component {
     }
 
     return (
-      <div className="authentication">
-        <div className="authentication__container">
-          <h1 className="authentication__header authentication__header--register">
-            <span>Ljepota servis</span>
-          </h1>
-          <form
-            className="authentication__form"
-            onSubmit={this.handleSubmit}
-            noValidate
-          >
-            <label>Ime</label>
-            <input
-              name="firstName"
-              type="text"
-              value={firstName}
-              placeholder="Ime"
-              onChange={this.handleChange}
-            />
-            <label>Prezime</label>
-            <input
-              name="lastName"
-              type="text"
-              value={lastName}
-              placeholder="Prezime"
-              onChange={this.handleChange}
-            />
-            <label>Korisničko ime</label>
-            <input
-              name="username"
-              type="text"
-              value={username}
-              placeholder="Korisničko ime"
-              onChange={event => this.handleChange(event)}
-              onBlur={event => this.handleUsernameBlur(event)}
-              className={"authentication__input" + isUsernameValid && "--fail"}
-              className={
-                isUsernameValid === false ? "authentication__input--fail" : null
-              }
-            />
-            <label>E-mail</label>
-            <input
-              name="email"
-              type="email"
-              value={email}
-              placeholder="adresa@mail.com"
-              onChange={event => {
-                this.handleChange(event);
-                this.handleEmailChange(event);
-              }}
-              className={
-                isEmailValid === false ? "authentication__input--fail" : null
-              }
-            />
-            <label>Password</label>
-            <input
-              name="password"
-              type="password"
-              value={password}
-              placeholder="Lozinka"
-              onChange={event => {
-                this.handleChange(event);
-                this.handlePasswordChange(event);
-              }}
-              className={
-                isPasswordValid === false ? "authentication__input--fail" : null
-              }
-            />
-            <input
-              name="passwordConfirmation"
-              type="password"
-              value={passwordConfirmation}
-              placeholder="Potvrdi lozinku"
-              onChange={event => {
-                this.handleChange(event);
-                this.handlePasswordConfirmationChange(event);
-              }}
-              className={
-                isPasswordConfirmationValid === false
-                  ? "authentication__input--fail"
-                  : null
-              }
-            />
-            <div className="authentication__submit">
-              <input type="submit" value="Registriraj se!" />
+      <React.Fragment>
+        <Popout
+          read={read}
+          message={message}
+          closePopout={() => this.setState({ read: true })}
+        />
+
+        <div className="authentication">
+          <div className="authentication__container">
+            <h1 className="authentication__header authentication__header--register">
+              <span>Šinjorina</span>
+            </h1>
+            <form
+              className="authentication__form"
+              onSubmit={this.handleSubmit}
+              noValidate
+            >
+              <label>Ime</label>
+              <input
+                name="firstName"
+                type="text"
+                value={firstName}
+                placeholder="Ime"
+                onChange={this.handleChange}
+              />
+              <label>Prezime</label>
+              <input
+                name="lastName"
+                type="text"
+                value={lastName}
+                placeholder="Prezime"
+                onChange={this.handleChange}
+              />
+              <label>Korisničko ime</label>
+              <input
+                name="username"
+                type="text"
+                value={username}
+                placeholder="Korisničko ime"
+                onChange={event => this.handleChange(event)}
+                onBlur={event => this.handleUsernameBlur(event)}
+                className={
+                  !isUsernameValid ? "authentication__input--fail" : null
+                }
+              />
+              <label>E-mail</label>
+              <input
+                name="email"
+                type="email"
+                value={email}
+                placeholder="adresa@mail.com"
+                onChange={event => {
+                  this.handleChange(event);
+                  this.handleEmailChange(event);
+                }}
+                className={
+                  isEmailValid === false ? "authentication__input--fail" : null
+                }
+              />
+              <label>Password</label>
+              <input
+                name="password"
+                type="password"
+                value={password}
+                placeholder="Lozinka"
+                onChange={event => {
+                  this.handleChange(event);
+                  this.handlePasswordChange(event);
+                }}
+                className={
+                  isPasswordValid === false
+                    ? "authentication__input--fail"
+                    : null
+                }
+              />
+              <input
+                name="passwordConfirmation"
+                type="password"
+                value={passwordConfirmation}
+                placeholder="Potvrdi lozinku"
+                onChange={event => {
+                  this.handleChange(event);
+                  this.handlePasswordConfirmationChange(event);
+                }}
+                className={
+                  isPasswordConfirmationValid === false
+                    ? "authentication__input--fail"
+                    : null
+                }
+              />
+              <div className="authentication__submit">
+                <input type="submit" value="Registriraj se!" />
+              </div>
+            </form>
+            <div className="authentication__navigate">
+              <span>Već imaš račun?</span>
+              <LinkContainer to="/authentication/login">
+                <span className="authentication__navigate__link">
+                  Prijavi se!
+                </span>
+              </LinkContainer>
             </div>
-          </form>
-          <div className="authentication__navigate">
-            <span>Već imaš račun?</span>
-            <LinkContainer to="/authentication/login">
-              <span className="authentication__navigate__link">
-                Prijavi se!
-              </span>
-            </LinkContainer>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

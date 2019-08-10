@@ -14,8 +14,9 @@ class Calendar extends Component {
   }
 
   componentDidUpdate(previousProps) {
-    if(
-      previousProps.selected.getFullYear() !== this.props.selected.getFullYear() ||
+    if (
+      previousProps.selected.getFullYear() !==
+        this.props.selected.getFullYear() ||
       previousProps.selected.getMonth() !== this.props.selected.getMonth() ||
       previousProps.selected.getDate() !== this.props.selected.getDate()
     )
@@ -74,13 +75,19 @@ class Calendar extends Component {
     return (
       <div className="calendar__wrapper">
         <div className="calendar__header">
-          {this.state.month === today.getMonth() ? <span></span> : (
-            <button onClick={this.handlePreviousMonth}><i className="fas fa-chevron-left"></i></button>
+          {this.state.month === today.getMonth() ? (
+            <span />
+          ) : (
+            <button onClick={this.handlePreviousMonth}>
+              <i className="fas fa-chevron-left" />
+            </button>
           )}
           <h3>
             {date.month} {date.year}.
           </h3>
-          <button onClick={this.handleNextMonth}><i className="fas fa-chevron-right"></i></button>
+          <button onClick={this.handleNextMonth}>
+            <i className="fas fa-chevron-right" />
+          </button>
         </div>
         <table className="calendar__main">
           <thead>
@@ -102,18 +109,26 @@ class Calendar extends Component {
                     this.state.month === today.getMonth()
                   ) {
                     return (
-                      <td disabled key={dayIndex} className="calendar__disabled__cell">
+                      <td
+                        disabled
+                        key={dayIndex}
+                        className="calendar__disabled__cell"
+                      >
                         {day}
                       </td>
                     );
                   }
                   return (
                     <td
-                      className={day === daySelected ? "calendar__selected__cell" : ""}
+                      className={
+                        day === daySelected &&
+                        this.state.month === this.props.selected.getMonth() &&
+                        this.state.year === this.props.selected.getFullYear()
+                          ? "calendar__selected__cell"
+                          : null
+                      }
                       onClick={() =>
-                        this.props.onChange(
-                          new Date(year, month, day)
-                        )
+                        this.props.onChange(new Date(year, month, day))
                       }
                       key={dayIndex}
                     >

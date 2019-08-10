@@ -9,20 +9,25 @@ const ServiceTypePicker = props => (
       <h1>Odaberi vrstu usluge</h1>
     </header>
     <main className="filter__main">
-      <article onClick={() => props.onServiceTypeChange("Hairdressing")} className="filter__main__barber">
-        <img src={BarberImage} className="btn-base" />
-        <h2>
-          Firzerske usluge
-        </h2>
+      <article
+        onClick={() => props.onServiceTypeChange("Barber")}
+        className="filter__main__barber"
+      >
+        <img src={BarberImage} alt="Frizerske" className="btn-base" />
+        <h2>Firzerske usluge</h2>
       </article>
-      <article onClick={() => props.onServiceTypeChange("Cosmetic")} className="filter__main__cosmetic">
-        <img src={CosmeticImage} className="btn-base" />
-        <h2>
-          Kozmetičke usluge
-        </h2>
+      <article
+        onClick={() => props.onServiceTypeChange("Cosmetic")}
+        className="filter__main__cosmetic"
+      >
+        <img src={CosmeticImage} alt="Kozmetičke" className="btn-base" />
+        <h2>Kozmetičke usluge</h2>
       </article>
-      <button className="filter__main__all btn-base" onClick={() => props.onServiceTypeChange("All")}>
-        Pretraži sve salone
+      <button
+        className="filter__main__all btn-base"
+        onClick={() => props.onServiceTypeChange("All")}
+      >
+        Pretraži sve salon
       </button>
     </main>
   </div>

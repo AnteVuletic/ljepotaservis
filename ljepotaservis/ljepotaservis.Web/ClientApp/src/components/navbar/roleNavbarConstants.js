@@ -9,24 +9,21 @@ const roleNavbarConstants = {
   Owner: {
     homePath: "/owner",
     items: [
-      { text: "Naslovnica", path: "/owner" },
-      { text: "Usluge", path: "/owner/services" },
+      { text: "Usluge", path: "/owner" },
       { text: "Zaposlenici", path: "/owner/employees" },
       { text: "Portfolio", path: "/owner/portfolios" }
     ]
   },
   Employee: {
     homePath: "/employee",
-    items: [
-      { text: "Naslovnica", path: "/employee" },
-      { text: "Rezervacije", path: "/employee/reservations" }
-    ]
+    items: [{ text: "Rezervacije", path: "/employee" }]
   },
   User: {
     homePath: "/",
     items: [
       { text: "Naslovnica", path: "/" },
-      { text: "Profile (not implemented)", path: "/user/profile" }
+      { text: "Profile (not implemented)", path: "/user/profile" },
+      { text: "Moje rezervacije", path: "/reservations" }
     ]
   },
   Guest: {

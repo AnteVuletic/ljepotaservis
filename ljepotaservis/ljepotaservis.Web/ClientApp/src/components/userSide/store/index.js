@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import ServicePicker from "./ServicePicker";
-import { getStoreDetailById, makeReservation } from "../../../services/storeService";
+import {
+  getStoreDetailById,
+  makeReservation
+} from "../../../services/storeService";
 import EmployeePicker from "./EmployeePicker";
 import DatePicker from "./DatePicker";
+import PortfolioView from "./PortfolioView";
 import ReservatiomSummary from "./ReservationSummary";
 import "../../../styling/store/storedetail.css";
 import Rating from "../../utilComponents/Rating";
@@ -31,6 +35,7 @@ class Store extends Component {
         date: new Date(),
         user: this.props.user.user
       },
+      portfolios: [],
       currentStep: "Service pick",
       message: "",
       read: true
@@ -44,8 +49,8 @@ class Store extends Component {
         return {
           ...prevState,
           ...storeDetail
-        }
-      })
+        };
+      });
     });
   }
 
@@ -76,13 +81,22 @@ class Store extends Component {
 
   handleNextStep = () => {
     const { currentStep, reservation } = this.state;
+
+    if (!this.props.user.loggedIn) {
+      this.setState({
+        read: false,
+        message: "Za rezerviranje treba biti prijavljen"
+      });
+      return;
+    }
+
     switch (currentStep) {
       case "Service pick":
         if (reservation.services.length < 1) {
           this.setState({
             read: false,
             message: "Odaberi barem jednu uslugu"
-          })
+          });
           break;
         }
         this.setState({ currentStep: "Employee pick" });
@@ -91,8 +105,8 @@ class Store extends Component {
         if (reservation.employee === null) {
           this.setState({
             read: false,
-            message: "Odaberi zaposlenika" 
-          })
+            message: "Odaberi zaposlenika"
+          });
           break;
         }
         this.setState({ currentStep: "Date pick" });
@@ -101,34 +115,99 @@ class Store extends Component {
         this.setState({ currentStep: "Summary" });
         break;
       case "Summary":
-        makeReservation({ ...this.state.reservation, storeId: this.state.id });
+        makeReservation({ ...this.state.reservation, storeId: this.state.id })
+          .then(response => {
+            response.ok ? 
+            this.setState({
+              currentStep: "Reservation complete",
+              read: false,
+              message: "Rezervacija završena"
+            }) :
+            this.setState({
+              currentStep: "Reservation complete",
+              read: false,
+              message: "Problem prilikom rezervacije pokušajte ponovno kasnije"
+            });
+          }
+          );
+        break;
+      case "Reservation complete":
+        this.setState({
+          currentStep: "Service pick" ,
+          reservation: {
+            services: [],
+            employee: null,
+            date: new Date(),
+            user: this.props.user.user
+          },
+          read: false
+        });
+        break;
+      default:
         break;
     }
   };
 
   handleAppoitmentPick = () => {
     this.setState({ currentStep: "Summary" });
-  }
+  };
 
   render() {
-    const { name, openCloseTime, services, address, employeeDetails, currentStep, imageName, score, message, read } = this.state;
+    const {
+      name,
+      openCloseTime,
+      services,
+      address,
+      employeeDetails,
+      currentStep,
+      imageName,
+      score,
+      message,
+      read
+    } = this.state;
 
     return (
       <main className="storedetail">
-        <Popout read={read} message={message} closePopout={() => {this.setState({ read: true})}}></Popout>
-        <header className={currentStep === "Date pick" ? "storedetail__header--inivsible" : "storedetail__header"}>
+        <Popout
+          read={read}
+          message={message}
+          closePopout={() => {
+            currentStep === "Reservation complete" ? 
+            this.handleNextStep():
+            this.setState({ read: true });
+          }}
+        />
+        <header
+          className={
+            currentStep === "Date pick"
+              ? "storedetail__header--inivsible"
+              : "storedetail__header"
+          }
+        >
           <div className="aspect__ratio">
             <div className="storedetail__header__content">
               <h1>Beauty salon {name}</h1>
               <h3>Adresa {address}</h3>
-              <h3>
-                Radno vrijeme: {openCloseTime}
-              </h3>
-              <Rating score={score} colorClass={"star-white"}/>
+              <h3>Radno vrijeme: {openCloseTime}</h3>
+              <Rating score={score} colorClass={"star-white"} />
             </div>
-            <img src={`https://localhost:44349/images/${imageName}`}/>
+            <img
+              src={`https://localhost:44349/images/${imageName}`}
+              alt="Salon"
+            />
           </div>
         </header>
+        <div className={currentStep === "Service pick" || currentStep === "Portfolios" ? 'storedetail__navigation' : 'storedetail__navigation storedetail__navigation--invisible'}>
+          <button className={currentStep === "Service pick" ? "storedetail__navigation--active" : ""} 
+                  onClick={() => this.setState({ currentStep: "Service pick" })}>
+            Rezerviranje
+          </button>
+          <button className={currentStep === "Portfolios" ? "storedetail__navigation--active" : ""}  
+                  onClick={() => this.setState({ currentStep: "Portfolios" })}>
+            Galerija
+          </button>
+        </div>
+        {currentStep === "Portfolios" && <PortfolioView portfolios={this.state.portfolios} />}
         {currentStep === "Service pick" && (
           <ServicePicker
             services={services}
@@ -138,6 +217,7 @@ class Store extends Component {
         {currentStep === "Employee pick" && (
           <EmployeePicker
             employees={employeeDetails}
+            currentEmployee={this.state.reservation.employee}
             onClick={this.handleEmployeeChange}
           />
         )}
@@ -155,18 +235,21 @@ class Store extends Component {
         {currentStep === "Summary" && (
           <ReservatiomSummary
             reservation={this.state.reservation}
+            employees={this.state.employeeDetails}
             store={this.state.store}
           />
         )}
-        {
-          currentStep === "Date pick" ? "" :
+        {currentStep === "Date pick" || currentStep === "Portfolios" ? null : (
           <button className="storedetail__next" onClick={this.handleNextStep}>
-            { currentStep === "Summary" ? 
-              "Rezerviraj" : 
-              <span>Rezerviraj <i className="fas fa-arrow-right"></i></span>
-              }
+            {currentStep === "Summary" ? (
+              "Rezerviraj"
+            ) : (
+              <span>
+                Rezerviraj <i className="fas fa-arrow-right" />
+              </span>
+            )}
           </button>
-        }
+        )}
       </main>
     );
   }
@@ -176,6 +259,4 @@ const mapStateToProps = state => ({
   user: state.authentication
 });
 
-export default connect(
-  mapStateToProps
-)(Store);
+export default connect(mapStateToProps)(Store);

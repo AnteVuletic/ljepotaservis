@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Route, Switch, Redirect } from "react-router";
-import Dashboard from "./Dashboard";
 import Services from "./services";
 import Employees from "./employees";
 import Portfolios from "./portfolios/index";
@@ -13,8 +12,7 @@ const OwnerSide = props => {
     <div>
       <RoleNavbar role={props.role} />
       <Switch>
-        <Route exact path={path} component={Dashboard} />
-        <Route path={path + "/services"} component={Services} />
+        <Route exact path={path} component={Services} />
         <Route path={path + "/employees"} component={Employees} />
         <Route path={path + "/portfolios"} component={Portfolios} />
         <Redirect to={path} />

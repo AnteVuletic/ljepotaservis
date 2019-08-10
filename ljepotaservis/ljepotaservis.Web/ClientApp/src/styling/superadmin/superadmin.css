@@ -1,15 +1,47 @@
 .form__superadmin{
     display: flex;
     flex-direction: column;
+    width: 100%;
+    overflow: hidden;
+}
+
+.form__superadmin select {
+    border: 1px solid #cccccc;
+    margin: 5px auto;
+    font-size: 20px;
+    display: block;
+    width: fit-content;
 }
 
 .form__superadmin input {
     border: 1px solid #cccccc;
-    margin: 5px;
+    margin: 5px auto;
     font-size: 20px;
+    display: block;
+    width: fit-content;
+}
+
+.form__superadmin .react-datepicker__input-container {
+    display: block;
+    margin: 5px auto;
+    width: 155%;
 }
 
 .form__superadmin label {
-    margin: 5px;
+    margin: 5px auto;
     display: block;
+    width: fit-content;
+}
+
+.form__superadmin button {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+    padding: 5px 10px;
+    background-color: #D75881;
+    color: #ffffff;
+}
+
+.form__superadmin h3 {
+    text-align: center;
 }

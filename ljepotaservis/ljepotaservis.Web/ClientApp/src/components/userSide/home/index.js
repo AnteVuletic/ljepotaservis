@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import AwesomeDebouncePromise from "awesome-debounce-promise";
 import StoreList from "./StoreList";
 import ServiceTypePicker from "./ServiceTypePicker";
-import Calendar from "../../utilComponents/Calendar";
 import { userService } from "../../../services/userServices";
 import "../../../styling/filter/main.css";
 
@@ -12,35 +12,45 @@ class Home extends Component {
     this.state = {
       stores: [],
       searchBar: "",
-      selectedServiceType: null,
-      dateTime: new Date(),
-      filtersAreOpen: false
+      selectedServiceType: "",
+      neighborhood: "Sve",
+      neighborhoods: []
     };
   }
 
   componentDidMount() {
-    this.loadFilteredStores();
+    this.getStoreLocations();
   }
 
-  handleChange = e => {
-    this.setState({ [e.target.name]: [e.target.value] });
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+    this.handleFilter();
   };
 
-  handleDateChange = dateTime => {
-    this.setState({ dateTime });
+  handleTextChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+
+    const debouncedFilterRequest = AwesomeDebouncePromise(
+      this.handleFilter,
+      1000
+    );
+    debouncedFilterRequest();
   };
 
-  handleServiceTypeChange = selectedServiceType => {
-    this.setState({ selectedServiceType });
+  handleServiceTypeChange = async selectedServiceType => {
+    await this.setState({ selectedServiceType });
+
+    this.handleFilter();
   };
 
   handleFilter = () => {
-    const { dateTime, selectedServiceType, searchBar } = this.state;
+    const { neighborhood, selectedServiceType, searchBar } = this.state;
     const filter = {
-      dateOfReservation: dateTime,
       storeType: selectedServiceType,
-      name: searchBar
-    }
+      name: searchBar,
+      neighborhood
+    };
+
     this.loadFilteredStores(filter);
   };
 
@@ -52,16 +62,22 @@ class Home extends Component {
     });
   };
 
+  getStoreLocations = () => {
+    userService.getStoreNeighborhoods().then(neighborhoods => {
+      this.setState({
+        neighborhoods
+      });
+    });
+  };
+
   render() {
     const {
       searchBar,
-      dateTime,
       stores,
-      filtersAreOpen,
       selectedServiceType
     } = this.state;
 
-    if (!selectedServiceType) {
+    if (selectedServiceType === "") {
       return (
         <ServiceTypePicker onServiceTypeChange={this.handleServiceTypeChange} />
       );
@@ -73,32 +89,38 @@ class Home extends Component {
           type="text"
           name="searchBar"
           value={searchBar}
-          onChange={this.handleChange}
+          onChange={this.handleTextChange}
           placeholder="Pretraži"
           className="filter__input"
         />
         <header className="filter__group">
-          <button 
-            onClick={() => {this.setState({ selectedServiceType: false})}} 
-            className={ selectedServiceType ? "btn-base btn-has-value" : "btn-base"}
+          <button
+            onClick={() => {
+              this.setState({ selectedServiceType: "" });
+            }}
+            className={
+              selectedServiceType ? "btn-base btn-has-value" : "btn-base"
+            }
           >
             Usluge
           </button>
-          <button
-            onClick={() => this.setState({ filtersAreOpen: !filtersAreOpen })}
-            className={ this.state.dateTime === new Date() ? "btn-base btn-has-value" : "btn-base"}
+          <select
+            name="neighborhood"
+            value={this.state.neighborhood}
+            onChange={this.handleChange}
+            className={
+              this.state.neighborhood !== "Sve"
+                ? "btn-base btn-has-value"
+                : "btn-base"
+            }
           >
-            Datum
-          </button>
-          {filtersAreOpen ? (
-            <Calendar
-              selected={dateTime}
-              onChange={this.handleDateChange}
-              onSave={this.handleFilter}
-            />
-          ) : null}
+            <option value="Sve">Sve</option>
+            {this.state.neighborhoods.map(location => (
+              <option key={location} value={location}>{location}</option>
+            ))}
+          </select>
         </header>
-        <StoreList stores={stores}/>
+        <StoreList stores={stores} />
       </React.Fragment>
     );
   }

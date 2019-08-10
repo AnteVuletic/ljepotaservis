@@ -25,8 +25,8 @@ namespace ljepotaservis.Infrastructure.EmailTemplates
             }
 
             templateText = templateText.Replace("--Title--", $"Poštovani {user.Firstname} {user.Lastname}, potvrdite registraciju")
-                .Replace("--Content--", "Pritiskom na donji botun će te potvrditi vašu registraciju na ljepotaservis")
-                .Replace("--Footer--", "Vaš ljepota servis")
+                .Replace("--Content--", "Pritiskom na donji botun će te potvrditi vašu registraciju na Šinjorinu")
+                .Replace("--Footer--", "Vaša Šinjorina")
                 .Replace("--TokenUrl--", url);
             return templateText;
         }

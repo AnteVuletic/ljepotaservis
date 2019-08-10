@@ -31,38 +31,37 @@ class ServicePicker extends Component {
         <table className="servicepicker__service__container">
           <thead>
             <tr>
-              <th>
-                Naziv
-              </th>
-              <th>
-                Cijena
-              </th>
-              <th></th>
+              <th>Naziv</th>
+              <th>Cijena</th>
+              <th />
             </tr>
           </thead>
           <tbody>
             {this.props.services.map(service => (
-              <tr 
-                key={service.id} 
-                className={this.state.checkedItems.find(srv => srv.id == service.id) != undefined ? 'service__item service__item--selected' : "service__item"}
+              <tr
+                key={service.id}
+                className={
+                  this.state.checkedItems.find(srv => srv.id === service.id) !==
+                  undefined
+                    ? "service__item service__item--selected"
+                    : "service__item"
+                }
               >
                 <td>
                   <span className="servicepicker__service__name">
                     {service.name}
                   </span>
                   <span className="servicepicker__service__duration">
-                    {service.duration.slice(0,5)} hh:min
+                    {service.duration.slice(0, 5)} hh:min
                   </span>
                 </td>
-                <td>
-                  {service.price} kn
-                </td>
+                <td>{service.price} kn</td>
                 <td>
                   <input
-                      type="checkbox"
-                      id="toggle"
-                      onChange={event => this.handleChange(event, service)}
-                    />
+                    type="checkbox"
+                    id="toggle"
+                    onChange={event => this.handleChange(event, service)}
+                  />
                 </td>
               </tr>
             ))}
