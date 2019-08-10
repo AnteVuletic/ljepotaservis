@@ -80,7 +80,9 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             }
             foreach (var dbService in dbServices)
             {
-                var isEdit = services.Count != 0 && services.All(srv => srv.Id != dbService.Id);
+                var isEdit = services.All(srv => srv.Id != dbService.Id);
+                if (services.Count == 0)
+                    isEdit = false;
                 if (!isEdit)
                 {
                     _dbLjepotaServisContext.Services.Remove(dbService);
@@ -219,7 +221,9 @@ namespace ljepotaservis.Domain.Repositories.Implementations
 
             foreach (var portfolio in portfoliosDb)
             {
-                var isEdit = portfolios.Count != 0 && portfolios.Any(port => port.Id == portfolio.Id);
+                var isEdit = portfolios.Any(port => port.Id == portfolio.Id);
+                if (portfolios.Count == 0)
+                    isEdit = false;
                 if (!isEdit)
                 {
                     _dbLjepotaServisContext.Portfolios.Remove(portfolio);
