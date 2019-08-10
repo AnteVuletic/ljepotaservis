@@ -39,7 +39,7 @@ class PortfolioModal extends Component {
                     <i className="fas fa-chevron-left"></i>
                 </div>
                 <div className="aspect__ratio">
-                    <img src={`https://localhost:44349/images/${portfolio.imageName}`} alt="Svi smo mi duje" />
+                    <img src={`https://ljepotaservisweb.azurewebsites.net/images/${portfolio.imageName}`} alt="Svi smo mi duje" />
                 </div>
                 <div className="portfolio__tile__description">
                     {portfolio.description}

@@ -45,7 +45,7 @@ class PortfolioView extends Component {
               key={portfolio.id}
               onClick={() => this.openModal(portfolio)}
               className="aspect__ratio">
-              <img src={`https://localhost:44349/images/${portfolio.imageName}`} alt="Slika alt" />
+              <img src={`https://ljepotaservisweb.azurewebsites.net/images/${portfolio.imageName}`} alt="Slika alt" />
             </div>
           )
         }

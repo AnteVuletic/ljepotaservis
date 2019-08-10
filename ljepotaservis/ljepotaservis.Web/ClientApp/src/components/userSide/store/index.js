@@ -192,7 +192,7 @@ class Store extends Component {
               <Rating score={score} colorClass={"star-white"} />
             </div>
             <img
-              src={`https://localhost:44349/images/${imageName}`}
+              src={`https://ljepotaservisweb.azurewebsites.net/images/${imageName}`}
               alt="Salon"
             />
           </div>
