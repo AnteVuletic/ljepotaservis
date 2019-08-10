@@ -4,7 +4,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { authentication } from "../../services/authentication";
 import { userService } from "../../services/userServices";
 import "../../styling/authentication/authentication.css";
-import Popout from "..//popout/Popout";
+import Popout from "../popout/Popout";
 
 class Registration extends Component {
   constructor(props) {
@@ -130,7 +130,7 @@ class Registration extends Component {
         <div className="authentication">
           <div className="authentication__container">
             <h1 className="authentication__header authentication__header--register">
-              <span>Ljepota servis</span>
+              <span>Šinjorina</span>
             </h1>
             <form
               className="authentication__form"

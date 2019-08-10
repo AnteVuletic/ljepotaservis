@@ -51,7 +51,7 @@
 .authentication__form input {
   background-color: transparent;
   font-size: 15px;
-  padding: 5px 0;
+  padding: 5px;
 }
 
 .authentication__form input::placeholder {
@@ -110,5 +110,6 @@
 }
 
 .authentication__input--fail {
-  color: red;
+  border: 1px solid red;
+  border-radius: 3px;
 }

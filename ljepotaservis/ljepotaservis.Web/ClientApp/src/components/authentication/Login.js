@@ -34,7 +34,7 @@ class Login extends Component {
       <div className="authentication">
         <div className="authentication__container">
           <h1 className="authentication__header">
-            <span>Ljepota servis</span>
+            <span>Šinjorina</span>
           </h1>
           <form className="authentication__form" onSubmit={this.handleSubmit} noValidate>
               <label>E-mail</label>

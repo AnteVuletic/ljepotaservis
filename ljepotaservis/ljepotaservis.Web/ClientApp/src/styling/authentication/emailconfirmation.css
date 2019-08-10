@@ -1,0 +1,17 @@
+.email__confirmation h1 {
+    color: #ffffff;
+    text-align: center;
+    font-size: 25px;
+    padding-top: 150px;
+}
+
+.email__confirmation button {
+    padding: 5px 10px;
+    color: #ffffff;
+    font-size: 14px;
+    margin: 0 auto;
+    display: block;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+    background-color: transparent;
+    text-transform: uppercase;
+}
