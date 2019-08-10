@@ -122,7 +122,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             foreach (var dbEmployee in dbEmployees)
             {
                 var isEdit = employees.All(employee => employee.Id != dbEmployee.Id);
-                if (employees.Count == 0)
+                if (employees.Count == 0 && newEmployees.Count == 0)
                     isEdit = false;
                 var employeeStore =_dbLjepotaServisContext.UserStores.Single(userStore => userStore.UserId == dbEmployee.Id);
                 if (!isEdit)

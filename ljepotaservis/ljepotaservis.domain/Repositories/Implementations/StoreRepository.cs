@@ -81,7 +81,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             foreach (var dbService in dbServices)
             {
                 var isEdit = services.All(srv => srv.Id != dbService.Id);
-                if (services.Count == 0)
+                if (services.Count == 0 && newServices.Count == 0)
                     isEdit = false;
                 if (!isEdit)
                 {
@@ -203,7 +203,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
         {
             var storeDb = await _dbLjepotaServisContext.Stores.FindAsync(store.Id);
             if (storeDb == null) throw new Exception("No store with id");
-            var newPortfolios = portfolios.Where(portfolio => portfolio.Id == null);
+            var newPortfolios = portfolios.Where(portfolio => portfolio.Id == null).ToList();
             portfolios = portfolios.Except(newPortfolios).ToList();
             var portfoliosDb = _dbLjepotaServisContext.Portfolios.Where(portfolio => portfolio.StoreId == storeDb.Id);
 
@@ -222,7 +222,7 @@ namespace ljepotaservis.Domain.Repositories.Implementations
             foreach (var portfolio in portfoliosDb)
             {
                 var isEdit = portfolios.Any(port => port.Id == portfolio.Id);
-                if (portfolios.Count == 0)
+                if (portfolios.Count == 0 && newPortfolios.Count == 0)
                     isEdit = false;
                 if (!isEdit)
                 {
